@@ -31,10 +31,12 @@ One stretch goal is to add the ability to create a user profile and login, so th
 - Display all parks on a map (google maps or another free api)
 - Create an event at a park
 - View all events at a park
+
 **3-7 "standard" requirements (will most likely complete)**
 - Make more complicated queries like “parks near me” or “parks near a given set of lat/long points”
 - Allow users to create an account and have “favourite” parks, other customizable settings like “home”
 - Share events from parks to facebook
+
 **2-3 stretch requirements (plan to complete 1!)**
 - Make the app only useable with an account, make the account secure
 - Allow users to invite other users within the app
