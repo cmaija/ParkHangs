@@ -46,3 +46,11 @@ One stretch goal is to add the ability to create a user profile and login, so th
 **Pick 2 of your minimal requirements and break each of them down into ~2-5 smaller tasks!**
 - Create tables in our own database to represent a park and an event
 - Create a script to get all of the parks data from the Vancouver parks API and then write them into our database (so we don’t have to do it by hand)
+
+**Sketches of Main Functionality**
+**Map Page With Menu**
+![Map Page With Menu](https://github.com/cmaija/ParkHangs/blob/master/sketch1.png?raw=true)
+**Calendar Page**
+![Calendar Page](https://github.com/cmaija/ParkHangs/blob/master/sketch2.png?raw=true)
+**Map Page with Modal describing park features**
+![Map Page with Modal describing park features](https://github.com/cmaija/ParkHangs/blob/master/sketch3.png?raw=true)
