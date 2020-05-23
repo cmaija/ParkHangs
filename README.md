@@ -35,7 +35,8 @@ One stretch goal is to add the ability to create a user profile and login, so th
 **3-7 "standard" requirements (will most likely complete)**
 - Make more complicated queries like “parks near me” or “parks near a given set of lat/long points”
 - Allow users to create an account and have “favourite” parks, other customizable settings like “home”
-- Share events from parks to facebook
+- Share events from parks to Facebook and Google calendars
+- Allow users to add comments to events and parks, as well as add ratings to parks and their facilities
 
 **2-3 stretch requirements (plan to complete 1!)**
 - Make the app only useable with an account, make the account secure
