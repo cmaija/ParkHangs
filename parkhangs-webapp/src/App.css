@@ -22,3 +22,21 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+#NavList {
+  width: 100%;
+  float: left;
+  margin: 0 0 3em 0;
+  padding: 0;
+  list-style: none;
+  background: black;
+  color: lightblue;
+}
+a{
+  color:darkgray;
+}
+
+#NavList li {
+  float: left;
+  padding-left: 3em;
+}
