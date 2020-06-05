@@ -12,41 +12,30 @@ class DetailModal extends React.Component {
                 parkStreetNumber: '801',
                 parkStreetName: 'W 22nd Ave',
             },
-            modalOpen: false,
         }
     }
 
-    closeModal () {
-        this.setState{(modalOpen, false)}
-    }
-
-    openModal () {
-        this.setState{(modalOpen, true)}
-    }
-
     render() {
-        if (this.props.show) {
-            if (this.props.show) {
-                return (
-                    <div className="modal-background">
-                        <div className="modal-container">
-                            <div className="detailed-info modal-card">
-                                <div className="detailed-content modal-card">
-                                     <div className="detailed-content-top modal-card">
-                                        <span className="detailed-content-title">{this.state.parkName}</span>
-                                     </div>
-                                     <div className="detailed-content-main modal-card">
-                                        <span className="detailed-content-neighborhood modal-card">Neighborhood: {this.state.parkNeighborhood}</span>
-                                        <span className="detailed-content-address modal-card">Address: {this.state.parkStreetNumber} {this.state.parkStreetName}</span>
-                                     </div>
+        console.log(this.props.showModal)
+        if (this.props.showModal) {
+            return (
+                <div className="modal-background">
+                    <div className="modal-container">
+                        <div className="detailed-info modal-card">
+                            <div className="detailed-content modal-card">
+                                 <div className="detailed-content-top modal-card">
+                                    <span className="detailed-content-title">{this.state.details.parkName}</span>
                                  </div>
-                                 <button className="button" onClick={this.closeModal}>close</button>
+                                 <div className="detailed-content-main modal-card">
+                                    <span className="detailed-content-neighborhood modal-card">Neighborhood: {this.state.details.parkNeighborhood}</span>
+                                    <span className="detailed-content-address modal-card">Address: {this.state.details.parkStreetNumber} {this.state.details.parkStreetName}</span>
+                                 </div>
                              </div>
+                             <button className="button" onClick={this.props.close}>close</button>
                          </div>
                      </div>
-                )
-            }
-            return null
+                 </div>
+            )
         }
         return null
     }
