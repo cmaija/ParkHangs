@@ -16,7 +16,8 @@ class App extends Component {
             modalOpen: false,
         };
 
-        this.closeDetailModal = this.closeDetailModal.bind(this)
+        this.closeDetailModal = this.closeDetailModal.bind(this);
+        this.openModal = this.openModal.bind(this);
     }
 
     closeDetailModal() {
@@ -37,6 +38,7 @@ class App extends Component {
                 <div>
                     <NavBar/>
                     <MainContainer/>
+                    <button onClick={this.openModal}>Show detailed modal</button>
                     <DetailModal close={this.closeDetailModal} showModal={this.state.modalOpen}/>
                     <Map/>
                     <Searchbar placeholder="Search..."/>
