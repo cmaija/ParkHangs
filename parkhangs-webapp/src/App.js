@@ -1,21 +1,51 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import Map from './components/Map.js';
+import NavBar from './components/NavBar';
+import MainContainer from './components/MainContainer';
+import DetailModal from './components/DetailModal';
+import CalendarWrapper from './components/CalendarWrapper';
+import Searchbar from "./components/Searchbar";
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+
+    constructor(props) {
+
+        super(props);
+        this.state = {
+            modalOpen: false,
+        };
+
+        this.closeDetailModal = this.closeDetailModal.bind(this)
+    }
+
+    closeDetailModal() {
+        this.closeModal()
+    }
+
+    closeModal() {
+        this.setState({modalOpen: false})
+    }
+
+    openModal() {
+        this.setState({modalOpen: true})
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <div>
+                    <NavBar/>
+                    <MainContainer/>
+                    <DetailModal close={this.closeDetailModal} showModal={this.state.modalOpen}/>
+                    <Map/>
+                    <Searchbar placeholder="Search..."/>
+                    <CalendarWrapper/>
+                </div>
+            </div>
+        );
+    }
 }
 
 export default App;
+

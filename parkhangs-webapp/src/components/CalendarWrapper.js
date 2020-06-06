@@ -1,5 +1,5 @@
 import React from "react";
-import Calendar from 'react-calendar'
+import Calendar from 'react-calendar';
 
 class CalendarWrapper extends React.Component {
 

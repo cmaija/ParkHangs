@@ -1,5 +1,4 @@
-import * as React from "react";
-import connect from "react-redux/es/connect/connect";
+import React from "react";
 
 class Searchbar extends React.Component {
 
@@ -61,8 +60,7 @@ class Searchbar extends React.Component {
                    value={this.state.searchQuery}
                    name="search"/>
             <button type="submit" onClick={this.handleSearchSubmit}>
-                <i className="fa fa-search">
-                </i>
+                <i className="fa fa-search"/>
             </button>
 
         </form>
