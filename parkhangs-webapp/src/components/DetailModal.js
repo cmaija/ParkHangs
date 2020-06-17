@@ -1,5 +1,5 @@
 import React from 'react'
-import '../DetailModal.css'
+import './DetailModal.css'
 
 class DetailModal extends React.Component {
     constructor(props) {
