@@ -5,7 +5,7 @@ import React from 'react';
 class NavBar extends React.Component {
     render () {
         return (
-            <div className>
+            <div className="NavBar">
                 <nav id ="NavBar">
                     <ul id ="NavList">
                         <li><a href="#">Home</a></li>
@@ -14,7 +14,7 @@ class NavBar extends React.Component {
                     </ul>
                 </nav>
             </div>
-               
+
         );
     }
 }

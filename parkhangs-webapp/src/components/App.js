@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Map from './components/Map.js';
+import Map from './Map.js';
 import NavBar from './NavBar';
 import MainContainer from './MainContainer';
 import DetailModal from './DetailModal'
@@ -32,12 +31,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <div>
-        <NavBar />
-        <MainContainer />
-        <DetailModal close={this.closeDetailModal} showModal={this.state.modalOpen} />
+          <div>
+            <NavBar />
+            <MainContainer />
+            <DetailModal close={this.closeDetailModal} showModal={this.state.modalOpen} />
+          </div>
       </div>
-    );
+  );
   }
 }
 
