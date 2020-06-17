@@ -6,8 +6,8 @@ class NavBar extends React.Component {
     render () {
         return (
             <div className="NavBar">
-                <nav id ="NavBar">
-                    <ul id ="NavList">
+                <nav id="NavBar">
+                    <ul id="NavList">
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Maps</a></li>
                         <li><a href="#">Calender</a></li>
