@@ -7,6 +7,8 @@ const parksSlice = createSlice({
     initialState: [
         {
             parkName: "Dude Chilling Park",
+            lat: 49.264012,
+            lng: -123.095931,
             events: [
                 {parkName: "Dude Chilling Park", eventTime: "2020-07-16T19:20-07:00"},
                 {parkName: "Dude Chilling Park", eventTime: "2021-01-01T11:17-07:00"}
@@ -14,12 +16,16 @@ const parksSlice = createSlice({
         },
         {
             parkName: "Shaughnessy Park",   
+            lat: 49.2557,
+            lng: -123.1351,
             events: [
                 {parkName: "Shaughnessy Park", eventTime: "2020-08-01T13:30-07:00"}
             ]
         }
         {
             parkName: "Sunset Beach Park",
+            lat: 49.2800,
+            lng: -123.1387,
             events: [
                 {parkName: "Sunset Beach Park", eventTime: "2020-06-29T10:45-07:00"},
                 {parkName: "Sunset Beach Park", eventTime: "2020-07-16T19:20-07:00"},
