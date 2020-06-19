@@ -23,7 +23,7 @@ class Searchbar extends React.Component {
     handleSearchInput(event) {
 
         this.setState({
-            searchQuery: event.target.value.trim()
+            searchQuery: event.target.value
         });
 
     };
