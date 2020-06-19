@@ -1,8 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+// export const selectPark = createAction('SelectPark')
+
 const parksSlice = createSlice({
     name: 'parks',
-  
+
     initialState: {
         parks: [
             {
@@ -36,18 +38,22 @@ const parksSlice = createSlice({
                 ]
             }
         ]
+        // selectedParkID: 0
     },
 
     reducers: {
-        addPark: {
+        selectPark: {
             reducer(state, action) {
-                const {id, name} = action.payload
-                state.push({id, name})
+              // let newState = {parks: [...state.parks],
+							// selectedItem: action.id};
+		          // return newState;
+              const {id, name} = action.payload
+              state.push({id, name})
             },
         },
     }
 })
 
-export const {addPark} = parksSlice.actions
+export const { selectPark } = parksSlice.actions
 
 export default parksSlice.reducer

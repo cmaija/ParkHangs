@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import { connect } from 'react-redux';
+import DetailModal from './DetailModal.js'
+import Marker from './Marker.js'
 
 class SimpleMap extends Component {
   static defaultProps = {
@@ -17,27 +18,20 @@ class SimpleMap extends Component {
       // Important! Always set the container height explicitly
       <div style={{ height: '500px', width: '75%', margin: 'auto' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'API Key' }}
+          bootstrapURLKeys={{ key: 'AIzaSyC6vDPdj5GJoNMlseU9Ogk7cisYHlfYm48' }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          <AnyReactComponent
-            lat={49.264012}
-            lng={-123.095931}
-            text="Dude Chilling Park"
+        {this.props.parks.map((park) => {
+          return <Marker key={park.id}
+          lat={park.lat}
+          lng={park.lng}
+          text={park.parkName}
+          events={park.events}
           />
-
-          <AnyReactComponent
-            lat={49.2557}
-            lng={-123.1351}
-            text="Shaughnessy Park"
-          />
-
-          <AnyReactComponent
-            lat={49.2800}
-            lng={-123.1387}
-            text="Sunset Beach Park"
-          />
+            }
+          )
+        }
 
         </GoogleMapReact>
       </div>
@@ -45,4 +39,11 @@ class SimpleMap extends Component {
   }
 }
 
-export default SimpleMap;
+const mapStateToProps = (state) => { //name is by convention
+	return { parks: state.parks.parks }; //now it will appear as props
+}
+
+export default connect(mapStateToProps, null)(SimpleMap);
+
+
+// export default SimpleMap;

@@ -10,7 +10,7 @@ class NavBar extends React.Component {
                     <ul id="NavList">
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Maps</a></li>
-                        <li><a href="#">Calender</a></li>
+                        <li><a href="#">Calendar</a></li>
                     </ul>
                 </nav>
             </div>
