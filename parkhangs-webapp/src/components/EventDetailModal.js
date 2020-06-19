@@ -1,15 +1,17 @@
 import React from 'react'
 import './DetailModal.css'
+import { connect } from 'react-redux'
+
 
 class EventDetailModal extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            details: {
-                parkName: "Shaughnessy Park", 
-                eventTime: "2020-08-01T13:30-07:00"
-      
+            details : {
+                parkName: this.props.parks[1].events[0].parkName ,
+                eventTime: this.props.parks[1].events[0].eventTime
             }
+            
         }
     }
 
@@ -39,4 +41,9 @@ class EventDetailModal extends React.Component {
     }
 }
 
-export default EventDetailModal
+const mapStateToProps = state =>{
+    return{parks: state.parks.parks}
+}
+
+
+export default connect(mapStateToProps, null)(EventDetailModal);
