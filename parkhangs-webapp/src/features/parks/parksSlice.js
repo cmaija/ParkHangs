@@ -48,6 +48,4 @@ const parksSlice = createSlice({
 });
 
 export const {addPark} = parksSlice.actions
-
-
 export default parksSlice.reducer
