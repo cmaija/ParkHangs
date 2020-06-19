@@ -4,7 +4,6 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const parksSlice = createSlice({
     name: 'parks',
-
     initialState: {
         parks: [
             {
@@ -50,9 +49,9 @@ const parksSlice = createSlice({
               const {id, name} = action.payload
               state.push({id, name})
             },
-        },
+        }
     }
-})
+});
 
 export const { selectPark } = parksSlice.actions
 

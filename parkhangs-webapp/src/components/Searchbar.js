@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 
 class Searchbar extends React.Component {
 
@@ -7,12 +8,15 @@ class Searchbar extends React.Component {
         super(props);
 
         this.state = {
-            searchQuery: ""
+            searchQuery: "",
+            invalidSearch: false,
+            searchResult: null,
         };
 
         this.handleSearchInput = this.handleSearchInput.bind(this);
         this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
         this.clearSearchText = this.clearSearchText.bind(this);
+        this.searchForAPark = this.searchForAPark.bind(this);
     }
 
 
@@ -32,17 +36,31 @@ class Searchbar extends React.Component {
 
             // TODO: add error message
 
-            alert("You didn't search anything!!");
+            this.setState({
+                invalidSearch: true
+            });
 
         } else {
 
-            alert("You searched: " + this.state.searchQuery);
+
+            this.searchForAPark(this.state.searchQuery);
 
             //TODO: call whatever method we pass in and use this.state.searchQuery as the parameter
 
             this.clearSearchText();
         }
     };
+
+    searchForAPark(parkName) {
+
+        let parkObject = this.props.park.find((park) =>
+            park.parkName === parkName
+        );
+
+        this.setState({
+            searchResult: parkObject
+        });
+    }
 
     clearSearchText() {
         this.setState({
@@ -62,27 +80,65 @@ class Searchbar extends React.Component {
             <button type="submit" onClick={this.handleSearchSubmit}>
                 <i className="fa fa-search"/>
             </button>
+            {
+                this.state.invalidSearch ?
+                    <div>
+                        There is something wrong with your search. Try again!
+                    </div>
+                    : null
+            }
+            {
+                this.state.searchResult != null ?
+                    <div>
+                        <div>
+                            Name: {this.state.searchResult.parkName}
+                        </div>
+                        <div>
+                            Lat: {this.state.searchResult.lat}
+                        </div>
+                        <div>
+                            Lon: {this.state.searchResult.lng}
+                        </div>
+                        Events:
+                        {
+                            this.state.searchResult.events.map((event) => {
+                                return <div key={event.eventTime}>
+                                    <div>
+                                        {event.parkName}
+                                    </div>
+                                    <div>
+                                        {event.eventTime}
+                                    </div>
+                                </div>;
+                            })
+                        }
 
+                    </div>
+                    :
+                    null
+            }
+            {
+                this.state.searchResult === undefined ?
+
+                    <div>
+                        There are no results
+                    </div>
+                    :
+                    null
+            }
         </form>
 
     }
 }
 
-
 const mapStateToProps = (state) => {
-    //TODO: set props here from state
+
+    return {
+        park: state.parks.parks
+    }
 };
 
-
-const mapDispatchToProps = (dispatch) => ({
-    //TODO: add actions here
-
-});
-
-
-export default Searchbar;
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);
+export default connect(mapStateToProps, null)(Searchbar);
 
 
 
