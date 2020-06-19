@@ -1,5 +1,7 @@
 import React from "react";
 import Calendar from 'react-calendar';
+import DetailModal from "./DetailModal";
+import {connect} from "react-redux";
 
 class CalendarWrapper extends React.Component {
 
@@ -10,26 +12,36 @@ class CalendarWrapper extends React.Component {
         this.state = {
 
             selectedDate: new Date(), // TODO: need to determine what exactly the selectedDateQuery format should be
-            showCalendar: false
+            showCalendar: false,
+            showEventPopup: false
         };
 
 
         this.onChange = this.onChange.bind(this);
         this.toggleCalendar = this.toggleCalendar.bind(this);
+        this.closeDetailModal = this.closeDetailModal.bind(this);
     }
 
-    onChange(date) {
-        alert("You selected: " + date);
+    onChange() {
+        //alert("You selected: " + date);
 
         this.setState(
             {
-                selectedDate: date,
-                showCalendar: false
+                showCalendar: false,
+                showEventPopup: true
             }
         );
         // TODO: need to pass in the date to make some sort of a query to the db to view/create/modify/delete events
 
     };
+
+    closeDetailModal() {
+
+        this.setState({
+                showEventPopup: !this.state.showEventPopup
+            }
+        );
+    }
 
     toggleCalendar() {
 
@@ -48,10 +60,42 @@ class CalendarWrapper extends React.Component {
                             <Calendar onChange={this.onChange} value={this.state.date}/>
                         </div> : null
                 }
+
+                <DetailModal close={this.closeDetailModal} showModal={this.state.showEventPopup}
+                             events={this.props.events}/>
             </div>
         );
 
     }
 }
 
-export default CalendarWrapper;
+
+const mapStateToProps = (state) => {
+
+    function filterEvents(state) {
+        const events = [];
+
+        //TODO: find the actual park first instead of all the parks (later tasks)
+
+        // crappy for loop but just demo purposes for now
+
+        for (let i = 0; i < state.parks.parks.length; i++) {
+
+            for (let j = 0; j < state.parks.parks[i].events.length; j++) {
+
+                events.push(state.parks.parks[i].events[j]);
+            }
+
+        }
+
+        return events;
+    }
+
+    return {
+        events: filterEvents(state)
+    }
+
+};
+
+export default connect(mapStateToProps, null)(CalendarWrapper);
+
