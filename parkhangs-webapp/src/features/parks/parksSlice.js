@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const parksSlice = createSlice({
     name: 'parks',
-
+  
     initialState: {
         parks: [
             {
