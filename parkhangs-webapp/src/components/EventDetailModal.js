@@ -16,7 +16,6 @@ class EventDetailModal extends React.Component {
     }
 
     render() {
-        console.log(this.props.showModal)
         if (this.props.showModal) {
             return (
                 <div className="modal-background">

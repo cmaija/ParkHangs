@@ -1,5 +1,5 @@
 import React from 'react';
-//import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 //import {increment} from '../actions';
 
 class MainContainer extends React.Component {
@@ -7,9 +7,15 @@ class MainContainer extends React.Component {
         return (
                 <div>
                     <h1>Page Content goes here.</h1>
+                    <button onClick={()=>{alert(this.props.selected + " is selected!")}}>Selected Park</button>
                 </div>
         );
     }
 }
 
-export default MainContainer;
+const mapStateToProps = (state) => { //name is by convention
+  return { selected: state.parks.selectedPark }; //now it will appear as props
+}
+
+export default connect(mapStateToProps, null)(MainContainer);
+// export default MainContainer;

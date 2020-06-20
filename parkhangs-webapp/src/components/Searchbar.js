@@ -1,5 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
+import AddEventForm from "./AddEventForm";
+import {addEvent, deleteEvent} from "../features/parks/parksSlice";
 
 class Searchbar extends React.Component {
 
@@ -137,6 +139,8 @@ const mapStateToProps = (state) => {
         park: state.parks.parks
     }
 };
+
+
 
 export default connect(mapStateToProps, null)(Searchbar);
 
