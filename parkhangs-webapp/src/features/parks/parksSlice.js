@@ -42,8 +42,9 @@ const parksSlice = createSlice({
     reducers: {
         addPark: {
             reducer(state, action) {
-                const {id, name} = action.payload
-                state.push({id, name})
+                // let newState = {parks: [...state.parks],
+                // selectedItem: action.id};
+                // return newState;
             },
         },
 
@@ -61,28 +62,55 @@ const parksSlice = createSlice({
               }
             }
         },
+        deleteEvent: {
+            reducer(state, action) {
+                const {parkId, eventId} = action.payload;
 
-        deleteEvent(state, action) {
-            const eventID = action.payload
-            function findID (state){
+                for (let i = 0; i < state.parks.length; i++) {
 
-                for (let i = 0; i < state.parks.parks.length; i++) {
-                    for (let j = 0; j < state.parks.parks[i].events.length; j++) {
-                        if (eventID !== state.parks.parks[i].events[j].id){
-                            state.parks.parks[i].events.splice(j--,1);
-                            //should delete the intended message; j-- decrements index so when array shifts no element is skipped
+                    if (state.parks[i].id === parkId) {
+                        // have the park
+
+                        for (let j = 0; j < state.parks[i].events.length; j++) {
+
+                            if (eventId === state.parks[i].events[j].id) {
+                                state.parks[i].events.splice(j)
+                            }
                         }
                     }
-
+                }
+            },
+            prepare(parkId, eventId) {
+                return {
+                    payload: {
+                        parkId,
+                        eventId
+                    }
                 }
             }
+        },
+        addEvent: {
+            reducer(state, action) {
+                const {parkId, event} = action.payload
 
+                for (let i = 0; i < state.parks.length; i++) {
+                    if (state.parks[i].id === parkId) {
+                        state.parks[i].events.push(event)
+                    }
+                }
+            },
 
-
+            prepare(parkId, event) {
+                return {
+                    payload: {
+                        parkId,
+                        event
+                    }
+                }
+            }
         }
     }
-})
+});
 
-export const {addPark, selectPark} = parksSlice.actions
-
+export const {selectPark, addEvent, deleteEvent} = parksSlice.actions;
 export default parksSlice.reducer
