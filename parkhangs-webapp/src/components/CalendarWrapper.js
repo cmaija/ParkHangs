@@ -1,68 +1,93 @@
 import React from "react";
 import Calendar from 'react-calendar';
-import DetailModal from "./DetailModal";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
+import { openModal } from "../features/modal/modalSlice"
+import './CalendarWrapper.css'
+import 'react-calendar/dist/Calendar.css'
 
 class CalendarWrapper extends React.Component {
 
     constructor(props) {
-
         super(props);
 
         this.state = {
-
             selectedDate: new Date(), // TODO: need to determine what exactly the selectedDateQuery format should be
-            showCalendar: false,
-            showEventPopup: false
         };
-
-
-        this.onChange = this.onChange.bind(this);
-        this.toggleCalendar = this.toggleCalendar.bind(this);
-        this.closeDetailModal = this.closeDetailModal.bind(this);
     }
 
-    onChange() {
-        //alert("You selected: " + date);
-
-        this.setState(
-            {
-                showCalendar: false,
-                showEventPopup: true
+    openDetailModal = (date) => {
+        const events = this.getCorrespondingEvents(date)
+        const props = {
+            component: 'DetailModal',
+            componentParams: {
+                events,
             }
-        );
-        // TODO: need to pass in the date to make some sort of a query to the db to view/create/modify/delete events
+        }
 
-    };
-
-    closeDetailModal() {
-
-        this.setState({
-                showEventPopup: !this.state.showEventPopup
-            }
-        );
+        this.props.openModal(props)
     }
 
-    toggleCalendar() {
+    eventDates = () => {
+        return this.props.park.events.map(event => new Date(event.eventTime))
+    }
 
-        this.setState({
-            showCalendar: !this.state.showCalendar
-        });
+    getCorrespondingEvents = (date) => {
+        return this.props.park.events.filter((event) => {
+            return this.datesAreOnSameDay(new Date(event.eventTime), date)})
+    }
+
+    tileClassName = ({ date, view }) => {
+        if (view === 'decade') {
+            if (this.eventDates().some(eventDate => this.datesAreOnSameYear(eventDate, date))) {
+                return 'date-has-event'
+            }
+        }
+
+        if (view === 'year') {
+            if (this.eventDates().some(eventDate => this.datesAreOnSameMonth(eventDate, date))) {
+                return 'date-has-event'
+            }
+        }
+
+        if (view === 'month') {
+            if (this.eventDates().some(eventDate => this.datesAreOnSameDay(eventDate, date))) {
+                return 'date-has-event'
+            }
+        }
+
+        if (view === 'day') {
+            if (this.eventDates().some(eventDate => this.datesAreOnSameDay(eventDate, date))) {
+                return 'date-has-event'
+            }
+        }
+    }
+
+    datesAreOnSameDay = (firstDay, secondDay) => {
+        return firstDay.getFullYear() === secondDay.getFullYear() &&
+        firstDay.getMonth() === secondDay.getMonth() &&
+        firstDay.getDate() === secondDay.getDate()
+    }
+
+    datesAreOnSameMonth = (firstDay, secondDay) => {
+        return firstDay.getFullYear() === secondDay.getFullYear() &&
+        firstDay.getMonth() === secondDay.getMonth()
+    }
+
+    datesAreOnSameYear = (firstDay, secondDay) => {
+        return firstDay.getFullYear() === secondDay.getFullYear()
     }
 
     render() {
         return (
-            <div>
-                <i onClick={this.toggleCalendar} className="far fa-calendar-alt"/>
-                {
-                    this.state.showCalendar ?
-                        <div style={{width: "250px"}}>
-                            <Calendar onChange={this.onChange} value={this.state.date}/>
-                        </div> : null
-                }
-
-                <DetailModal close={this.closeDetailModal} showModal={this.state.showEventPopup}
-                             events={this.props.events}/>
+            <div className="CalendarWrapper">
+                <div>{this.props.park.parkName}</div>
+                <div style={{width: "250px"}}>
+                    <Calendar
+                        onChange={this.openDetailModal}
+                        value={this.state.date}
+                        tileClassName={this.tileClassName}
+                        defaultView="year"/>
+                </div>
             </div>
         );
 
@@ -70,32 +95,9 @@ class CalendarWrapper extends React.Component {
 }
 
 
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch) => ({
+    openModal: (modalProps) => dispatch(openModal(modalProps)),
+})
 
-    function filterEvents(state) {
-        const events = [];
 
-        //TODO: find the actual park first instead of all the parks (later tasks)
-
-        // crappy for loop but just demo purposes for now
-
-        for (let i = 0; i < state.parks.parks.length; i++) {
-
-            for (let j = 0; j < state.parks.parks[i].events.length; j++) {
-
-                events.push(state.parks.parks[i].events[j]);
-            }
-
-        }
-
-        return events;
-    }
-
-    return {
-        events: filterEvents(state)
-    }
-
-};
-
-export default connect(mapStateToProps, null)(CalendarWrapper);
-
+export default connect(null, mapDispatchToProps)(CalendarWrapper);

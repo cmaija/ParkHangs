@@ -54,7 +54,6 @@ class Searchbar extends React.Component {
     };
 
     searchForAPark(parkName) {
-
         let parkObject = this.props.park.find((park) =>
             park.parkName === parkName
         );
@@ -143,7 +142,3 @@ const mapStateToProps = (state) => {
 
 
 export default connect(mapStateToProps, null)(Searchbar);
-
-
-
-

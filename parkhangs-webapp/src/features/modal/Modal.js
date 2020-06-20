@@ -1,34 +1,48 @@
 import React from 'react'
 import './Modal.css'
-import DetailModal from '../../components/DetailModal';
-import EventDetailModal from '../../components/EventDetailModal';
+import DetailModal from '../../components/DetailModal'
+import EventDetailModal from '../../components/EventDetailModal'
+import { connect } from "react-redux"
+import {
+    openModal,
+    closeModal } from "./modalSlice";
+
 
 class Modal extends React.Component {
     constructor(props) {
         super(props)
+
         this.state = {
-            showModal: true,
+            showModal: true
         }
+
+        this.close = this.close.bind(this)
     }
 
-    components: {
-        detailModal: DetailModal,
-        eventModal: EventModal,
+    components = {
+        'DetailModal': DetailModal,
+        'EventDetailModal': EventDetailModal,
+    }
+
+    close () {
+        this.props.closeModal()
     }
 
     render() {
         if (this.state.showModal) {
-            const ComponentName = this.props.component ? this.components[this.props.component] : false
-            const hasComponent = !!this.props.component
+            const ComponentName = this.props.modalProps.component
+                ? this.components[this.props.modalProps.component]
+                : false
+            const hasComponent = !!this.props.modalProps.component
             return (
                 <div className="modal-background">
                     <div className="modal-container">
                         <div className="detailed-info modal-card">
                             <div className="detailed-content modal-card">
-                                {hasComponent && <ComponentName {...this.props.componentParams}/>}
+                                {hasComponent && <ComponentName {...this.props.modalProps.componentParams}/>}
                             </div>
                         </div>
-                        <button className="button" onClick={this.props.close}>close</button>
+                        <button className="button" onClick={this.close}>close</button>
                     </div>
                 </div>
             )
@@ -36,4 +50,9 @@ class Modal extends React.Component {
     }
 }
 
-export default Modal
+const mapDispatchToProps = (dispatch) => ({
+    openModal: () => dispatch(openModal()),
+    closeModal: () => dispatch(closeModal(false)),
+})
+
+export default connect(null, mapDispatchToProps)(Modal)

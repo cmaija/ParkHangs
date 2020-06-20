@@ -1,9 +1,11 @@
-import React, {Component} from 'react';
-import {selectPark} from '../features/parks/parksSlice.js'
+import React, {Component} from 'react'
+import {
+    selectPark,
+    deleteEvent } from '../features/parks/parksSlice.js'
+import { openModal } from '../features/modal/modalSlice.js'
 import MarkerIcon from '../images/marker.png'
 import AddEventForm from "./AddEventForm";
-import {deleteEvent} from "../features/parks/parksSlice";
-import {connect} from "react-redux";
+import {connect} from "react-redux"
 
 class Marker extends Component {
     constructor(props) {
@@ -93,8 +95,8 @@ const mapStateToProps = (state) => { //name is by convention
 
 const mapDispatchToProps = (dispatch) => ({
     selectParkID: (parkID) => dispatch(selectPark(parkID)),
-    deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId))
-
+    deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
+    openModal: () => dispatch(openModal())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Marker);

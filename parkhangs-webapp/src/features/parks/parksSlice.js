@@ -45,6 +45,7 @@ const parksSlice = createSlice({
                 // let newState = {parks: [...state.parks],
                 // selectedItem: action.id};
                 // return newState;
+                return state
             },
         },
 

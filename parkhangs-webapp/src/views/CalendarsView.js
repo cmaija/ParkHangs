@@ -1,15 +1,30 @@
 import React, {Component} from 'react';
 import CalendarWrapper from '../components/CalendarWrapper';
+import Searchbar from '../components/Searchbar'
+import { connect } from 'react-redux'
+import './CalendarsView.css'
 
 class CalendarsView extends Component {
     render() {
-        console.log('calendar')
         return (
             <div className="CalendarsView">
-                <CalendarWrapper/>
+                <Searchbar placeholder="Search..."/>
+                <div className="CalendarList">
+                {
+                    this.props.parks.map((park) => {
+                        return <CalendarWrapper key={park.id} park={park}/>
+                    })
+                }
+                </div>
             </div>
         );
     }
 }
 
-export default CalendarsView;
+const mapStateToProps = (state) => {
+    return {
+        parks: state.parks.parks,
+    }
+}
+
+export default connect(mapStateToProps, null)(CalendarsView);
