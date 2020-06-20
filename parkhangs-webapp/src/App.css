@@ -1,42 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Ubuntu', sans-serif;
+}
+
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
+  width: 100vw;
+  height: 95vh;
 }
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-#NavList {
-  width: 100%;
-  float: left;
-  margin: 0 0 3em 0;
-  padding: 0;
-  list-style: none;
-  background: black;
-  color: lightblue;
-}
-a{
-  color:darkgray;
-}
-
-#NavList li {
-  float: left;
-  padding-left: 3em;
 }

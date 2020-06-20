@@ -1,0 +1,32 @@
+.NavBar {
+    width: 100%;
+    height: 4rem;
+    background-color: #fafbfc;
+    margin-top: -8px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-right: 5rem;
+    border-bottom: 1px solid #e1e4e8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.NavTitle {
+    padding-left: 3rem;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.NavList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.NavLink {
+    padding: 0 1rem;
+}

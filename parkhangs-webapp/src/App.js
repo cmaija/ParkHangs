@@ -54,11 +54,10 @@ class App extends Component {
             <div className="App">
                 <div>
                     <NavBar/>
-                    <MainContainer/>
                     <button onClick={this.openModal}>Show detailed modal</button>
                     <DetailModal close={this.closeDetailModal} showModal={this.state.modalOpen}/>
                     <Map/>
-                    <button onClick={this.openEventModal}>Show event modal</button> 
+                    <button onClick={this.openEventModal}>Show event modal</button>
                     <EventDetailModal close={this.closeEventModal} showModal={this.state.eventmodalOpen}/>
                     <Searchbar placeholder="Search..."/>
                     <CalendarWrapper/>
