@@ -11,12 +11,12 @@ yarn-error.log*
 lerna-debug.log*
 
 # Coverage directory used by tools like istanbul
-coverage
+/coverage
 *.lcov
 
 # Dependency directories
-node_modules/
-jspm_packages/
+/node_modules
+/jspm_packages
 
 
 # Optional npm cache directory
