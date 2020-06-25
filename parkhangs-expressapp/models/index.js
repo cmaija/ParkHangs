@@ -33,12 +33,11 @@ const Event = new Schema(
     },
 );
 
+module.exports = mongoose.model('events', Event);
+
 
 //TODO: to be used later!
 
-//
-// // export default mongoose.model('messages', Message);
-// module.exports = mongoose.model('events', Event);
 //
 // const ParkComment = new Schema(
 //     {
