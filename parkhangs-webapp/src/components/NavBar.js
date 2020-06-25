@@ -3,14 +3,14 @@ import React from 'react';
 //import {increment} from '../actions';
 
 class NavBar extends React.Component {
-    render() {
+    render () {
         return (
-            <div className>
+            <div className="NavBar">
                 <nav id="NavBar">
                     <ul id="NavList">
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Maps</a></li>
-                        <li><a href="#">Calender</a></li>
+                        <li><a href="#">Calendar</a></li>
                     </ul>
                 </nav>
             </div>

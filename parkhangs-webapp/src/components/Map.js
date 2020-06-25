@@ -1,48 +1,47 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import {connect} from 'react-redux';
+import DetailModal from './DetailModal.js'
+import Marker from './Marker.js'
 
 class SimpleMap extends Component {
-  static defaultProps = {
-    center: {
-      lat: 49.28,
-      lng: -123.12
-    },
-    zoom: 12
-  };
+    static defaultProps = {
+        center: {
+            lat: 49.28,
+            lng: -123.12
+        },
+        zoom: 12
+    };
 
-  render() {
-    return (
-      // Important! Always set the container height explicitly
-      <div style={{ height: '500px', width: '75%', margin: 'auto' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: 'API Key' }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          <AnyReactComponent
-            lat={49.264012}
-            lng={-123.095931}
-            text="Dude Chilling Park"
-          />
+    render() {
+        return (
+            // Important! Always set the container height explicitly
+            <div style={{height: '500px', width: '75%', margin: 'auto'}}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{key: 'API KEY HERE!'}}
+                    defaultCenter={this.props.center}
+                    defaultZoom={this.props.zoom}
+                >
+                    {this.props.parks.map((park) => {
+                            return <Marker key={park.id}
+                                           lat={park.lat}
+                                           lng={park.lng}
+                                           text={park.parkName}
+                                           events={park.events}
+                                           park={park}
+                            />
+                        }
+                    )
+                    }
 
-          <AnyReactComponent
-            lat={49.2557}
-            lng={-123.1351}
-            text="Shaughnessy Park"
-          />
-
-          <AnyReactComponent
-            lat={49.2800}
-            lng={-123.1387}
-            text="Sunset Beach Park"
-          />
-
-        </GoogleMapReact>
-      </div>
-    );
-  }
+                </GoogleMapReact>
+            </div>
+        );
+    }
 }
 
-export default SimpleMap;
+const mapStateToProps = (state) => { //name is by convention
+    return {parks: state.parks.parks}; //now it will appear as props
+}
+
+export default connect(mapStateToProps, null)(SimpleMap);
