@@ -1,5 +1,5 @@
 const Request = require("request");
-const Park = require('../models/index');
+const Park = require('../models/ParkModel');
 
 // used to populate the parks on the database. Should not be called unless parks collection on database is removed
 

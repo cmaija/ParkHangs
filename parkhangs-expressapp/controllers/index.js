@@ -1,4 +1,4 @@
-const Park = require('../models/index');
+const Park = require('../models/ParkModel');
 
 const express = require('express');
 const Request = require("request");
