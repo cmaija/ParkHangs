@@ -4,7 +4,6 @@ import {
     deleteEvent } from '../features/parks/parksSlice.js'
 import { openModal } from '../features/modal/modalSlice.js'
 import MarkerIcon from '../images/marker.png'
-import AddEventForm from "./AddEventForm";
 import {connect} from "react-redux"
 
 class Marker extends Component {
@@ -18,11 +17,17 @@ class Marker extends Component {
         this.handleSelect = this.handleSelect.bind(this);
     }
 
-    handleSelect() {
-        this.setState({
-            showDetails: true
-        });
-        this.props.selectParkID(this.props.text);
+    handleSelect (park) {
+        this.props.selectParkID(park);
+
+        const props = {
+            component: 'ModalMapDetail',
+            componentParams: {
+                park,
+            }
+        }
+
+        this.props.openModal(props)
 
     }
 
@@ -31,59 +36,11 @@ class Marker extends Component {
             <div>
                 <img src={MarkerIcon}/>
                 <div className="marker" onClick={() => {
-                    this.handleSelect()
+                    this.handleSelect(this.props.text)
                 }}
                 >
                     {this.props.park.parkName}
                 </div>
-
-                {
-
-                    this.state.showDetails ?
-
-                        <div className="modal-background" style={{width: "50%"}}>
-                            <div className="modal-container">
-                                <div className="detailed-info modal-card">
-                                    <div>
-                                        <div>
-                                            Name: {this.props.park.parkName}
-                                        </div>
-                                        <div>
-                                            Lat: {this.props.park.lat}
-                                        </div>
-                                        <div>
-                                            Lon: {this.props.park.lng}
-                                        </div>
-                                        Events:
-                                        {
-                                            this.props.park.events.map((event) => {
-                                                return <div key={event.id}>
-                                                    <div>
-                                                        {event.parkName}
-                                                    </div>
-                                                    <div>
-                                                        {event.eventTime}
-                                                    </div>
-                                                    <button onClick={() => {
-                                                        this.props.deleteEventFromPark(this.props.park.id, event.id)
-                                                    }}>
-                                                        X
-                                                    </button>
-                                                </div>;
-                                            })
-                                        }
-
-                                        <AddEventForm park={this.props.park}/>
-                                        <button onClick={() => {
-                                            this.setState({showDetails: false})
-                                        }}>Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                }
             </div>
         );
     };
