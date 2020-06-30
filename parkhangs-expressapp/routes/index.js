@@ -5,6 +5,7 @@ var router = express.Router();
 
 //PLACE ROUTES HERE!
 router.get('/parks', controller.getParks);
-router.get('/:parkId/events', controller.getEventsByPark)
+router.patch('/events/:eventId', controller.updateEvent)
+router.delete('/events/:eventId', controller.deleteEvent)
 
 module.exports = router;
