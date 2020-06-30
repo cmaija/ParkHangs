@@ -1,7 +1,7 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import AddEventForm from "./AddEventForm";
-import {addEvent, deleteEvent} from "../features/parks/parksSlice";
+import { setParkFilter } from "../features/parks/parksSlice";
 
 class Searchbar extends React.Component {
 
@@ -54,13 +54,14 @@ class Searchbar extends React.Component {
     };
 
     searchForAPark(parkName) {
-        let parkObject = this.props.park.find((park) =>
-            park.parkName === parkName
-        );
-
-        this.setState({
-            searchResult: parkObject
-        });
+        // let parkObject = this.props.park.find((park) =>
+        //     park.parkName === parkName
+        // );
+        //
+        // this.setState({
+        //     searchResult: parkObject
+        // });
+        this.props.setFilter(parkName)
     }
 
     clearSearchText() {
@@ -131,14 +132,8 @@ class Searchbar extends React.Component {
 
     }
 }
+const mapDispatchToProps = (dispatch) => ({
+    setFilter: (filter) => dispatch(setParkFilter(filter))
+})
 
-const mapStateToProps = (state) => {
-
-    return {
-        park: state.parks.parks
-    }
-};
-
-
-
-export default connect(mapStateToProps, null)(Searchbar);
+export default connect(null, mapDispatchToProps)(Searchbar);

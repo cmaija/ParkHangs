@@ -1,7 +1,7 @@
 import React from 'react'
-import './DetailModal.css'
+import './ModalDetail.css'
 
-class DetailModal extends React.Component {
+class ModalDetail extends React.Component {
     render() {
         return (
             <div className="detailed-content-main modal-card">
@@ -24,4 +24,4 @@ class DetailModal extends React.Component {
 
 }
 
-export default DetailModal
+export default ModalDetail

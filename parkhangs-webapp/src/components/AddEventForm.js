@@ -40,9 +40,7 @@ class AddEventForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-
     addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event))
-
-});
+})
 
 export default connect(null, mapDispatchToProps)(AddEventForm);

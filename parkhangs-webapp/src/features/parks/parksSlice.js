@@ -36,6 +36,7 @@ const parksSlice = createSlice({
                 ]
             }
         ],
+        filter: "",
         selectedPark: "No park"
     },
 
@@ -49,11 +50,40 @@ const parksSlice = createSlice({
             },
         },
 
+        setParkFilter: {
+            reducer (state, action) {
+                const { filter } = action.payload
+                return state.filter = filter
+            },
+            prepare (filter) {
+                return {
+                    payload: {
+                        filter,
+                    }
+                }
+            }
+        },
+
+        filterParks: {
+            reducer (state, action) {
+                const { query } = action.payload
+                return state.parks.filter((park) => {
+                    return park.parkName === query
+                })
+            },
+            prepare (query) {
+                return {
+                    payload: {
+                        query,
+                    }
+                }
+            }
+        },
+
         selectPark: {
           reducer(state, action) {
               const {parkID} = action.payload
               state.selectedPark = parkID
-              console.log(state.selectedPark)
             },
             prepare(parkID) {
               return {
@@ -113,5 +143,9 @@ const parksSlice = createSlice({
     }
 });
 
-export const {selectPark, addEvent, deleteEvent} = parksSlice.actions;
+export const {
+    selectPark,
+    addEvent,
+    deleteEvent,
+    setParkFilter } = parksSlice.actions;
 export default parksSlice.reducer

@@ -15,7 +15,6 @@ const modalSlice = createSlice({
             },
 
             prepare (modalProps) {
-                console.log('wtf')
                 return {
                     payload: {
                         modalProps
@@ -26,7 +25,6 @@ const modalSlice = createSlice({
 
         closeModal: {
             reducer (state, action) {
-                console.log('modal slice')
                 state.modalOpen = false
             },
         },

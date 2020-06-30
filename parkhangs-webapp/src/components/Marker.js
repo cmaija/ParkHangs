@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
-import {
-    selectPark,
-    deleteEvent } from '../features/parks/parksSlice.js'
+import { selectPark } from '../features/parks/parksSlice.js'
 import { openModal } from '../features/modal/modalSlice.js'
 import MarkerIcon from '../images/marker.png'
 import {connect} from "react-redux"
@@ -13,28 +11,25 @@ class Marker extends Component {
         this.state = {
             showDetails: false
         };
-
-        this.handleSelect = this.handleSelect.bind(this);
     }
 
-    handleSelect (park) {
+    handleSelect = (park) => {
         this.props.selectParkID(park);
-
-        const props = {
+        const modalProps = {
             component: 'ModalMapDetail',
             componentParams: {
                 park,
             }
         }
 
-        this.props.openModal(props)
+        this.props.openModal(modalProps)
 
     }
 
     render() {
         return (
             <div>
-                <img src={MarkerIcon}/>
+                <img alt="map-marker" src={MarkerIcon}/>
                 <div className="marker" onClick={() => {
                     this.handleSelect(this.props.text)
                 }}
@@ -52,8 +47,7 @@ const mapStateToProps = (state) => { //name is by convention
 
 const mapDispatchToProps = (dispatch) => ({
     selectParkID: (parkID) => dispatch(selectPark(parkID)),
-    deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
-    openModal: () => dispatch(openModal())
+    openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Marker);

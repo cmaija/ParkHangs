@@ -10,7 +10,6 @@ import { connect } from "react-redux";
 
 class Routes extends Component {
     render () {
-        console.log(this.props.modalOpen)
         return (
             <div className="App">
                 <NavBar />

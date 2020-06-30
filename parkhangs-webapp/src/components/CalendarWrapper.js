@@ -18,7 +18,7 @@ class CalendarWrapper extends React.Component {
     openDetailModal = (date) => {
         const events = this.getCorrespondingEvents(date)
         const props = {
-            component: 'DetailModal',
+            component: 'ModalDetail',
             componentParams: {
                 events,
             }

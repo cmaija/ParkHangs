@@ -1,5 +1,5 @@
 import React from 'react'
-import './DetailModal.css'
+import './ModalDetail.css'
 import { connect } from 'react-redux'
 
 

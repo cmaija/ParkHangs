@@ -1,7 +1,8 @@
 import React from 'react'
 import './Modal.css'
-import DetailModal from '../../components/DetailModal'
-import EventDetailModal from '../../components/EventDetailModal'
+import ModalDetail from '../../components/Modal/ModalDetail'
+import EventDetailModal from '../../components/Modal/EventDetailModal'
+import ModalMapDetail from '../../components/Modal/ModalMapDetail'
 import { connect } from "react-redux"
 import {
     openModal,
@@ -20,8 +21,9 @@ class Modal extends React.Component {
     }
 
     components = {
-        'DetailModal': DetailModal,
+        'ModalDetail': ModalDetail,
         'EventDetailModal': EventDetailModal,
+        'ModalMapDetail': ModalMapDetail,
     }
 
     close () {
