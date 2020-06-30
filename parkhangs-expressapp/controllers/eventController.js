@@ -35,9 +35,9 @@ const getEvents = async (req, res) => {
 
 // Add an event
 const addEvent = function (req, res) {
-  if (err) {
-      return res.status(400).json({success: false, error: err})
-  }
+  // if (err) {
+  //     return res.status(400).json({success: false, error: err})
+  // }
   var newEvent = req.body;
   // newEvent.id = uuid();
   res.setHeader('Content-Type', 'application/json');
