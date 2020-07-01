@@ -1,6 +1,6 @@
 import React from "react";
-import {connect} from "react-redux";
-import {addEvent} from "../features/parks/parksSlice.js";
+import { connect } from "react-redux";
+import { addEvent } from "features/parks/parksSlice"
 
 class AddEventForm extends React.Component {
 

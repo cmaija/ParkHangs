@@ -1,12 +1,12 @@
 import React from 'react'
-import './Modal.css'
-import ModalDetail from '../../components/Modal/ModalDetail'
-import EventDetailModal from '../../components/Modal/EventDetailModal'
-import ModalMapDetail from '../../components/Modal/ModalMapDetail'
+import 'features/modal/Modal.css'
+import ModalDetail from 'components/Modal/ModalDetail'
+import EventDetailModal from 'components/Modal/EventDetailModal'
+import ModalMapDetail from 'components/Modal/ModalMapDetail'
 import { connect } from "react-redux"
 import {
     openModal,
-    closeModal } from "./modalSlice";
+    closeModal } from "features/modal/modalSlice";
 
 
 class Modal extends React.Component {

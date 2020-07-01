@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import { selectPark } from '../features/parks/parksSlice.js'
-import { openModal } from '../features/modal/modalSlice.js'
-import MarkerIcon from '../images/marker.png'
+import { selectPark } from 'features/parks/parksSlice.js'
+import { openModal } from 'features/modal/modalSlice.js'
+import MarkerIcon from 'assets/icons/marker.png'
 import {connect} from "react-redux"
 
 class Marker extends Component {

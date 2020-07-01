@@ -1,8 +1,8 @@
 import React from 'react'
-import AddEventForm from '../AddEventForm'
-import { deleteEvent } from '../../features/parks/parksSlice.js'
+import AddEventForm from 'components/AddEventForm'
+import { deleteEvent } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
-import './ModalMapDetail.css'
+import 'components/Modal/ModalMapDetail.css'
 
 class ModalMapDetail extends React.Component {
     selectedPark = () => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import AddEventForm from "./AddEventForm";
-import { setParkFilter } from "../features/parks/parksSlice";
+import AddEventForm from "components/AddEventForm";
+import { queryParks } from "features/parks/parksSlice";
 
 class Searchbar extends React.Component {
 
@@ -48,12 +48,15 @@ class Searchbar extends React.Component {
             this.searchForAPark(this.state.searchQuery);
 
             //TODO: call whatever method we pass in and use this.state.searchQuery as the parameter
-
+            this.setState({
+                invalidSearch: false
+            })
+            
             this.clearSearchText();
         }
     };
 
-    searchForAPark(parkName) {
+    searchForAPark = (parkName) =>  {
         // let parkObject = this.props.park.find((park) =>
         //     park.parkName === parkName
         // );
@@ -62,6 +65,7 @@ class Searchbar extends React.Component {
         //     searchResult: parkObject
         // });
         this.props.setFilter(parkName)
+        this.props.onSearch(false)
     }
 
     clearSearchText() {
@@ -133,7 +137,11 @@ class Searchbar extends React.Component {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    setFilter: (filter) => dispatch(setParkFilter(filter))
+    setFilter: (filter) => dispatch(queryParks(filter))
 })
 
-export default connect(null, mapDispatchToProps)(Searchbar);
+const mapStateToProps = (state) => ({
+    filteredParks: state.parks.filteredParks
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);

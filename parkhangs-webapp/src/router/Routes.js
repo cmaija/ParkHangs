@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import NavBar from '../components/NavBar'
+import NavBar from 'components/NavBar'
 import { Switch, Route } from 'react-router-dom'
-import MapView from '../views/MapView'
-import CalendarsView from '../views/CalendarsView'
-import NoMatch from '../views/NoMatch'
-import Modal from '../features/modal/Modal'
-import '../App.css'
+import MapView from 'views/MapView'
+import CalendarsView from 'views/CalendarsView'
+import NoMatch from 'views/NoMatch'
+import Modal from 'features/modal/Modal'
+import 'App.css'
 import { connect } from "react-redux";
 
 class Routes extends Component {

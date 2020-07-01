@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './NavBar.css'
-import MapIcon from '../assets/icons/map-icon.svg'
-import CalendarIcon from '../assets/icons/calendar-icon.svg'
+import 'components/NavBar.css'
+import MapIcon from 'assets/icons/map-icon.svg'
+import CalendarIcon from 'assets/icons/calendar-icon.svg'
 
 class NavBar extends React.Component {
     render () {

@@ -1,8 +1,8 @@
 import React from "react";
-import Calendar from 'react-calendar';
-import { connect } from "react-redux";
-import { openModal } from "../features/modal/modalSlice"
-import './CalendarWrapper.css'
+import Calendar from 'react-calendar'
+import { connect } from "react-redux"
+import { openModal } from "features/modal/modalSlice"
+import 'components/CalendarWrapper.css'
 import 'react-calendar/dist/Calendar.css'
 
 class CalendarWrapper extends React.Component {
