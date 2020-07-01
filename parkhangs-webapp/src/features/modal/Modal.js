@@ -1,7 +1,6 @@
 import React from 'react'
 import 'features/modal/Modal.css'
 import ModalDetail from 'components/Modal/ModalDetail'
-import EventDetailModal from 'components/Modal/EventDetailModal'
 import ModalMapDetail from 'components/Modal/ModalMapDetail'
 import { connect } from "react-redux"
 import {
@@ -16,17 +15,14 @@ class Modal extends React.Component {
         this.state = {
             showModal: true
         }
-
-        this.close = this.close.bind(this)
     }
 
     components = {
         'ModalDetail': ModalDetail,
-        'EventDetailModal': EventDetailModal,
         'ModalMapDetail': ModalMapDetail,
     }
 
-    close () {
+    close = () => {
         this.props.closeModal()
     }
 

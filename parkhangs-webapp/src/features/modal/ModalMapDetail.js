@@ -2,7 +2,7 @@ import React from 'react'
 import AddEventForm from 'components/AddEventForm'
 import { deleteEvent } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
-import 'components/Modal/ModalMapDetail.css'
+import 'features/modal/ModalMapDetail.css'
 
 class ModalMapDetail extends React.Component {
     selectedPark = () => {

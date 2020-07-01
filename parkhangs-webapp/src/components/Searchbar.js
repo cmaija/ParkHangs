@@ -23,10 +23,9 @@ class Searchbar extends React.Component {
 
 
     handleSearchInput(event) {
-
         this.setState({
             searchQuery: event.target.value
-        });
+        })
 
     };
 
@@ -35,35 +34,23 @@ class Searchbar extends React.Component {
         event.preventDefault();
 
         if (this.state.searchQuery === "") {
-
             // TODO: add error message
-
             this.setState({
                 invalidSearch: true
             });
-
         } else {
-
-
             this.searchForAPark(this.state.searchQuery);
 
             //TODO: call whatever method we pass in and use this.state.searchQuery as the parameter
             this.setState({
                 invalidSearch: false
             })
-            
+
             this.clearSearchText();
         }
     };
 
     searchForAPark = (parkName) =>  {
-        // let parkObject = this.props.park.find((park) =>
-        //     park.parkName === parkName
-        // );
-        //
-        // this.setState({
-        //     searchResult: parkObject
-        // });
         this.props.setFilter(parkName)
         this.props.onSearch(false)
     }
@@ -71,7 +58,7 @@ class Searchbar extends React.Component {
     clearSearchText() {
         this.setState({
             searchQuery: ""
-        });
+        })
     }
 
     render() {
