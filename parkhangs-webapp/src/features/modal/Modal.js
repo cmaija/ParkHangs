@@ -1,7 +1,7 @@
 import React from 'react'
 import 'features/modal/Modal.css'
-import ModalDetail from 'components/Modal/ModalDetail'
-import ModalMapDetail from 'components/Modal/ModalMapDetail'
+import ModalDetail from 'features/modal/ModalDetail.js'
+import ModalMapDetail from 'features/modal/ModalMapDetail.js'
 import { connect } from "react-redux"
 import {
     openModal,
