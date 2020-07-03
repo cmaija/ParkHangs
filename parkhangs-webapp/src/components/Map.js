@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import Marker from 'components/Marker.js'
 
 class SimpleMap extends Component {
+    
     static defaultProps = {
         center: {
             lat: 49.28,
@@ -13,11 +14,12 @@ class SimpleMap extends Component {
     };
 
     render() {
+       
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '500px', width: '75%', margin: 'auto'}}>
                 <GoogleMapReact
-                    bootstrapURLKeys={{key: process.env.MAP_API_KEY}}
+                    bootstrapURLKeys={{key:process.env.REACT_APP_MAP_API_KEY}}
                     defaultCenter={this.props.center}
                     defaultZoom={this.props.zoom}
                 >
