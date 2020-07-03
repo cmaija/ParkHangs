@@ -1,7 +1,7 @@
 import React from "react";
-import {connect} from "react-redux";
-import AddEventForm from "./AddEventForm";
-import {addEvent, deleteEvent} from "../features/parks/parksSlice";
+import { connect } from "react-redux";
+import AddEventForm from "components/AddEventForm";
+import { queryParks } from "features/parks/parksSlice";
 
 class Searchbar extends React.Component {
 
@@ -23,10 +23,9 @@ class Searchbar extends React.Component {
 
 
     handleSearchInput(event) {
-
         this.setState({
             searchQuery: event.target.value
-        });
+        })
 
     };
 
@@ -35,39 +34,31 @@ class Searchbar extends React.Component {
         event.preventDefault();
 
         if (this.state.searchQuery === "") {
-
             // TODO: add error message
-
             this.setState({
                 invalidSearch: true
             });
-
         } else {
-
-
             this.searchForAPark(this.state.searchQuery);
 
             //TODO: call whatever method we pass in and use this.state.searchQuery as the parameter
+            this.setState({
+                invalidSearch: false
+            })
 
             this.clearSearchText();
         }
     };
 
-    searchForAPark(parkName) {
-
-        let parkObject = this.props.park.find((park) =>
-            park.parkName === parkName
-        );
-
-        this.setState({
-            searchResult: parkObject
-        });
+    searchForAPark = (parkName) =>  {
+        this.props.setFilter(parkName)
+        this.props.onSearch(false)
     }
 
     clearSearchText() {
         this.setState({
             searchQuery: ""
-        });
+        })
     }
 
     render() {
@@ -132,18 +123,12 @@ class Searchbar extends React.Component {
 
     }
 }
+const mapDispatchToProps = (dispatch) => ({
+    setFilter: (filter) => dispatch(queryParks(filter))
+})
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => ({
+    filteredParks: state.parks.filteredParks
+})
 
-    return {
-        park: state.parks.parks
-    }
-};
-
-
-
-export default connect(mapStateToProps, null)(Searchbar);
-
-
-
-
+export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);
