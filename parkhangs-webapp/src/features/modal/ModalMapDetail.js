@@ -10,6 +10,8 @@ class ModalMapDetail extends React.Component {
     }
     componentDidMount(){
         console.log(this.props.fetchEventsById(this.selectedPark().id));
+        //debug use: currently the selectedID doesn't match up since the dummy data doesn't reflect backend
+        //TODO: need gordon's filter and select park endpoint to work properly
     }
     
     render() {
@@ -38,9 +40,11 @@ class ModalMapDetail extends React.Component {
                         {
                             //Call dispatch to action for getEventsByID endpoint?
                             //need to change the line below
-                            this.selectedPark().events.map((event) => {
-                              //this.props.fetchEventsById(this.selectedPark().id).map((event) => { //uncomment to test endpoint; map not a function bc res is an json not array?
-                                return <div className="Event" key={event.id}>
+                            //this.selectedPark().events.map((event) => {
+                            //uncomment to test endpoint; BROKEN: map not a function bc res is an json not array?
+                            this.props.fetchEventsById(this.selectedPark().id).map((event) => { 
+                                //key currently not unique?
+                                return <div className="Event" key={event._id}> 
                                     <div>
                                         {event.parkName} -
                                     </div>

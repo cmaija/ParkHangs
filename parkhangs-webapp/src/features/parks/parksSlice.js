@@ -18,7 +18,7 @@ const parksSlice = createSlice({
     initialState: {
         parks: [
             {
-                id: "0",
+                id: "1",
                 parkName: "Dude Chilling Park",
                 lat: 49.264012,
                 lng: -123.095931,
@@ -37,7 +37,7 @@ const parksSlice = createSlice({
                 ]
             },
             {
-                id: "2",
+                id: "4",
                 parkName: "Sunset Beach Park",
                 lat: 49.2800,
                 lng: -123.1387,
