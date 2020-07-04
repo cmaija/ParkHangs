@@ -3,11 +3,17 @@ import axios from 'axios';
 
 //Thunk crated here
 export const fetchEventsById = createAsyncThunk(
-    'fetchEventsByIdStatus', (id) => {
+    'parks/fetchEventsByIdStatus', (id) => {
         axios
             .get(`http://localhost:9000/${id}/events`)
-            .then((res)=> res.data)
-            .catch(err => err)
+            .then((res)=> {
+                
+                return res.data
+            })
+            .catch(err =>{ 
+
+                return err
+            })
     }
 );
 
@@ -28,7 +34,7 @@ const parksSlice = createSlice({
                 ]
             },
             {
-                id: "1",
+                id: "2",
                 parkName: "Shaughnessy Park",
                 lat: 49.2557,
                 lng: -123.1351,
@@ -51,7 +57,7 @@ const parksSlice = createSlice({
         filteredParks: [],
         selectedPark: "No park",
         eventsById: [],
-        //isLoading = false, DELETE LATER
+       
         error : null //for errors in AJAX calls
     },
 
@@ -143,19 +149,13 @@ const parksSlice = createSlice({
                 }
             }
         },
-        /* getEventsByIdStart: { //DELETE LATER
-            reducer(state, action) {
-                //set isLoading to true
-                state.isLoading = true;
-            }
-        }, */
 
         getEventsByIdSuccess: {
            [fetchEventsById.fulfilled]:(state, action) =>{
                 //action should return endpoint's call's events
                 //Or have this action return the events locally to component later?
                 state.eventsById = action.payload //todo:Need to create events field in universal store in this case!
-                //state.isLoading = false;
+               
             },
             prepare(events) {
                 return {
@@ -168,9 +168,16 @@ const parksSlice = createSlice({
         getEventsByIdFailure: {
             [fetchEventsById.rejected]:(state, action) => {
                 //action should return endpoint's error
-                //state.isLoading = false,
-                state.eventsById = []; //shows empty bc error occured
-                state.error = action.payload;
+               
+                if(action.payload){
+                    state.eventsById = []; //shows empty bc error occured
+                    state.error = action.payload.message; //error message
+                }
+                else {
+                    state.eventsById = []; //shows empty bc error occured
+                    state.error =action.error;
+                }
+                
             },
             prepare(error) {
                 return {
@@ -189,6 +196,8 @@ export const {
     addEvent,
     deleteEvent,
     queryParks,
+    getEventsByIdFailure,
+    getEventsByIdSuccess
 } = parksSlice.actions;
 export default parksSlice.reducer
 

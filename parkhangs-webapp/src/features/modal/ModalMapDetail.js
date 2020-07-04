@@ -4,15 +4,19 @@ import { deleteEvent,fetchEventsById } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 
+
 class ModalMapDetail extends React.Component {
+ 
     selectedPark = () => {
         return this.props.parks.find(park => park.parkName === this.props.park)
     }
-    componentDidMount(){
-        console.log(this.props.fetchEventsById(this.selectedPark().id));
-        //debug use: currently the selectedID doesn't match up since the dummy data doesn't reflect backend
-        //TODO: need gordon's filter and select park endpoint to work properly
-    }
+   
+   componentDidMount(){
+    //currently promise is being rejected: figure out how to call the promise here and load into events.map area
+       console.log(this.props.fetchEvents(this.selectedPark().id))
+      
+   }
+    
     
     render() {
         return (
@@ -38,27 +42,34 @@ class ModalMapDetail extends React.Component {
                     <div className="Section">
                         <span className="SectionTitle">Events</span>
                         {
-                            //Call dispatch to action for getEventsByID endpoint?
                             //need to change the line below
-                            //this.selectedPark().events.map((event) => {
+                            this.selectedPark().events.map((event) => {
                             //uncomment to test endpoint; BROKEN: map not a function bc res is an json not array?
-                            this.props.fetchEventsById(this.selectedPark().id).map((event) => { 
-                                //key currently not unique?
-                                return <div className="Event" key={event._id}> 
-                                    <div>
-                                        {event.parkName} -
-                                    </div>
-                                    <div>
-                                        {event.eventTime}
-                                    </div>
-                                    <button onClick={() => {
-                                        this.props.deleteEventFromPark(this.selectedPark().id, event.id)
-                                    }}>
-                                        X
-                                    </button>
-                                </div>;
-                            })
-                        }
+                            //TODO: need gordon's filter and select park endpoint to work properly
+                            
+                                //TODO: fix this is broken!!
+                               
+                                    //key may need to be changed to event._id as backend
+                                    return <div className="Event" key={event.id}> 
+                                        <div>
+                                            {event.parkName} -
+                                        </div>
+                                        <div>
+                                            {event.eventTime}
+                                        </div>
+                                        <button onClick={() => {
+                                            this.props.deleteEventFromPark(this.selectedPark().id, event.id)
+                                        }}>
+                                            X
+                                        </button>
+                                    </div>;
+                                })
+                                
+                            }
+                            
+
+                            
+                        
                         <AddEventForm park={this.selectedPark()}/>
                     </div>
                 </div>
@@ -76,7 +87,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
-    fetchEventsById: (parkId) => dispatch(fetchEventsById(parkId)) //api call
+    fetchEvents: (parkId) => dispatch(fetchEventsById(parkId)) //should then cases be added here?
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);
