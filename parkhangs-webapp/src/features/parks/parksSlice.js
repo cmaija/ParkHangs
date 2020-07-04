@@ -1,4 +1,16 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import axios from 'axios';
+
+//Thunk crated here
+export const fetchEventsById = createAsyncThunk(
+    'fetchEventsByIdStatus', (id) => {
+        axios
+            .get(`http://localhost:9000/${id}/events`)
+            .then((res)=> res.data)
+            .catch(err => err)
+    }
+);
+
 
 const parksSlice = createSlice({
     name: 'parks',
@@ -37,7 +49,10 @@ const parksSlice = createSlice({
             }
         ],
         filteredParks: [],
-        selectedPark: "No park"
+        selectedPark: "No park",
+        eventsById: [],
+        //isLoading = false, DELETE LATER
+        error : null //for errors in AJAX calls
     },
 
     reducers: {
@@ -127,7 +142,45 @@ const parksSlice = createSlice({
                     }
                 }
             }
-        }
+        },
+        /* getEventsByIdStart: { //DELETE LATER
+            reducer(state, action) {
+                //set isLoading to true
+                state.isLoading = true;
+            }
+        }, */
+
+        getEventsByIdSuccess: {
+           [fetchEventsById.fulfilled]:(state, action) =>{
+                //action should return endpoint's call's events
+                //Or have this action return the events locally to component later?
+                state.eventsById = action.payload //todo:Need to create events field in universal store in this case!
+                //state.isLoading = false;
+            },
+            prepare(events) {
+                return {
+                    payload: {
+                        events
+                    }
+                }
+            }
+        },
+        getEventsByIdFailure: {
+            [fetchEventsById.rejected]:(state, action) => {
+                //action should return endpoint's error
+                //state.isLoading = false,
+                state.eventsById = []; //shows empty bc error occured
+                state.error = action.payload;
+            },
+            prepare(error) {
+                return {
+                    payload: {
+                        error
+                    }
+                }
+            }
+        },
+        
     }
 });
 
@@ -135,5 +188,20 @@ export const {
     selectPark,
     addEvent,
     deleteEvent,
-    queryParks } = parksSlice.actions;
+    queryParks,
+} = parksSlice.actions;
 export default parksSlice.reducer
+
+/* //API thunk call separated from slice DELETE LATER
+export const fetchEventsById = (id) => async dispatch =>{
+    try {
+        dispatch(getEventsByIdStart())
+        const EventsFetched = await axios
+                                    .get(`http://localhost:9000/${id}/events`);
+        dispatch(getEventsByIdSuccess(EventsFetched))
+    }
+    catch (err) {
+        dispatch(getEventsByIdFailure(err.toString())) //might be err.message
+    }
+}
+ */
