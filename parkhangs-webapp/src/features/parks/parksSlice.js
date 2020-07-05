@@ -3,17 +3,15 @@ import axios from 'axios';
 
 //Thunk crated here
 export const fetchEventsById = createAsyncThunk(
-    'parks/fetchEventsByIdStatus', (id) => {
-        axios
-            .get(`http://localhost:9000/${id}/events`)
-            .then((res)=> {
-                
-                return res.data
-            })
-            .catch(err =>{ 
-
-                return err
-            })
+    'parks/fetchEventsByIdStatus',  async (id, {signal}) => {
+        const source = axios.CancelToken.source();
+        signal.addEventListener('abort', () => {
+            source.cancel()
+        })
+        const response = await axios.get(`http://localhost:9000/${id}/events`,
+            {cancelToken: source.token}
+        )
+        return response.data;
     }
 );
 
@@ -154,7 +152,16 @@ const parksSlice = createSlice({
            [fetchEventsById.fulfilled]:(state, action) =>{
                 //action should return endpoint's call's events
                 //Or have this action return the events locally to component later?
-                state.eventsById = action.payload //todo:Need to create events field in universal store in this case!
+                const events = action.payload
+                 for(let i = 0 ; i< events.length; i ++){
+                
+                   state.eventsById.push(events[i]); //direct mutation of state thanks to Immer
+                }
+
+                /* return {...state,
+                    eventsById:events
+                } */
+                //state.eventsById = action.payload 
                
             },
             prepare(events) {

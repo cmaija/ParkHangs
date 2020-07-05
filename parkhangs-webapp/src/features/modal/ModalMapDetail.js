@@ -3,6 +3,7 @@ import AddEventForm from 'components/AddEventForm'
 import { deleteEvent,fetchEventsById } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
+import {unwrapResult} from '@reduxjs/toolkit'
 
 
 class ModalMapDetail extends React.Component {
@@ -11,12 +12,25 @@ class ModalMapDetail extends React.Component {
         return this.props.parks.find(park => park.parkName === this.props.park)
     }
    
-   componentDidMount(){
-    //currently promise is being rejected: figure out how to call the promise here and load into events.map area
-       console.log(this.props.fetchEvents(this.selectedPark().id))
-      
-   }
+    componentDidMount(){
+        this.getEvents();
+        console.log(this.props.eventsById);
+        
+    }
+
+    getEvents = async () => {
+        try{
+             const resultAction = await this.props.fetchEvents(this.selectedPark().id) //waits for promise
+             const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
+             console.log(events)
+            return events.data;//returns array
+        }catch (err) {
+            console.error(err);
+            //return an error
+            return err
+        }
     
+    }
     
     render() {
         return (
@@ -43,14 +57,14 @@ class ModalMapDetail extends React.Component {
                         <span className="SectionTitle">Events</span>
                         {
                             //need to change the line below
-                            this.selectedPark().events.map((event) => {
-                            //uncomment to test endpoint; BROKEN: map not a function bc res is an json not array?
+                            //this.selectedPark().events.map((event) => {
+                            
                             //TODO: need gordon's filter and select park endpoint to work properly
                             
-                                //TODO: fix this is broken!!
+                             this.props.eventsById.map ((event) =>   {
                                
                                     //key may need to be changed to event._id as backend
-                                    return <div className="Event" key={event.id}> 
+                                    return <div className="Event" key={event._id}> 
                                         <div>
                                             {event.parkName} -
                                         </div>
@@ -80,7 +94,8 @@ class ModalMapDetail extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        parks: state.parks.parks
+        parks: state.parks.parks,
+        eventsById: state.parks.eventsById
 
     }
 }
