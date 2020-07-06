@@ -6,7 +6,7 @@ export const fetchEventsById = createAsyncThunk(
     'parks/fetchEventsByIdStatus',  async (id, ThunkAPI) => {
         
         const response = await axios.get(`http://localhost:9000/${id}/events`)
-        return response.data;
+        return response.data.data;
     }
 );
 

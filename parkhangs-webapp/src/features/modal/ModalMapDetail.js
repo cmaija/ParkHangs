@@ -7,20 +7,16 @@ import {unwrapResult} from '@reduxjs/toolkit'
 
 
 class ModalMapDetail extends React.Component {
-   constructor(props){
-       super(props);
-       this.state = {
-        eventsByIdLocal: [] //local store array; delete later
-       }
-   }
+  
     selectedPark = () => {
         return this.props.parks.find(park => park.parkName === this.props.park)
     }
    
     componentDidMount = async () => {
-        let result = await this.getEvents();
+        let result =  await this.getEvents();
         console.log(result);
         console.log(this.props.eventsById);
+        return result;
         
     }
 
