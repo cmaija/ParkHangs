@@ -1,12 +1,22 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk, bindActionCreators} from '@reduxjs/toolkit'
 import axios from 'axios';
 
 //Thunk crated here
 export const fetchEventsById = createAsyncThunk(
-    'parks/fetchEventsByIdStatus',  async (id, ThunkAPI) => {
+    'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
         
-        const response = await axios.get(`http://localhost:9000/${id}/events`)
-        return response.data.data;
+        try {
+             const response = await axios.get(`http://localhost:9000/${id}/events`)
+             return response.data.data;
+        } catch (err){
+            if (!err.response) {
+               return err;
+            }
+            
+           return rejectWithValue(err.response.data)
+        }
+       
+
     }
 );
 
@@ -51,7 +61,7 @@ const parksSlice = createSlice({
         selectedPark: "No park",
         eventsById: [],
         loading: 'idle',
-       currentRequestId: undefined,
+        //currentRequestId: undefined,
         error : null //for errors in AJAX calls
     },
 
@@ -146,7 +156,7 @@ const parksSlice = createSlice({
         
     },
     extraReducers: {
-        getEventsByIdPending: {
+        /* 
             [fetchEventsById.pending]: (state, action) => {
                 if (state.loading === 'idle') {
                   state.loading = 'pending'
@@ -154,65 +164,50 @@ const parksSlice = createSlice({
                 }
             },
             
-                prepare(events) {
+            prepare(events) {
                return {
                    payload: {
                        events //debug
                    }
                }
-           }
-        },
-        getEventsByIdSuccess: {
-            [fetchEventsById.fulfilled]:(state, action) =>{
+           }, */
+        
+        
+        [fetchEventsById.fulfilled]:(state, action) =>{
                //action should return endpoint's call's events
-               //TODO: Currently undefined payload?
+               //TODO: Currently undefined payload? Action not called?
                //Or have this action return the events locally to component later?
                
-                const {events} = action.payload
+                //const {events} = action.payload
                 const { requestId } = action.meta
-                if (state.loading === 'pending' && state.currentRequestId === requestId) {
-                    state.loading = 'idle';
 
-                    for(let i = 0 ; i< events.length; i ++){
-                            
-                    state.eventsById.push(events[i]); 
-                    } 
-
-                    state.currentRequestId = undefined;
-
-                }
-              
-              
-           },
-           prepare(events) {
-               return {
-                   payload: {
-                       events
-                   }
-               }
-           }
-       }, 
-       getEventsByIdFailure: {
-           [fetchEventsById.rejected]: (state, action) => {
-               //action should return endpoint's error
-               const {error} = action.payload
-
-               const { requestId } = action.meta
-               if (state.loading === 'pending' && state.currentRequestId === requestId) {
-                state.loading = 'idle'
-                state.error = action.error
-                state.currentRequestId = undefined
-              }
+                console.log("in getEventsByIdSuccess,", action.payload);
+                //console.log("events:" ,events); //broken
                
-           },
-           prepare(error) {
-               return {
-                   payload: {
-                       error
-                   }
-               }
+
+                for(let i = 0 ; i< action.payload.length; i ++){
+                        
+                state.eventsById.push(action.payload[i]); 
+                } 
+
+                
+                
+              
+              
+        },   
+        [fetchEventsById.rejected]: (state, action) => {
+               //action should return endpoint's error
+                if(action.payload){
+                   // If a rejected action has a payload, it means that it was returned with rejectWithValue
+                   state.eventsById = [] //reset/clear with error
+                   state.error = action.payload.errorMessage
+                }
+                else {
+                    state.eventsById = [] //reset/clear with error
+                    state.error = action.error
+                }
            }
-       },
+       
     }
 });
 

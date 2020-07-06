@@ -14,9 +14,12 @@ class ModalMapDetail extends React.Component {
    
     componentDidMount = async () => {
         let result =  await this.getEvents();
-        console.log(result);
-        console.log(this.props.eventsById);
-        return result;
+        //console.log(result); 
+        //console.log(this.props.eventsById);
+        console.log(this.props.error);
+        if(this.props.error){
+            throw this.props.error
+        }
         
     }
 
@@ -24,7 +27,6 @@ class ModalMapDetail extends React.Component {
         try{
              const resultAction = await this.props.fetchEvents(this.selectedPark().id) //waits for promise
              const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
-             //console.log(events)
              
              return events;
             
@@ -67,13 +69,34 @@ class ModalMapDetail extends React.Component {
                              this.props.eventsById.map ((event) =>   {
                                
                                     //key may need to be changed to event._id as backend
-                                    return <div className="Event" key={event._id}> 
+                                    return <div className="Event" key={event._id}>
+                                        {/* <div>
+                                            _id: {event._id} 
+                                        </div>  */}
                                         <div>
-                                            {event.parkName} -
-                                        </div>
+                                            createdDateTime:<br/>{event.createdDateTime} 
+                                        </div> 
+                                        
                                         <div>
-                                            {event.eventTime}
+                                            creatorID:<br/>{event.creatorID} 
+                                        </div> 
+                                        
+                                        <div>
+                                            creator:<br/>{event.creatorName} 
+                                        </div> 
+                                        
+                                        <div>
+                                            details:<br/>{event.details} 
                                         </div>
+                                       
+                                        <div>
+                                            DateTime:<br/>{event.eventDateTime}
+                                        </div>
+                                        
+                                        <div>
+                                            parkId:<br/>{event.parkId}
+                                        </div>
+                                        
                                         <button onClick={() => {
                                             this.props.deleteEventFromPark(this.selectedPark().id, event.id)
                                         }}>
@@ -99,7 +122,7 @@ const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
         eventsById: state.parks.eventsById, //universal; actions for fulfillment and rejected not connecting? array remains empty
-        
+        error: state.parks.error
     }
 }
 
