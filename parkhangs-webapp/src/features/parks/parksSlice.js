@@ -3,14 +3,9 @@ import axios from 'axios';
 
 //Thunk crated here
 export const fetchEventsById = createAsyncThunk(
-    'parks/fetchEventsByIdStatus',  async (id, {signal}) => {
-        const source = axios.CancelToken.source();
-        signal.addEventListener('abort', () => {
-            source.cancel()
-        })
-        const response = await axios.get(`http://localhost:9000/${id}/events`,
-            {cancelToken: source.token}
-        )
+    'parks/fetchEventsByIdStatus',  async (id, ThunkAPI) => {
+        
+        const response = await axios.get(`http://localhost:9000/${id}/events`)
         return response.data;
     }
 );
@@ -55,7 +50,8 @@ const parksSlice = createSlice({
         filteredParks: [],
         selectedPark: "No park",
         eventsById: [],
-       
+        loading: 'idle',
+       currentRequestId: undefined,
         error : null //for errors in AJAX calls
     },
 
@@ -146,55 +142,77 @@ const parksSlice = createSlice({
                     }
                 }
             }
-        },
-
-        getEventsByIdSuccess: {
-           [fetchEventsById.fulfilled]:(state, action) =>{
-                //action should return endpoint's call's events
-                //Or have this action return the events locally to component later?
-                const events = action.payload
-                 for(let i = 0 ; i< events.length; i ++){
-                
-                   state.eventsById.push(events[i]); //direct mutation of state thanks to Immer
-                }
-
-                /* return {...state,
-                    eventsById:events
-                } */
-                //state.eventsById = action.payload 
-               
-            },
-            prepare(events) {
-                return {
-                    payload: {
-                        events
-                    }
-                }
-            }
-        },
-        getEventsByIdFailure: {
-            [fetchEventsById.rejected]:(state, action) => {
-                //action should return endpoint's error
-               
-                if(action.payload){
-                    state.eventsById = []; //shows empty bc error occured
-                    state.error = action.payload.message; //error message
-                }
-                else {
-                    state.eventsById = []; //shows empty bc error occured
-                    state.error =action.error;
-                }
-                
-            },
-            prepare(error) {
-                return {
-                    payload: {
-                        error
-                    }
-                }
-            }
-        },
+        }
         
+    },
+    extraReducers: {
+        getEventsByIdPending: {
+            [fetchEventsById.pending]: (state, action) => {
+                if (state.loading === 'idle') {
+                  state.loading = 'pending'
+                  state.currentRequestId = action.meta.requestId
+                }
+            },
+            
+                prepare(events) {
+               return {
+                   payload: {
+                       events //debug
+                   }
+               }
+           }
+        },
+        getEventsByIdSuccess: {
+            [fetchEventsById.fulfilled]:(state, action) =>{
+               //action should return endpoint's call's events
+               //TODO: Currently undefined payload?
+               //Or have this action return the events locally to component later?
+               
+                const {events} = action.payload
+                const { requestId } = action.meta
+                if (state.loading === 'pending' && state.currentRequestId === requestId) {
+                    state.loading = 'idle';
+
+                    for(let i = 0 ; i< events.length; i ++){
+                            
+                    state.eventsById.push(events[i]); 
+                    } 
+
+                    state.currentRequestId = undefined;
+
+                }
+              
+              
+           },
+           prepare(events) {
+               return {
+                   payload: {
+                       events
+                   }
+               }
+           }
+       }, 
+       getEventsByIdFailure: {
+           [fetchEventsById.rejected]: (state, action) => {
+               //action should return endpoint's error
+               const {error} = action.payload
+
+               const { requestId } = action.meta
+               if (state.loading === 'pending' && state.currentRequestId === requestId) {
+                state.loading = 'idle'
+                state.error = action.error
+                state.currentRequestId = undefined
+              }
+               
+           },
+           prepare(error) {
+               return {
+                   payload: {
+                       error
+                   }
+               }
+           }
+       },
     }
 });
 
@@ -203,10 +221,9 @@ export const {
     addEvent,
     deleteEvent,
     queryParks,
-    getEventsByIdFailure,
-    getEventsByIdSuccess
 } = parksSlice.actions;
 export default parksSlice.reducer
+
 
 /* //API thunk call separated from slice DELETE LATER
 export const fetchEventsById = (id) => async dispatch =>{

@@ -7,13 +7,19 @@ import {unwrapResult} from '@reduxjs/toolkit'
 
 
 class ModalMapDetail extends React.Component {
- 
+   constructor(props){
+       super(props);
+       this.state = {
+        eventsByIdLocal: [] //local store array; delete later
+       }
+   }
     selectedPark = () => {
         return this.props.parks.find(park => park.parkName === this.props.park)
     }
    
-    componentDidMount(){
-        this.getEvents();
+    componentDidMount = async () => {
+        let result = await this.getEvents();
+        console.log(result);
         console.log(this.props.eventsById);
         
     }
@@ -22,12 +28,13 @@ class ModalMapDetail extends React.Component {
         try{
              const resultAction = await this.props.fetchEvents(this.selectedPark().id) //waits for promise
              const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
-             console.log(events)
-            return events.data;//returns array
+             //console.log(events)
+             
+             return events;
+            
         }catch (err) {
             console.error(err);
-            //return an error
-            return err
+            return err;
         }
     
     }
@@ -95,8 +102,8 @@ class ModalMapDetail extends React.Component {
 const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
-        eventsById: state.parks.eventsById
-
+        eventsById: state.parks.eventsById, //universal; actions for fulfillment and rejected not connecting? array remains empty
+        
     }
 }
 
