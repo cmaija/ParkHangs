@@ -3,18 +3,13 @@ const express = require('express');
 const Request = require("request");
 var assert = require('assert');
 var mongoose = require( 'mongoose' );
-//var { uuid } = require('uuidv4');
+const database = require('../database/index');
+var { uuid } = require('uuidv4');
 
 var router = express.Router();
 router.use(express.json())
 
-var uri = "mongodb://localhost:9000/events";
-
-mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
-
-const connection = mongoose.connection;
-
-connection.once("open", function() {
+database.once("open", function() {
   console.log("MongoDB database connection established successfully");
 });
 
@@ -35,28 +30,37 @@ const getEvents = async (req, res) => {
 
 // Add an event
 const addEvent = function (req, res) {
-  // if (err) {
-  //     return res.status(400).json({success: false, error: err})
-  // }
-  var newEvent = req.body;
-  // newEvent.id = uuid();
-  res.setHeader('Content-Type', 'application/json');
-  connection.collection('events').insertOne(newEvent);
-  console.log('item inserted :)');
-  return res.status(200).json({success: true, data: newEvent})
+    var {
+      parkId,
+      details,
+      eventDateTime
+    } = req.body
+    var newEvent = {
+      parkId: parkId ? parkId : null,
+      details: details ? details : null,
+      eventDateTime: eventDateTime ? eventDateTime : null,
+    }
+    if (newEvent.parkId === null || newEvent.details === null || newEvent.eventDateTime === null) {
+      return res.status(400).json({success: false,  error: `Missing one or more fields`})
+    }
+
+    newEvent._id = uuid();
+    let d = new Date();
+    let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+    newEvent.createdDateTime = strDate;
+    newEvent.creatorName = "user";
+    newEvent.creatorID = 0;
+    newEvent.__v = 0;
+
+    try {
+    res.setHeader('Content-Type', 'application/json');
+    database.collection('events').insertOne(newEvent);
+    console.log('item inserted :)');
+    return res.status(200).json({success: true, data: newEvent._id})
+  } catch (error) {
+    return res.status(404).json({success: false, error: 'Could clear messages'})
+  }
 }
-
-// var newEvent = {
-//   parkId: req.body.parkId,
-//   eventId: req.body.eventId,
-//   details: req.body.details,
-//   eventDateTime: req.body.eventDateTime,
-//   createdDateTime: req.body.createdDateTime,
-//   creatorName: req.body.creatorName,
-//   creatorID: req.body.creatorID,
-//   __v: req.body.__v
-// };
-
 
 module.exports = {
     getEvents,
