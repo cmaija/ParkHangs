@@ -1,4 +1,4 @@
-const Event = require('../models/EventModel')
+const Event = require('../models/EventModel');
 const express = require('express');
 const Request = require("request");
 var assert = require('assert');
@@ -13,7 +13,7 @@ database.once("open", function() {
   console.log("MongoDB database connection established successfully");
 });
 
-// Get all events
+// Gets all events
 const getEvents = async (req, res) => {
     await Event.find({}, (err, events) => {
         if (err) {
@@ -28,7 +28,7 @@ const getEvents = async (req, res) => {
     }).catch(err => console.log(err))
 };
 
-// Add an event
+// Adds a new event
 const addEvent = function (req, res) {
     var {
       parkId,
@@ -58,7 +58,7 @@ const addEvent = function (req, res) {
     console.log('item inserted :)');
     return res.status(200).json({success: true, data: newEvent._id})
   } catch (error) {
-    return res.status(404).json({success: false, error: 'Could clear messages'})
+    return res.status(404).json({success: false, error: 'Could not add event'})
   }
 }
 
