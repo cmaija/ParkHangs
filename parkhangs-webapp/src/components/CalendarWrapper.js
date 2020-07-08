@@ -31,14 +31,13 @@ class CalendarWrapper extends React.Component {
         // TODO: Events geet loaded here. Not sure how you want to do it,
         // either get all the events and store them in the store, or when this component mounts,
         // make a request by parkid. The search bar needs to be a bit smarter or we need to paginate
-        // this calendar view page because I think 150 calendars is too many calendars to show at once. 
-        // return this.props.park.events.map(event => new Date(event.eventTime))
-        return []
+        // this calendar view page because I think 150 calendars is too many calendars to show at once.
+        return this.props.events.map(event => new Date(event.eventDateTime))
     }
 
     getCorrespondingEvents = (date) => {
-        return this.props.park.events.filter((event) => {
-            return this.datesAreOnSameDay(new Date(event.eventTime), date)})
+        return this.props.events.filter((event) => {
+            return this.datesAreOnSameDay(new Date(event.eventDateTime), date)})
     }
 
     tileClassName = ({ date, view }) => {
@@ -99,10 +98,16 @@ class CalendarWrapper extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        events: state.parks.eventsById
+    }
+}
+
 
 const mapDispatchToProps = (dispatch) => ({
     openModal: (modalProps) => dispatch(openModal(modalProps)),
 })
 
 
-export default connect(null, mapDispatchToProps)(CalendarWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarWrapper);

@@ -47,6 +47,8 @@ const addEvent = async (req, res) => {
     // newEvent._id = uuid();
     let d = new Date();
     let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+    // let temp = new Date();
+    // newEvent.eventDateTime = temp;
     newEvent.createdDateTime = strDate;
     newEvent.creatorName = "user";
     newEvent.creatorID = 0;
