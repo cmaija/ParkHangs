@@ -14,15 +14,22 @@ class CalendarsView extends Component {
     }
 
     componentDidMount = async () => {
+      if (this.props.parks.length === 0) {
+          this.props.getAllParks()
+      }
         this.props.getAllEvents();
     };
 
     toggleShowAllParks = (show) => {
         console.log(this.props.events)
         this.setState((state) => {
-            return { showAllParks: show }
+          return { showAllParks: true }
         })
     }
+
+    toggleShowAllParks = (show) => {
+        console.log(this.props.events)
+      }
 
     render() {
         return (
@@ -54,7 +61,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllEvents: () => dispatch(apis.fetchEvents())
+    getAllEvents: () => dispatch(apis.fetchEvents()),
+    getAllParks: () => dispatch(apis.fetchParks())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);
