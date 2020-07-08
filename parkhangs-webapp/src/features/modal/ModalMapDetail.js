@@ -21,8 +21,8 @@ class ModalMapDetail extends React.Component {
 
     getEvents = async () => {
         try{
-             const resultAction = await this.props.fetchEvents(this.props.park._id);//waits for promise
-             const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
+            const resultAction = await this.props.fetchEvents(this.props.park.parkId);
+            const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
              return events;
             
         }catch (err) {
