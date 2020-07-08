@@ -4,7 +4,7 @@ const Request = require("request");
 var assert = require('assert');
 var mongoose = require( 'mongoose' );
 const database = require('../database/index');
-var { uuid } = require('uuidv4');
+// var { uuid } = require('uuidv4');
 
 var router = express.Router();
 router.use(express.json())
@@ -44,7 +44,7 @@ const addEvent = function (req, res) {
       return res.status(400).json({success: false,  error: `Missing one or more fields`})
     }
 
-    newEvent._id = uuid();
+    // newEvent._id = uuid();
     let d = new Date();
     let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
     newEvent.createdDateTime = strDate;
@@ -54,7 +54,11 @@ const addEvent = function (req, res) {
 
     try {
     res.setHeader('Content-Type', 'application/json');
-    database.collection('events').insertOne(newEvent);
+    await database.collection('events').insertOne(newEvent)  => {
+      if (err) {
+            return res.status(400).json({success: false, error: 'Could not add event'})
+        }
+    }
     console.log('item inserted :)');
     return res.status(200).json({success: true, data: newEvent._id})
   } catch (error) {
