@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
-import DetailModal from './DetailModal.js'
-import Marker from './Marker.js'
+import Marker from 'components/Marker.js'
 
 class SimpleMap extends Component {
     static defaultProps = {
