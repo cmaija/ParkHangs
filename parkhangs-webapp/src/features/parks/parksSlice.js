@@ -1,64 +1,77 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: 'http://localhost:9000/',
+});
+
+export const fetchParks = createAsyncThunk(
+    '/parks', async ({rejectWithValue}) => {
+
+        try {
+            const response = await api.get('/parks');
+            return response.data.data;
+        } catch (err){
+            if (!err.response) {
+                return err;
+            }
+
+            return rejectWithValue(err.response.data)
+        }
+
+        // await api.get('/parks')
+        //     .then((res) => {
+        //         if (!res.data.success) {
+        //             console.log("not successful in fetching parks");
+        //             console.log(res.data.success);
+        //         } else {
+        //             console.log(res.data.data);
+        //             return res.data.data;
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         //TODO: error handle
+        //         console.log(error);
+        //         return error.data.message;
+        //     })
+    });
+
+
+// await api.get('/parks')
+//     .then((res) => {
+//         if (!res.data.success) {
+//             console.log("not successful in fetching parks");
+//             console.log(res.data.success);
+//         } else {
+//             console.log(res.data.data);
+//             return res.data.data;
+//         }
+//     })
+//     .catch((error) => {
+//         //TODO: error handle
+//         console.log(error);
+//     })
 
 const parksSlice = createSlice({
     name: 'parks',
 
     initialState: {
-        parks: [
-            {
-                id: "0",
-                parkName: "Dude Chilling Park",
-                lat: 49.264012,
-                lng: -123.095931,
-                events: [
-                    {id: 1, parkName: "Dude Chilling Park", eventTime: "2020-07-16T19:20-07:00"},
-                    {id: 2, parkName: "Dude Chilling Park", eventTime: "2021-01-01T11:17-07:00"}
-                ]
-            },
-            {
-                id: "1",
-                parkName: "Shaughnessy Park",
-                lat: 49.2557,
-                lng: -123.1351,
-                events: [
-                    {id: 1, parkName: "Shaughnessy Park", eventTime: "2020-08-01T13:30-07:00"}
-                ]
-            },
-            {
-                id: "2",
-                parkName: "Sunset Beach Park",
-                lat: 49.2800,
-                lng: -123.1387,
-                events: [
-                    {id: 1, parkName: "Sunset Beach Park", eventTime: "2020-06-29T10:45-07:00"},
-                    {id: 2, parkName: "Sunset Beach Park", eventTime: "2020-07-16T19:20-07:00"},
-                    {id: 3, parkName: "Sunset Beach Park", eventTime: "2020-12-24T07:50-07:00"}
-                ]
-            }
-        ],
+        parks: [],
         filteredParks: [],
         selectedPark: "No park"
     },
 
     reducers: {
-        addPark: {
-            reducer(state, action) {
-                // let newState = {parks: [...state.parks],
-                // selectedItem: action.id};
-                // return newState;
-                return state
-            },
-        },
 
         queryParks: {
-            reducer (state, action) {
-                const { query } = action.payload
+            reducer(state, action) {
+                const {query} = action.payload
                 state.filteredParks = state.parks.filter((park) => {
                     return park.parkName === query
                 })
             },
 
-            prepare (query) {
+            prepare(query) {
                 return {
                     payload: {
                         query,
@@ -68,16 +81,16 @@ const parksSlice = createSlice({
         },
 
         selectPark: {
-          reducer(state, action) {
-              const {parkID} = action.payload
-              state.selectedPark = parkID
+            reducer(state, action) {
+                const {parkID} = action.payload
+                state.selectedPark = parkID
             },
             prepare(parkID) {
-              return {
-                payload: {
-                  parkID
+                return {
+                    payload: {
+                        parkID
+                    }
                 }
-              }
             }
         },
 
@@ -128,12 +141,31 @@ const parksSlice = createSlice({
                 }
             }
         }
+    },
+
+    extraReducers: {
+
+        [fetchParks.fulfilled]: (state, action) => {
+            //TODO: action.payload is undefined here!???!?!?!?!!!?!?
+
+            const {requestId} = action.meta;
+
+
+            //state.parks.push(action.payload);
+        },
+
+        [fetchParks.rejected]: (state, action) => { //TODO:
+            //action should return endpoint's error
+            if (action.payload) {
+                // If a rejected action has a payload, it means that it was returned with rejectWithValue
+                console.log(action.payload.errorMessage);
+            } else {
+                console.log(action.error);
+            }
+        }
     }
 });
 
-export const {
-    selectPark,
-    addEvent,
-    deleteEvent,
-    queryParks } = parksSlice.actions;
-export default parksSlice.reducer
+export const {addParks, selectPark, addEvent, deleteEvent} = parksSlice.actions;
+
+export default parksSlice.reducer;

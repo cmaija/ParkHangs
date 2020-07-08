@@ -6,7 +6,6 @@ const Request = require("request");
 
 const getEventsByParkId = async (req, res) =>{
 
-
     //verify there's a valid park in the db park
     await Park.find( {parkId: req.params.parkId}, (err, parks) => {
         if(err) {
