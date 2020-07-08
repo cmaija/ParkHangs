@@ -3,6 +3,7 @@ import CalendarWrapper from '../components/CalendarWrapper';
 import Searchbar from '../components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
+import apis from '../api/index'
 
 class CalendarsView extends Component {
     constructor (props) {
@@ -11,6 +12,10 @@ class CalendarsView extends Component {
             showAllParks: false,
         }
     }
+
+    componentDidMount = async () => {
+        this.props.getAllEvents();
+    };
 
     toggleShowAllParks = (show) => {
         this.setState((state) => {
@@ -46,6 +51,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToParks = (state) => {}
+const mapDispatchToProps = (dispatch) => ({
+    getAllEvents: () => dispatch(apis.fetchEvents())
+});
 
-export default connect(mapStateToProps, null)(CalendarsView);
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);

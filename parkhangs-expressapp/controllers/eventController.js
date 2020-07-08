@@ -29,7 +29,7 @@ const getEvents = async (req, res) => {
 };
 
 // Adds a new event
-const addEvent = function (req, res) {
+const addEvent = async (req, res) => {
     var {
       parkId,
       details,
@@ -50,17 +50,13 @@ const addEvent = function (req, res) {
     newEvent.createdDateTime = strDate;
     newEvent.creatorName = "user";
     newEvent.creatorID = 0;
-    newEvent.__v = 0;
 
     try {
     res.setHeader('Content-Type', 'application/json');
-    await database.collection('events').insertOne(newEvent)  => {
-      if (err) {
-            return res.status(400).json({success: false, error: 'Could not add event'})
-        }
-    }
-    console.log('item inserted :)');
-    return res.status(200).json({success: true, data: newEvent._id})
+    let inserted = await database.collection('events').insertOne(newEvent);
+    assert.equal(1, inserted.insertedCount);
+    console.log('item inserted');
+    return res.status(200).json({success: true, data: newEvent})
   } catch (error) {
     return res.status(404).json({success: false, error: 'Could not add event'})
   }

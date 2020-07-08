@@ -67,6 +67,22 @@ const parksSlice = createSlice({
             }
         },
 
+        fetchEventsSuccessful: {
+            reducer(state, action) {
+                const {eventsArray} = action.payload;
+                state.events = eventsArray;
+            },
+
+            prepare(eventsArray) {
+                return {
+                    payload: {
+                        eventsArray
+                    }
+                }
+            }
+        },
+
+
         selectPark: {
           reducer(state, action) {
               const {parkID} = action.payload
@@ -133,6 +149,7 @@ const parksSlice = createSlice({
 
 export const {
     selectPark,
+    fetchEventsSuccessful,
     addEvent,
     deleteEvent,
     queryParks } = parksSlice.actions;
