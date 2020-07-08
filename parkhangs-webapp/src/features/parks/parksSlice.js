@@ -1,56 +1,25 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios';
 
-const api = axios.create({
-    baseURL: 'http://localhost:9000/',
-});
 
-export const fetchParks = createAsyncThunk(
-    '/parks', async ({rejectWithValue}) => {
-
+//Thunk created here
+export const fetchEventsById = createAsyncThunk(
+    'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
+        
         try {
-            const response = await api.get('/parks');
-            return response.data.data;
+             const response = await axios.get(`http://localhost:9000/${id}/events`)
+             return response.data.data;
         } catch (err){
             if (!err.response) {
-                return err;
+               return err;
             }
-
-            return rejectWithValue(err.response.data)
+            
+           return rejectWithValue(err.response.data)
         }
+       
 
-        // await api.get('/parks')
-        //     .then((res) => {
-        //         if (!res.data.success) {
-        //             console.log("not successful in fetching parks");
-        //             console.log(res.data.success);
-        //         } else {
-        //             console.log(res.data.data);
-        //             return res.data.data;
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         //TODO: error handle
-        //         console.log(error);
-        //         return error.data.message;
-        //     })
-    });
-
-
-// await api.get('/parks')
-//     .then((res) => {
-//         if (!res.data.success) {
-//             console.log("not successful in fetching parks");
-//             console.log(res.data.success);
-//         } else {
-//             console.log(res.data.data);
-//             return res.data.data;
-//         }
-//     })
-//     .catch((error) => {
-//         //TODO: error handle
-//         console.log(error);
-//     })
+    }
+);
 
 const parksSlice = createSlice({
     name: 'parks',
@@ -58,10 +27,28 @@ const parksSlice = createSlice({
     initialState: {
         parks: [],
         filteredParks: [],
-        selectedPark: "No park"
+        eventsById: [],
+        loading: 'idle',
+        //currentRequestId: undefined,
+        error : null //for errors in AJAX calls
     },
 
     reducers: {
+
+        fetchParksSuccessful: {
+            reducer(state, action) {
+                const {parksArray} = action.payload;
+                state.parks = parksArray;
+            },
+
+            prepare(parksArray) {
+                return {
+                    payload: {
+                        parksArray
+                    }
+                }
+            }
+        },
 
         queryParks: {
             reducer(state, action) {
@@ -75,20 +62,6 @@ const parksSlice = createSlice({
                 return {
                     payload: {
                         query,
-                    }
-                }
-            }
-        },
-
-        selectPark: {
-            reducer(state, action) {
-                const {parkID} = action.payload
-                state.selectedPark = parkID
-            },
-            prepare(parkID) {
-                return {
-                    payload: {
-                        parkID
                     }
                 }
             }
@@ -144,28 +117,55 @@ const parksSlice = createSlice({
     },
 
     extraReducers: {
+        /*
+            [fetchEventsById.pending]: (state, action) => {
+                if (state.loading === 'idle') {
+                  state.loading = 'pending'
+                  state.currentRequestId = action.meta.requestId
+                }
+            },
 
-        [fetchParks.fulfilled]: (state, action) => {
-            //TODO: action.payload is undefined here!???!?!?!?!!!?!?
+            prepare(events) {
+               return {
+                   payload: {
+                       events //debug
+                   }
+               }
+           }, */
 
-            const {requestId} = action.meta;
+
+        [fetchEventsById.fulfilled]:(state, action) =>{
+            //action should return endpoint's call's events
+            //TODO: Currently undefined payload? Action not called?
+            //Or have this action return the events locally to component later?
+
+            //const {events} = action.payload
+            const { requestId } = action.meta
+
+            console.log("in getEventsByIdSuccess,", action.payload);
+            //console.log("events:" ,events); //broken
 
 
-            //state.parks.push(action.payload);
+            for(let i = 0 ; i< action.payload.length; i ++){
+
+                state.eventsById.push(action.payload[i]);
+            }
         },
-
-        [fetchParks.rejected]: (state, action) => { //TODO:
+        [fetchEventsById.rejected]: (state, action) => {
             //action should return endpoint's error
-            if (action.payload) {
+            if(action.payload){
                 // If a rejected action has a payload, it means that it was returned with rejectWithValue
-                console.log(action.payload.errorMessage);
-            } else {
-                console.log(action.error);
+                state.eventsById = [] //reset/clear with error
+                state.error = action.payload.errorMessage
+            }
+            else {
+                state.eventsById = [] //reset/clear with error
+                state.error = action.error
             }
         }
+
     }
 });
 
-export const {addParks, selectPark, addEvent, deleteEvent} = parksSlice.actions;
-
-export default parksSlice.reducer;
+export const {selectPark, addEvent, deleteEvent, queryParks, fetchParksSuccessful} = parksSlice.actions;
+export default parksSlice.reducer

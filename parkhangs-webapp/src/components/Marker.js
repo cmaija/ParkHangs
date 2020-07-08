@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import { selectPark } from 'features/parks/parksSlice.js'
-import { openModal } from 'features/modal/modalSlice.js'
+import {selectPark} from 'features/parks/parksSlice.js'
+import {openModal} from 'features/modal/modalSlice.js'
 import MarkerIcon from 'assets/icons/marker.png'
 import {connect} from "react-redux"
 
@@ -14,40 +14,35 @@ class Marker extends Component {
     }
 
     handleSelect = (park) => {
-        this.props.selectParkID(park);
         const modalProps = {
             component: 'ModalMapDetail',
             componentParams: {
                 park,
             }
-        }
+        };
 
-        this.props.openModal(modalProps)
+        this.props.openModal(modalProps);
 
-    }
+    };
 
     render() {
         return (
             <div>
                 <img alt="map-marker" src={MarkerIcon}/>
                 <div className="marker" onClick={() => {
-                    this.handleSelect(this.props.text)
+                    this.handleSelect(this.props.park)
                 }}
                 >
-                    {this.props.park.parkName}
+                    {/*TODO: should we display the name of the park*/}
+                    {this.props.park.name}
                 </div>
             </div>
         );
     };
 }
 
-const mapStateToProps = (state) => { //name is by convention
-    return {selected: state.parks.selectedPark}; //now it will appear as props
-}
-
 const mapDispatchToProps = (dispatch) => ({
-    selectParkID: (parkID) => dispatch(selectPark(parkID)),
     openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Marker);
+export default connect(null, mapDispatchToProps)(Marker);
