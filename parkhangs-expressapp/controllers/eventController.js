@@ -52,11 +52,11 @@ const addEvent = async (req, res) => {
     newEvent.creatorID = 0;
 
     try {
-    res.setHeader('Content-Type', 'application/json');
-    let inserted = await database.collection('events').insertOne(newEvent);
-    assert.equal(1, inserted.insertedCount);
-    console.log('item inserted');
-    return res.status(200).json({success: true, data: newEvent})
+      res.setHeader('Content-Type', 'application/json');
+      let inserted = await database.collection('events').insertOne(newEvent);
+      assert.equal(1, inserted.insertedCount);
+      console.log('item inserted');
+      return res.status(200).json({success: true, data: newEvent})
   } catch (error) {
     return res.status(404).json({success: false, error: 'Could not add event'})
   }
