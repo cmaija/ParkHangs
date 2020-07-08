@@ -3,6 +3,7 @@ import CalendarWrapper from '../components/CalendarWrapper';
 import Searchbar from '../components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
+import apis from '../api/index'
 
 class CalendarsView extends Component {
     constructor (props) {
@@ -12,9 +13,15 @@ class CalendarsView extends Component {
         }
     }
 
-    toggleShowAllParks = (show) => {
+    componentDidMount () {
+        if (this.props.parks.length === 0) {
+            this.props.getAllParks()
+        }
+    }
+
+    toggleShowAllParks = () => {
         this.setState((state) => {
-            return { showAllParks: show }
+            return { showAllParks: true }
         })
     }
 
@@ -26,10 +33,10 @@ class CalendarsView extends Component {
                 <div className="CalendarList">
                 { this.state.showAllParks
                     ? this.props.parks.map((park) => {
-                        return <CalendarWrapper key={park.id} park={park}/>
+                        return <CalendarWrapper key={park._id} park={park}/>
                     })
                     : this.props.filteredParks.map((park) => {
-                        return <CalendarWrapper key={park.id} park={park}/>
+                        return <CalendarWrapper key={park._id} park={park}/>
                     })
 
                 }
@@ -46,6 +53,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToParks = (state) => {}
-
-export default connect(mapStateToProps, null)(CalendarsView);
+const mapDispatchToProps = (dispatch) => ({
+    getAllParks: () => dispatch(apis.fetchParks())
+})
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);

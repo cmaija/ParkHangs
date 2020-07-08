@@ -28,7 +28,12 @@ class CalendarWrapper extends React.Component {
     }
 
     eventDates = () => {
-        return this.props.park.events.map(event => new Date(event.eventTime))
+        // TODO: Events geet loaded here. Not sure how you want to do it,
+        // either get all the events and store them in the store, or when this component mounts,
+        // make a request by parkid. The search bar needs to be a bit smarter or we need to paginate
+        // this calendar view page because I think 150 calendars is too many calendars to show at once. 
+        // return this.props.park.events.map(event => new Date(event.eventTime))
+        return []
     }
 
     getCorrespondingEvents = (date) => {
@@ -80,7 +85,7 @@ class CalendarWrapper extends React.Component {
     render() {
         return (
             <div className="CalendarWrapper">
-                <div>{this.props.park.parkName}</div>
+                <div>{this.props.park.name}</div>
                 <div style={{width: "250px"}}>
                     <Calendar
                         onChange={this.openDetailModal}
