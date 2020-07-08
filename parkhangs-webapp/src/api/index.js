@@ -34,15 +34,15 @@ export const fetchEvents = () => {
         api.get('/events')
             .then((res) => {
                 if (!res.data.success) {
-                    console.log("Could not fetch events");
-                    console.log(res.data.success);
+                  console.log("Could not fetch events");
+                  console.log(res.data.success);
                 } else {
-                    dispatch(fetchEventsSuccessful(res.data.data));
+                  dispatch(fetchEventsSuccessful(res.data.data));
                 }
             })
             .catch((error) => {
-                console.log("fetchEvents error: " + error);
-                return error.data.message;
+              console.log("fetchEvents error: " + error);
+              return error.data.message;
             })
     }
 };

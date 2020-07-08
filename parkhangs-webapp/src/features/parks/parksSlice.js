@@ -35,20 +35,20 @@ const parksSlice = createSlice({
 
     reducers: {
 
-        fetchParksSuccessful: {
-            reducer(state, action) {
-                const {parksArray} = action.payload;
-                state.parks = parksArray;
-            },
+      fetchParksSuccessful: {
+          reducer(state, action) {
+              const {parksArray} = action.payload;
+              state.parks = parksArray;
+          },
 
-            prepare(parksArray) {
-                return {
-                    payload: {
-                        parksArray
-                    }
-                }
-            }
-        },
+          prepare(parksArray) {
+              return {
+                  payload: {
+                      parksArray
+                  }
+              }
+          }
+      },
 
         queryParks: {
             reducer(state, action) {
@@ -70,7 +70,7 @@ const parksSlice = createSlice({
         fetchEventsSuccessful: {
             reducer(state, action) {
                 const {eventsArray} = action.payload;
-                state.events = eventsArray;
+                state.eventsById = eventsArray;
             },
 
             prepare(eventsArray) {
@@ -200,6 +200,7 @@ const parksSlice = createSlice({
 export const {
     selectPark,
     fetchEventsSuccessful,
+    fetchParksSuccessful,
     addEvent,
     deleteEvent,
     queryParks } = parksSlice.actions;

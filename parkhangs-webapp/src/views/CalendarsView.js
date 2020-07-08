@@ -18,6 +18,7 @@ class CalendarsView extends Component {
     };
 
     toggleShowAllParks = (show) => {
+        console.log(this.props.events)
         this.setState((state) => {
             return { showAllParks: show }
         })
@@ -31,10 +32,10 @@ class CalendarsView extends Component {
                 <div className="CalendarList">
                 { this.state.showAllParks
                     ? this.props.parks.map((park) => {
-                        return <CalendarWrapper key={park.id} park={park}/>
+                        return <CalendarWrapper key={park._id} park={park}/>
                     })
                     : this.props.filteredParks.map((park) => {
-                        return <CalendarWrapper key={park.id} park={park}/>
+                        return <CalendarWrapper key={park._id} park={park}/>
                     })
 
                 }
@@ -47,7 +48,8 @@ class CalendarsView extends Component {
 const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
-        filteredParks: state.parks.filteredParks
+        filteredParks: state.parks.filteredParks,
+        events: state.parks.eventsById
     }
 }
 
