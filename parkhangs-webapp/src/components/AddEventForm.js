@@ -1,20 +1,23 @@
-import React from "react";
-import { connect } from "react-redux";
-import { addEvent } from "features/parks/parksSlice"
+import React from 'react'
+import { connect } from 'react-redux'
+import { addEvent } from 'features/parks/parksSlice'
+import TimePicker from 'react-time-picker'
 
-class AddEventForm extends React.Component {
+class AddUpdateEventForm extends React.Component {
 
     constructor(props) {
+        super(props)
+        this.state = {
+            eventDetail: this.props.detail || null,
+            eventTime: this.props.eventDateTime || null
+        }
+    }
 
-        super(props);
-
-        this.state = {};
-
-        this.handleAddEvent = this.handleAddEvent.bind(this);
+    isNewEvent = () => {
+        return !!this.props._id
     }
 
     handleAddEvent(event) {
-
         event.preventDefault();
 
         let newEvent = {
@@ -24,17 +27,25 @@ class AddEventForm extends React.Component {
         };
 
         this.props.addEventToPark(this.props.park.id, newEvent);
-
-    };
+    }
 
     render() {
-        return <div>
-            <div>Add an event!</div>
-            <button className={"submit-message-button leftButton"}
-                    onClick={this.handleAddEvent}>
-                Create event!
-            </button>
-        </div>
+        return(
+            <div>
+                <form className="EventForm">
+                    <label for="eventTime"></label>
+                    <TimePicker
+                        onChange={this.handleEventTimeChange}
+                        id="eventTime"
+                        value={this.state.eventTime}/>
+                    <label for="eventDetail">Details: </label>
+                    <textarea id="eventDetail"/>
+                </form>
+                <button className={"submit-message-button leftButton"}
+                        onClick={this.handleAddEvent}>
+                    Create event!
+                </button>
+            </div>)
 
     }
 }
@@ -43,4 +54,4 @@ const mapDispatchToProps = (dispatch) => ({
     addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event))
 })
 
-export default connect(null, mapDispatchToProps)(AddEventForm);
+export default connect(null, mapDispatchToProps)(AddUpdateEventForm);

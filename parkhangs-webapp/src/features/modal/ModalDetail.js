@@ -1,4 +1,5 @@
 import React from 'react'
+import AddEventForm from 'components/AddEventForm'
 import 'features/modal/ModalDetail.css'
 
 class ModalDetail extends React.Component {
@@ -18,6 +19,7 @@ class ModalDetail extends React.Component {
                         </div>;
                     })
                 }
+                <AddEventForm />
             </div>
         )
     }
