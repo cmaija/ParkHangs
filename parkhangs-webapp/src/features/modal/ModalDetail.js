@@ -10,10 +10,10 @@ class ModalDetail extends React.Component {
                     this.props.events.map((event) => {
                         return <div key={event._id}>
                             <div>
-                                {event.parkName}
+                                {event.details}
                             </div>
                             <div>
-                                {event.eventTime}
+                                {event.eventDateTime}
                             </div>
                         </div>;
                     })
