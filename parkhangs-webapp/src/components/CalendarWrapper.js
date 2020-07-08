@@ -36,6 +36,7 @@ class CalendarWrapper extends React.Component {
     }
 
     getCorrespondingEvents = (date) => {
+      console.log(this.props.events)
         return this.props.events.filter((event) => {
             return this.datesAreOnSameDay(new Date(event.eventDateTime), date)})
     }

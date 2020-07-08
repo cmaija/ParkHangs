@@ -8,7 +8,7 @@ class ModalDetail extends React.Component {
                 Events:
                 {
                     this.props.events.map((event) => {
-                        return <div key={event.eventTime}>
+                        return <div key={event._id}>
                             <div>
                                 {event.parkName}
                             </div>
