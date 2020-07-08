@@ -3,6 +3,7 @@ import 'features/modal/Modal.css'
 import ModalDetail from 'features/modal/ModalDetail'
 import ModalMapDetail from 'features/modal/ModalMapDetail'
 import { connect } from 'react-redux'
+
 import {
     openModal,
     closeModal } from 'features/modal/modalSlice';
