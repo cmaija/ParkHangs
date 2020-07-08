@@ -1,8 +1,5 @@
 import axios from "axios";
-import {fetchParksSuccessful} from '../features/parks/parksSlice.js'
-import {fetchEventsSuccessful} from '../features/parks/parksSlice.js'
-
-
+import {fetchParksSuccessful, fetchEventsSuccessful, addEventSuccessful} from '../features/parks/parksSlice.js'
 
 const api = axios.create({
     baseURL: 'http://localhost:9000',
@@ -47,9 +44,33 @@ export const fetchEvents = () => {
     }
 };
 
+export const addEvent = (parkId, details, eventDateTime) => {
+
+    return (dispatch) => {
+        api.post('/events', {
+          parkId: parkId,
+          details: details,
+          eventDateTime: eventDateTime
+ 			 }).then((res) => {
+                if (!res.data.success) {
+                  console.log("Could not add event");
+                  console.log(res.data.success);
+                } else {
+                  console.log(res.data.event);
+                  dispatch(addEventSuccessful(res.data.data));
+                }
+            })
+            .catch((error) => {
+              console.log("fetchEvents error: " + error);
+              return error.data.message;
+            })
+    }
+};
+
 const apis = {
     fetchParks,
-    fetchEvents
+    fetchEvents,
+    addEvent
 };
 
 export default apis;
