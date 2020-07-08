@@ -117,34 +117,13 @@ const parksSlice = createSlice({
     },
 
     extraReducers: {
-        /*
-            [fetchEventsById.pending]: (state, action) => {
-                if (state.loading === 'idle') {
-                  state.loading = 'pending'
-                  state.currentRequestId = action.meta.requestId
-                }
-            },
-
-            prepare(events) {
-               return {
-                   payload: {
-                       events //debug
-                   }
-               }
-           }, */
-
 
         [fetchEventsById.fulfilled]:(state, action) =>{
             //action should return endpoint's call's events
-            //TODO: Currently undefined payload? Action not called?
-            //Or have this action return the events locally to component later?
-
-            //const {events} = action.payload
-            const { requestId } = action.meta
-
-            console.log("in getEventsByIdSuccess,", action.payload);
-            //console.log("events:" ,events); //broken
-
+    
+            const { requestId } = action.meta      
+            //In the case of no Events; no errors thrown but want to empty array
+            state.eventsById = [];
 
             for(let i = 0 ; i< action.payload.length; i ++){
 
