@@ -6,7 +6,6 @@ import moment from 'moment'
 class ModalDetail extends React.Component {
     date = () => {
         const momentDate = moment(this.props.date)
-        console.log(momentDate)
         return momentDate.format("MMMM Do YYYY")
     }
 
