@@ -31,7 +31,7 @@ class AddUpdateEventForm extends React.Component {
     }
 
     isNewEvent = () => {
-        return !!this.props._id
+        return !this.props._id
     }
 
     handleEventTimeChange = (time) => {
@@ -51,11 +51,18 @@ class AddUpdateEventForm extends React.Component {
     handleAddEvent = (event) => {
         event.preventDefault()
         const eventTimestamp = moment(`${this.state.eventTime} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
-        console.log(eventTimestamp)
         const newEvent = {
             eventDetail: this.state.eventDetail,
             eventDateTime: eventTimestamp,
         }
+
+        // ADD/UPDATE EVENT DISPATCH GOES HERE!
+        // if (this.isNewEvent()) {
+        //    this.props.addNewEvent(event, this.props._id)
+        //} else {
+        //    this.props.updateEvent(event, this.props._id)
+        //}
+
         console.log(newEvent)
     }
 
