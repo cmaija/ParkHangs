@@ -39,7 +39,7 @@ class ModalDetail extends React.Component {
                         }
                     </div>
                     <div className="AddEventForm">
-                        <AddEventForm currentDate={this.props.date} />
+                        <AddEventForm parkId={this.props.park._id} currentDate={this.props.date} />
                     </div>
                 </div>
             </div>

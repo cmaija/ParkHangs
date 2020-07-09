@@ -58,9 +58,9 @@ class AddUpdateEventForm extends React.Component {
 
         // ADD/UPDATE EVENT DISPATCH GOES HERE!
         // if (this.isNewEvent()) {
-        //    this.props.addNewEvent(this.props._id, event)
+        //    this.props.addNewEvent(this.props.parkId, event)
         //} else {
-        //    this.props.updateEvent(this.props._id, event)
+        //    this.props.updateEvent(this.props.parkId, event)
         //}
 
         console.log(newEvent)
