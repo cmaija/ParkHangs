@@ -52,11 +52,12 @@ export const addEvent = (parkId, details, eventDateTime) => {
           details: details,
           eventDateTime: eventDateTime
  			 }).then((res) => {
+             console.log(res);
                 if (!res.data.success) {
                   console.log("Could not add event");
                   console.log(res.data.success);
                 } else {
-                  console.log(res.data.event);
+                  // console.log(res.data.data);
                   dispatch(addEventSuccessful(res.data.data));
                 }
             })

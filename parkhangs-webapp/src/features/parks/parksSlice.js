@@ -86,7 +86,7 @@ const parksSlice = createSlice({
         addEventSuccessful: {
             reducer(state, action) {
                 const {newEvent} = action.payload;
-                state.event.push(newEvent);
+                state.events.push(newEvent);
             },
 
             prepare(newEvent) {

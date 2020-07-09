@@ -4,6 +4,7 @@ const Request = require("request");
 var assert = require('assert');
 var mongoose = require( 'mongoose' );
 const database = require('../database/index');
+const moment = require('moment');
 // var { uuid } = require('uuidv4');
 
 var router = express.Router();
@@ -40,16 +41,18 @@ const addEvent = async (req, res) => {
       details: details ? details : null,
       eventDateTime: eventDateTime ? eventDateTime : null,
     }
+    // console.log(newEvent.parkId);
+    // console.log(newEvent.details);
+    // console.log(newEvent.eventDateTime);
     if (newEvent.parkId === null || newEvent.details === null || newEvent.eventDateTime === null) {
       return res.status(400).json({success: false,  error: `Missing one or more fields`})
     }
 
     // newEvent._id = uuid();
-    let d = new Date();
-    let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
-    // let temp = new Date();
-    // newEvent.eventDateTime = temp;
-    newEvent.createdDateTime = strDate;
+    // let d = new Date();
+    // let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+    var now = moment(new Date(), 'hh:mm D MM YY').unix()
+    newEvent.createdDateTime = now;
     newEvent.creatorName = "user";
     newEvent.creatorID = 0;
 

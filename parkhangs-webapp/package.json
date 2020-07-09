@@ -16,7 +16,8 @@
     "react-scripts": "^0.9.5",
     "react-time-picker": "^4.0.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "timepicker": "^1.13.11"
   },
   "devDependencies": {},
   "scripts": {

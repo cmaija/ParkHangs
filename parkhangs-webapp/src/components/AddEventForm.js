@@ -52,19 +52,22 @@ class AddUpdateEventForm extends React.Component {
     handleAddEvent = (event) => {
         event.preventDefault()
         const eventTimestamp = moment(`${this.state.eventTime} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
-        const newEvent = {
-            eventDetail: this.state.eventDetail,
-            eventDateTime: eventTimestamp,
-        }
+        // const newEvent = {
+        //     eventDetail: this.state.eventDetail,
+        //     eventDateTime: eventTimestamp,
+        // }
+        const eventDetail =  this.state.eventDetail;
+        const eventDateTime =  eventTimestamp;
 
         // ADD/UPDATE EVENT DISPATCH GOES HERE!
-        // if (this.isNewEvent()) {
-        //    this.props.addNewEvent(this.props.parkId, event)
-        //} else {
+        if (this.isNewEvent()) {
+           this.props.addOneEvent(this.props.parkId, eventDetail, eventDateTime)
+        }
+        // else {
         //    this.props.updateEvent(this.props.parkId, event)
-        //}
+        // }
 
-        console.log(newEvent)
+        console.log("event added")
     }
 
     render() {
@@ -105,7 +108,7 @@ class AddUpdateEventForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event)),
-    addOneEvents: (parkId, details, eventDateTime) => dispatch(apis.addEvent(parkId, details, eventDateTime))
+    addOneEvent: (parkId, details, eventDateTime) => dispatch(apis.addEvent(parkId, details, eventDateTime))
 })
 
 export default connect(null, mapDispatchToProps)(AddUpdateEventForm);

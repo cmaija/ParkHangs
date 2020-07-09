@@ -2,6 +2,7 @@ import React from 'react'
 import AddEventForm from 'components/AddEventForm'
 import 'features/modal/ModalDetail.css'
 import moment from 'moment'
+import { connect } from "react-redux"
 
 class ModalDetail extends React.Component {
     date = () => {
@@ -20,12 +21,12 @@ class ModalDetail extends React.Component {
                         <div className="EventsList-populated">
                         {   this.props.events.length > 0 &&
                                 this.props.events.map((event) => {
-                                    return <div key={event.eventTime}>
+                                    return <div key={event._id}>
                                         <div>
-                                            {event.parkName}
+                                            {event.details}
                                         </div>
                                         <div>
-                                            {event.eventTime}
+                                            {event.eventDateTime}
                                         </div>
                                     </div>;
                                 })
@@ -47,4 +48,10 @@ class ModalDetail extends React.Component {
 
 }
 
-export default ModalDetail
+const mapStateToProps = (state) => {
+    return {
+        events: state.parks.events
+    }
+}
+
+export default connect(mapStateToProps, null)(ModalDetail);
