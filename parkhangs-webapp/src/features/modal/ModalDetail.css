@@ -30,6 +30,7 @@
     align-items: center;
     justify-content: center;
     color: black;
+    width: 100%;
 }
 
 .detailed-content {
@@ -51,4 +52,31 @@
     justify-content: flex-start;
     font-size: 14px;
     font-weight: bold;
+}
+
+.ModalDetail-Title {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.ModalDetail-Body {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.EventsList {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.AddEventForm {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
