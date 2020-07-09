@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import AddEventForm from "components/AddEventForm";
 import { queryParks } from "features/parks/parksSlice";
 
 class Searchbar extends React.Component {
