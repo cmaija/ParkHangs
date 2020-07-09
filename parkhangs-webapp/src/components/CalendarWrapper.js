@@ -17,10 +17,13 @@ class CalendarWrapper extends React.Component {
 
     openDetailModal = (date) => {
         const events = this.getCorrespondingEvents(date)
+        const serializedDate = Date.parse(date)
         const props = {
             component: 'ModalDetail',
             componentParams: {
+                park: this.props.park,
                 events,
+                date: serializedDate,
             }
         }
 

@@ -9,7 +9,7 @@ class CalendarsView extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            showAllParks: false,
+            showAllParks: true,
         }
     }
 

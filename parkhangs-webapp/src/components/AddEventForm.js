@@ -2,6 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addEvent } from 'features/parks/parksSlice'
 import TimePicker from 'react-time-picker'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+import moment from 'moment'
+import './AddEventForm.css'
 
 class AddUpdateEventForm extends React.Component {
 
@@ -9,41 +13,82 @@ class AddUpdateEventForm extends React.Component {
         super(props)
         this.state = {
             eventDetail: this.props.detail || null,
-            eventTime: this.props.eventDateTime || null
+            eventTime: this.eventTime(),
+            eventDate: this.eventDate(),
         }
+    }
+
+    eventTime = () => {
+        return this.props.eventDateTime ? moment(this.props.eventDateTime).format("hh:m a") : null
+    }
+
+    eventDate = () => {
+        return this.props.eventDateTime || this.props.currentDate
+    }
+
+    parsedEventDate = () => {
+        return moment(this.state.eventDate).format("D MM YY")
     }
 
     isNewEvent = () => {
         return !!this.props._id
     }
 
-    handleAddEvent(event) {
-        event.preventDefault();
+    handleEventTimeChange = (time) => {
+        this.setState({eventTime: time})
+    }
 
-        let newEvent = {
-            id: Date.now().toLocaleString(),
-            parkName: this.props.park.parkName,
-            eventTime: new Date().toLocaleString()
-        };
+    handleUpdateDetails = (event) => {
+        this.setState({
+            eventDetail: event.target.value
+        })
+    }
 
-        this.props.addEventToPark(this.props.park.id, newEvent);
+    handleUpdateDate = (date) => {
+        this.setState({ eventDate: date })
+    }
+
+    handleAddEvent = (event) => {
+        event.preventDefault()
+        const eventTimestamp = moment(`${this.state.eventTime} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
+        console.log(eventTimestamp)
+        const newEvent = {
+            eventDetail: this.state.eventDetail,
+            eventDateTime: eventTimestamp,
+        }
+        console.log(newEvent)
     }
 
     render() {
+        const newEvent = this.isNewEvent()
         return(
-            <div>
+            <div className="EventForm">
+                <span>Add New Event</span>
                 <form className="EventForm">
-                    <label for="eventTime"></label>
-                    <TimePicker
-                        onChange={this.handleEventTimeChange}
-                        id="eventTime"
-                        value={this.state.eventTime}/>
-                    <label for="eventDetail">Details: </label>
-                    <textarea id="eventDetail"/>
+                    {
+                        !newEvent && <div className="formsection date">
+                            <label htmlFor="eventDate">Date:</label>
+                            <Calendar id="eventDate" onChange={this.handleUpdateDate}/>
+                        </div>
+                    }
+                    <div className="formsection time">
+                        <label htmlFor="eventTime">Time:</label>
+                        <TimePicker
+                            onChange={this.handleEventTimeChange}
+                            id="eventTime"
+                            disableClock={true}
+                            value={this.state.eventTime}/>
+                    </div>
+                    <div className="formsection details">
+                        <label htmlFor="eventDetail">Details: </label>
+                        <textarea
+                            onChange={this.handleUpdateDetails}
+                            id="eventDetail"/>
+                    </div>
                 </form>
                 <button className={"submit-message-button leftButton"}
                         onClick={this.handleAddEvent}>
-                    Create event!
+                    <span>{this.isNewEvent ? 'Create Event' : 'Update Event'}</span>
                 </button>
             </div>)
 
