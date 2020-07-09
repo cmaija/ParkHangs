@@ -27,6 +27,7 @@ const parksSlice = createSlice({
     initialState: {
         parks: [],
         filteredParks: [],
+        events: [],
         eventsById: [],
         loading: 'idle',
         //currentRequestId: undefined,
@@ -70,7 +71,7 @@ const parksSlice = createSlice({
         fetchEventsSuccessful: {
             reducer(state, action) {
                 const {eventsArray} = action.payload;
-                state.eventsById = eventsArray;
+                state.events = eventsArray;
             },
 
             prepare(eventsArray) {
@@ -85,7 +86,7 @@ const parksSlice = createSlice({
         addEventSuccessful: {
             reducer(state, action) {
                 const {newEvent} = action.payload;
-                state.eventsById.push(newEvent);
+                state.event.push(newEvent);
             },
 
             prepare(newEvent) {
@@ -165,8 +166,8 @@ const parksSlice = createSlice({
 
         [fetchEventsById.fulfilled]:(state, action) =>{
             //action should return endpoint's call's events
-    
-            const { requestId } = action.meta      
+
+            const { requestId } = action.meta
             //In the case of no Events; no errors thrown but want to empty array
             state.eventsById = [];
 

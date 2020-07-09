@@ -52,7 +52,7 @@ const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
         filteredParks: state.parks.filteredParks,
-        events: state.parks.eventsById
+        events: state.parks.events
     }
 }
 

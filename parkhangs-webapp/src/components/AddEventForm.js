@@ -41,6 +41,7 @@ class AddEventForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event))
+    addOneEvents: (parkId, details, eventDateTime) => dispatch(apis.addEvent(parkId, details, eventDateTime))
 })
 
 export default connect(null, mapDispatchToProps)(AddEventForm);
