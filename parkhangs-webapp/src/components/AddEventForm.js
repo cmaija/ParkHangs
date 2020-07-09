@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { addEvent } from "features/parks/parksSlice"
+import apis from '../api/index'
 
 class AddEventForm extends React.Component {
 
@@ -40,7 +41,7 @@ class AddEventForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event))
+    addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event)),
     addOneEvents: (parkId, details, eventDateTime) => dispatch(apis.addEvent(parkId, details, eventDateTime))
 })
 
