@@ -4,6 +4,7 @@ import Searchbar from '../components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
 import apis from '../api/index'
+import { fetchEventsById } from 'features/parks/parksSlice.js'
 
 class CalendarsView extends Component {
     constructor (props) {
@@ -17,11 +18,23 @@ class CalendarsView extends Component {
       if (this.props.parks.length === 0) {
           this.props.getAllParks()
       }
-        this.props.getAllEvents();
+        this.props.getAllEvents()
+        //this.sortEvents()
     };
 
+    // makes an array with [{parkId: 1-216, events: [all events for park x]}, {etc}]
+    sortEvents = () => {
+      const sortedEvents = [];
+      this.props.parks.map((park) => {
+        this.props.fetchEvents(park.parkId)
+        const singleParkEvent = {};
+        singleParkEvent.parkId = park.parkId;
+        singleParkEvent.events = this.props.filteredEvents;
+        sortedEvents.push(singleParkEvent);
+      })
+    }
+
     toggleShowAllParks = (show) => {
-        console.log(this.props.events)
         this.setState((state) => {
           return { showAllParks: true }
         })
@@ -52,13 +65,15 @@ const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
         filteredParks: state.parks.filteredParks,
-        events: state.parks.events
+        events: state.parks.events,
+        filteredEvents: state.parks.eventsById
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     getAllParks: () => dispatch(apis.fetchParks()),
-    getAllEvents: () => dispatch(apis.fetchEvents())
+    getAllEvents: () => dispatch(apis.fetchEvents()),
+    fetchEvents: (parkId) => dispatch(fetchEventsById(parkId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);
