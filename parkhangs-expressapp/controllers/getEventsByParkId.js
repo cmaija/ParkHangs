@@ -6,7 +6,6 @@ const Request = require("request");
 
 const getEventsByParkId = async (req, res) =>{
 
-
     //verify there's a valid park in the db park
     await Park.find( {parkId: req.params.parkId}, (err, parks) => {
         if(err) {
@@ -25,11 +24,7 @@ const getEventsByParkId = async (req, res) =>{
         if(err) {
             return res.status(400).json({sucess:false, error: err})
         }
-        if (!events.length) {
-            return res
-                .status(404)
-                .json({success:false, error: `No Events by this Id!`})
-        }
+       
         return res.status(200).json({sucess: true, data: events})
    })};
 

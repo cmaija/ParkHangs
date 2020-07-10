@@ -1,14 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore} from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Routes from './router/Routes'
+import thunk from 'redux-thunk'
 
 const store = configureStore({
+    middlewares: thunk,
     reducer: rootReducer
-})
+});
 
 render(
     <Provider store={store}>
@@ -17,4 +19,4 @@ render(
         </Router>
     </Provider>,
     document.getElementById('root')
-)
+);

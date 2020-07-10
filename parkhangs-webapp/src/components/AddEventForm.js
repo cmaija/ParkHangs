@@ -1,40 +1,103 @@
-import React from "react";
-import { connect } from "react-redux";
-import { addEvent } from "features/parks/parksSlice"
+import React from 'react'
+import { connect } from 'react-redux'
+import { addEvent } from 'features/parks/parksSlice'
+import TimePicker from 'react-time-picker'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+import moment from 'moment'
+import './AddEventForm.css'
 
-class AddEventForm extends React.Component {
+class AddUpdateEventForm extends React.Component {
 
     constructor(props) {
-
-        super(props);
-
-        this.state = {};
-
-        this.handleAddEvent = this.handleAddEvent.bind(this);
+        super(props)
+        this.state = {
+            eventDetail: this.props.detail || null,
+            eventTime: this.eventTime(),
+            eventDate: this.eventDate(),
+        }
     }
 
-    handleAddEvent(event) {
+    eventTime = () => {
+        return this.props.eventDateTime ? moment(this.props.eventDateTime).format("hh:m a") : null
+    }
 
-        event.preventDefault();
+    eventDate = () => {
+        return this.props.eventDateTime || this.props.currentDate
+    }
 
-        let newEvent = {
-            id: Date.now().toLocaleString(),
-            parkName: this.props.park.parkName,
-            eventTime: new Date().toLocaleString()
-        };
+    parsedEventDate = () => {
+        return moment(this.state.eventDate).format("D MM YY")
+    }
 
-        this.props.addEventToPark(this.props.park.id, newEvent);
+    isNewEvent = () => {
+        return !this.props.eventDateTime
+    }
 
-    };
+    handleEventTimeChange = (time) => {
+        this.setState({eventTime: time})
+    }
+
+    handleUpdateDetails = (event) => {
+        this.setState({
+            eventDetail: event.target.value
+        })
+    }
+
+    handleUpdateDate = (date) => {
+        this.setState({ eventDate: date })
+    }
+
+    handleAddEvent = (event) => {
+        event.preventDefault()
+        const eventTimestamp = moment(`${this.state.eventTime} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
+        const newEvent = {
+            eventDetail: this.state.eventDetail,
+            eventDateTime: eventTimestamp,
+        }
+
+        // ADD/UPDATE EVENT DISPATCH GOES HERE!
+        // if (this.isNewEvent()) {
+        //    this.props.addNewEvent(this.props.parkId, event)
+        //} else {
+        //    this.props.updateEvent(this.props.parkId, event)
+        //}
+
+        console.log(newEvent)
+    }
 
     render() {
-        return <div>
-            <div>Add an event!</div>
-            <button className={"submit-message-button leftButton"}
-                    onClick={this.handleAddEvent}>
-                Create event!
-            </button>
-        </div>
+        const newEvent = this.isNewEvent()
+        return(
+            <div className="EventForm">
+                <span>Add New Event</span>
+                <form className="EventForm">
+                    {
+                        !newEvent && <div className="formsection date">
+                            <label htmlFor="eventDate">Date:</label>
+                            <Calendar id="eventDate" onChange={this.handleUpdateDate}/>
+                        </div>
+                    }
+                    <div className="formsection time">
+                        <label htmlFor="eventTime">Time:</label>
+                        <TimePicker
+                            onChange={this.handleEventTimeChange}
+                            id="eventTime"
+                            disableClock={true}
+                            value={this.state.eventTime}/>
+                    </div>
+                    <div className="formsection details">
+                        <label htmlFor="eventDetail">Details: </label>
+                        <textarea
+                            onChange={this.handleUpdateDetails}
+                            id="eventDetail"/>
+                    </div>
+                </form>
+                <button className={"submit-message-button leftButton"}
+                        onClick={this.handleAddEvent}>
+                    <span>{this.isNewEvent ? 'Create Event' : 'Update Event'}</span>
+                </button>
+            </div>)
 
     }
 }
@@ -43,4 +106,4 @@ const mapDispatchToProps = (dispatch) => ({
     addEventToPark: (parkId, event) => dispatch(addEvent(parkId, event))
 })
 
-export default connect(null, mapDispatchToProps)(AddEventForm);
+export default connect(null, mapDispatchToProps)(AddUpdateEventForm);

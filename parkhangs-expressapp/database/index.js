@@ -10,7 +10,7 @@ let DBNAME = "ParkHangs";
 let MONGODBCONNECTIONURL = `mongodb+srv://park_hangs_team:${PASSWORD}@parkhangs-ngrhm.mongodb.net/${DBNAME}?retryWrites=true&w=majority`;
 
 mongoose
-    .connect(MONGODBCONNECTIONURL, {useNewUrlParser: true})
+    .connect(MONGODBCONNECTIONURL, {useNewUrlParser: true, useUnifiedTopology: true})
     .catch(e => {
         console.error('Connection error', e.message)
     });
