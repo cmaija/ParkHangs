@@ -35,7 +35,8 @@ class CalendarWrapper extends React.Component {
         // either get all the events and store them in the store, or when this component mounts,
         // make a request by parkid. The search bar needs to be a bit smarter or we need to paginate
         // this calendar view page because I think 150 calendars is too many calendars to show at once.
-        return this.props.events.map(event => new Date(event.eventDateTime));
+        // return this.props.park.events.map(event => new Date(event.eventDateTime))
+        return []
     }
 
     getCorrespondingEvents = (date) => {

@@ -2,7 +2,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios';
 
 
-//Thunk created here
+//Thunk created here; api call for eventsbyparkId stored to store
 export const fetchEventsById = createAsyncThunk(
     'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
 
@@ -51,6 +51,14 @@ const parksSlice = createSlice({
           }
       },
 
+            prepare(parksArray) {
+                return {
+                    payload: {
+                        parksArray
+                    }
+                }
+            }
+        },
         queryParks: {
             reducer(state, action) {
                 const {query} = action.payload
@@ -167,6 +175,49 @@ const parksSlice = createSlice({
                         event
                     }
                 }
+            }
+        },
+        returnEventsByParkId: {
+            //uses store's Events object that Phil will implement and
+            //returns subset of events to modal
+            reducer(state, action) {
+               const {parkId} = action.payload
+               return events[parkId]; //TODO: Phil can check if this works
+            },
+            prepare(parkId){
+                return{
+                    payload: {
+                        parkId
+                    }
+                }
+            }
+        }
+    },
+
+    extraReducers: {
+
+        [fetchEventsById.fulfilled]:(state, action) =>{
+            //action should return endpoint's call's events
+
+            const { requestId } = action.meta
+            //In the case of no Events; no errors thrown but want to empty array
+            state.eventsById = [];
+
+            for(let i = 0 ; i< action.payload.length; i ++){
+
+                state.eventsById.push(action.payload[i]);
+            }
+        },
+        [fetchEventsById.rejected]: (state, action) => {
+            //action should return endpoint's error
+            if(action.payload){
+                // If a rejected action has a payload, it means that it was returned with rejectWithValue
+                state.eventsById = [] //reset/clear with error
+                state.error = action.payload.errorMessage
+            }
+            else {
+                state.eventsById = [] //reset/clear with error
+                state.error = action.error
             }
         }
     },

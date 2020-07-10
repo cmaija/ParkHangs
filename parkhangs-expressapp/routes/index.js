@@ -12,8 +12,6 @@ router.use(express.json())
 router.get('/parks', controller.getParks);
 router.get('/events', eventController.getEvents);
 router.post('/events',eventController.addEvent);
-
-
 router.get('/:parkId/events', eventbyparkIdController.getEventsByParkId);
 
 module.exports = router;
