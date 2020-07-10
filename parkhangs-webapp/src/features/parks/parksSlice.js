@@ -21,6 +21,158 @@ export const fetchEventsById = createAsyncThunk(
     }
 );
 
+const parksSliceReducers = {
+    fetchParksSuccessful: {
+        reducer(state, action) {
+            const {parksArray} = action.payload;
+            state.parks = parksArray;
+        },
+
+        prepare(parksArray) {
+            return {
+                payload: {
+                    parksArray
+                }
+            }
+        }
+    },
+  queryParks: {
+        reducer(state, action) {
+              const {query} = action.payload
+              state.filteredParks = state.parks.filter((park) => {
+                  return park.name === query
+              })
+          },
+
+        prepare(query) {
+              return {
+                  payload: {
+                      query,
+                  }
+              }
+          }
+     },
+
+      fetchEventsSuccessful: {
+          reducer(state, action) {
+              const {eventsArray} = action.payload;
+              const sortedEvents = {};
+              eventsArray.map((event) => {
+                const key = event.parkId.toString()
+                if (!(key in sortedEvents)) {
+                sortedEvents[key] = [event];
+              } else {
+                sortedEvents[key].push(event)
+              }
+              })
+              state.events = sortedEvents;
+          },
+
+          prepare(eventsArray) {
+              return {
+                  payload: {
+                      eventsArray
+                  }
+              }
+          }
+      },
+
+      addEventSuccessful: {
+          reducer(state, action) {
+              const {newEvent} = action.payload;
+              state.events.newEvent.parkId.push(newEvent);
+          },
+
+          prepare(newEvent) {
+              return {
+                  payload: {
+                      newEvent
+                  }
+              }
+          }
+      },
+
+
+      selectPark: {
+        reducer(state, action) {
+            const {parkID} = action.payload
+            state.selectedPark = parkID
+          },
+          prepare(parkID) {
+            return {
+              payload: {
+                parkID
+              }
+            }
+          }
+      },
+
+      deleteEvent: {
+          reducer(state, action) {
+              const {parkId, eventId} = action.payload;
+
+              for (let i = 0; i < state.parks.length; i++) {
+
+                  if (state.parks[i].id === parkId) {
+                      // have the park
+
+                      for (let j = 0; j < state.parks[i].events.length; j++) {
+
+                          if (eventId === state.parks[i].events[j].id) {
+                              state.parks[i].events.splice(j)
+                          }
+                      }
+                  }
+              }
+          },
+          prepare(parkId, eventId) {
+              return {
+                  payload: {
+                      parkId,
+                      eventId
+                  }
+              }
+          }
+      },
+      addEvent: {
+          reducer(state, action) {
+              const {parkId, event} = action.payload
+
+              for (let i = 0; i < state.parks.length; i++) {
+                  if (state.parks[i].id === parkId) {
+                      state.parks[i].events.push(event)
+                  }
+              }
+          },
+
+          prepare(parkId, event) {
+              return {
+                  payload: {
+                      parkId,
+                      event
+                  }
+              }
+          }
+      },
+     /*  returnEventsByParkId: {
+          //uses store's Events object that returns subset of events to modal
+          reducer(state, action) {
+             const {parkId} = action.payload
+             //console.log(parkId);; //DEBUG USE
+             console.log(JSON.stringify(state.events[parkId]));; //DEBUG USE
+             const res = state.events[parkId];
+             return state.events[parkId]; 
+          },
+          prepare(parkId){
+              return{
+                  payload: {
+                      parkId
+                  }
+              }
+          }
+      } */
+}
+
 const parksSlice = createSlice({
     name: 'parks',
 
@@ -34,169 +186,10 @@ const parksSlice = createSlice({
         error : null //for errors in AJAX calls
     },
 
-    reducers: {
-
-      fetchParksSuccessful: {
-          reducer(state, action) {
-              const {parksArray} = action.payload;
-              state.parks = parksArray;
-          },
-
-          prepare(parksArray) {
-              return {
-                  payload: {
-                      parksArray
-                  }
-              }
-          }
-      },
-
-            prepare(parksArray) {
-                return {
-                    payload: {
-                        parksArray
-                    }
-                }
-            }
-        },
-        queryParks: {
-            reducer(state, action) {
-                const {query} = action.payload
-                state.filteredParks = state.parks.filter((park) => {
-                    return park.parkName === query
-                })
-            },
-
-            prepare(query) {
-                return {
-                    payload: {
-                        query,
-                    }
-                }
-            }
-        },
-
-        fetchEventsSuccessful: {
-            reducer(state, action) {
-                const {eventsArray} = action.payload;
-                const sortedEvents = {};
-                eventsArray.map((event) => {
-                  const key = event.parkId.toString()
-                  if (!(key in sortedEvents)) {
-                  sortedEvents[key] = [event];
-                } else {
-                  sortedEvents[key].push(event)
-                }
-                })
-                state.events = sortedEvents;
-            },
-
-            prepare(eventsArray) {
-                return {
-                    payload: {
-                        eventsArray
-                    }
-                }
-            }
-        },
-
-        addEventSuccessful: {
-            reducer(state, action) {
-                const {newEvent} = action.payload;
-                state.events.newEvent.parkId.push(newEvent);
-            },
-
-            prepare(newEvent) {
-                return {
-                    payload: {
-                        newEvent
-                    }
-                }
-            }
-        },
-
-
-        selectPark: {
-          reducer(state, action) {
-              const {parkID} = action.payload
-              state.selectedPark = parkID
-            },
-            prepare(parkID) {
-              return {
-                payload: {
-                  parkID
-                }
-              }
-            }
-        },
-
-        deleteEvent: {
-            reducer(state, action) {
-                const {parkId, eventId} = action.payload;
-
-                for (let i = 0; i < state.parks.length; i++) {
-
-                    if (state.parks[i].id === parkId) {
-                        // have the park
-
-                        for (let j = 0; j < state.parks[i].events.length; j++) {
-
-                            if (eventId === state.parks[i].events[j].id) {
-                                state.parks[i].events.splice(j)
-                            }
-                        }
-                    }
-                }
-            },
-            prepare(parkId, eventId) {
-                return {
-                    payload: {
-                        parkId,
-                        eventId
-                    }
-                }
-            }
-        },
-        addEvent: {
-            reducer(state, action) {
-                const {parkId, event} = action.payload
-
-                for (let i = 0; i < state.parks.length; i++) {
-                    if (state.parks[i].id === parkId) {
-                        state.parks[i].events.push(event)
-                    }
-                }
-            },
-
-            prepare(parkId, event) {
-                return {
-                    payload: {
-                        parkId,
-                        event
-                    }
-                }
-            }
-        },
-        returnEventsByParkId: {
-            //uses store's Events object that Phil will implement and
-            //returns subset of events to modal
-            reducer(state, action) {
-               const {parkId} = action.payload
-               return events[parkId]; //TODO: Phil can check if this works
-            },
-            prepare(parkId){
-                return{
-                    payload: {
-                        parkId
-                    }
-                }
-            }
-        }
-    },
+    reducers: parksSliceReducers,
 
     extraReducers: {
-
-        [fetchEventsById.fulfilled]:(state, action) =>{
+        [fetchEventsById.fulfilled]: (state, action) => {
             //action should return endpoint's call's events
 
             const { requestId } = action.meta
@@ -221,35 +214,6 @@ const parksSlice = createSlice({
             }
         }
     },
-
-    extraReducers: {
-
-        [fetchEventsById.fulfilled]:(state, action) =>{
-            //action should return endpoint's call's events
-
-            const { requestId } = action.meta
-            //In the case of no Events; no errors thrown but want to empty array
-            state.eventsById = [];
-
-            for(let i = 0 ; i< action.payload.length; i ++){
-
-                state.eventsById.push(action.payload[i]);
-            }
-        },
-        [fetchEventsById.rejected]: (state, action) => {
-            //action should return endpoint's error
-            if(action.payload){
-                // If a rejected action has a payload, it means that it was returned with rejectWithValue
-                state.eventsById = [] //reset/clear with error
-                state.error = action.payload.errorMessage
-            }
-            else {
-                state.eventsById = [] //reset/clear with error
-                state.error = action.error
-            }
-        }
-
-    }
 });
 
 export const {
@@ -259,5 +223,7 @@ export const {
     addEventSuccessful,
     addEvent,
     deleteEvent,
-    queryParks } = parksSlice.actions;
+    queryParks,
+    //returnEventsByParkId 
+} = parksSlice.actions;
 export default parksSlice.reducer
