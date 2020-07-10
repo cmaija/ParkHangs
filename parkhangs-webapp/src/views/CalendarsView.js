@@ -18,7 +18,6 @@ class CalendarsView extends Component {
       if (this.props.parks.length === 0) {
           this.props.getAllParks()
       }
-        //this.props.getAllEvents()
     };
 
     toggleShowAllParks = (show) => {
@@ -53,7 +52,6 @@ const mapStateToProps = (state) => {
         parks: state.parks.parks,
         filteredParks: state.parks.filteredParks,
         events: state.parks.events,
-        filteredEvents: state.parks.eventsById
     }
 }
 

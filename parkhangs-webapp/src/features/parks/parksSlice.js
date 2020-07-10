@@ -27,7 +27,7 @@ const parksSlice = createSlice({
     initialState: {
         parks: [],
         filteredParks: [],
-        events: [],
+        events: {},
         eventsById: {},
         loading: 'idle',
         //currentRequestId: undefined,
@@ -35,21 +35,6 @@ const parksSlice = createSlice({
     },
 
     reducers: {
-
-      addSortedEvents: {
-          reducer (state, action) {
-            const {sortedEvents} = action.payload;
-                state.eventsById = sortedEvents;
-          },
-
-          prepare (sortedEvents) {
-              return {
-                  payload: {
-                      sortedEvents
-                  }
-              }
-          }
-      },
 
       fetchParksSuccessful: {
           reducer(state, action) {
@@ -86,7 +71,16 @@ const parksSlice = createSlice({
         fetchEventsSuccessful: {
             reducer(state, action) {
                 const {eventsArray} = action.payload;
-                state.events = eventsArray;
+                const sortedEvents = {};
+                eventsArray.map((event) => {
+                  const key = event.parkId.toString()
+                  if (!(key in sortedEvents)) {
+                  sortedEvents[key] = [event];
+                } else {
+                  sortedEvents[key].push(event)
+                }
+                })
+                state.events = sortedEvents;
             },
 
             prepare(eventsArray) {
@@ -101,7 +95,7 @@ const parksSlice = createSlice({
         addEventSuccessful: {
             reducer(state, action) {
                 const {newEvent} = action.payload;
-                state.events.push(newEvent);
+                state.events.newEvent.parkId.push(newEvent);
             },
 
             prepare(newEvent) {
@@ -214,6 +208,5 @@ export const {
     addEventSuccessful,
     addEvent,
     deleteEvent,
-    addSortedEvents,
     queryParks } = parksSlice.actions;
 export default parksSlice.reducer
