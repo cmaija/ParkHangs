@@ -9,25 +9,12 @@ import { addSortedEvents } from 'features/parks/parksSlice';
 class MapView extends Component {
 
   componentDidMount = async () => {
-      this.props.getAllEvents()
-      console.log(this.props.events)
-      this.sortEvents()
-      console.log(this.props.filteredEvents)
+    await this.props.getAllEvents()
+    await this.sortEvents()
+    console.log(this.props.events)
     }
 
-  // componentDidMount = () => {
-  //   (async () => {
-  //     let res = await this.props.getAllEvents()
-  //     console.log(this.props.events)
-  //     this.sortEvents()
-  //     console.log(this.props.filteredEvents)
-  //   })()
-  //   .catch(error => {
-  //     console.log(error)
-  //   })
-  // }
-
-  sortEvents = () => {
+  sortEvents = async () => {
     const sortedEvents = {};
     this.props.events.map((event) => {
       const key = event.parkId.toString()
@@ -37,13 +24,22 @@ class MapView extends Component {
       sortedEvents[key].push(event)
     }
   })
-  console.log(sortedEvents)
-  this.props.addEvents(sortedEvents);
-}
+    console.log(sortedEvents)
+    this.props.addEvents(sortedEvents);
+  }
+
+  handleClick = () => {
+    this.sortEvents()
+    console.log(this.props.events)
+    console.log(this.props.filteredEvents)
+  }
 
     render() {
         return (
             <div className="MapView">
+            <div>
+              <button className="test" onClick={this.handleClick}>test</button>
+            </div>
                 <Map/>
             </div>
         );
