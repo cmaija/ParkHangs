@@ -1,6 +1,6 @@
 import React from 'react'
 // import AddEventForm from '../components/AddEventForm'
-import { deleteEvent,fetchEventsById } from 'features/parks/parksSlice.js'
+import { deleteEvent,returnEventsByParkId } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
@@ -10,12 +10,24 @@ class ModalMapDetail extends React.Component {
 
     // this.props.park is the current park. Passed in as a prop. Not from store
 
+    //local state
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            events: []
+        };
+    }
+        
+    
     componentDidMount = async () => {
-        let result =  await this.getEvents();
+        /* let result =  await this.getEvents(); //NOT USED ANYMORE; REPLACED STORE WITH LOCAL STATE VALUE
         console.log(this.props.error);
         if(this.props.error){
             throw this.props.error
-        }
+        } */
+
+        this.state.events = returnEvents(this.props.park.parkId).slice(); //TODO: check;should create a new array with events
         
     };
 
@@ -82,9 +94,8 @@ class ModalMapDetail extends React.Component {
                     <div className="Section">
                         <span className="SectionTitle">Events</span>
                         {
-                            //TODO: need gordon's filter and select park endpoint to work properly
-                            
-                             this.props.eventsById.map ((event) =>   {
+
+                             this.state.events.map ((event) =>   {
                                
                                     //key may need to be changed to event._id as backend
                                     return <div className="Event" key={event._id}>
@@ -134,7 +145,7 @@ class ModalMapDetail extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        eventsById: state.parks.eventsById, //universal; actions for fulfillment and rejected not connecting? array remains empty
+        //eventsById: state.parks.eventsById, //universal; actions for fulfillment and rejected not connecting? array remains empty
         error: state.parks.error,
         events:state.events
     }
@@ -142,7 +153,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
-    fetchEvents: (parkId) => dispatch(fetchEventsById(parkId)) //should then cases be added here?
+    //fetchEvents: (parkId) => dispatch(fetchEventsById(parkId)) //should then cases be added here?
+    returnEvents: (parkId) => dispatch(returnEventsByParkId(parkId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);
