@@ -2,7 +2,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios';
 
 
-//Thunk created here
+//Thunk created here; api call for eventsbyparkId stored to store
 export const fetchEventsById = createAsyncThunk(
     'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
         
@@ -49,7 +49,6 @@ const parksSlice = createSlice({
                 }
             }
         },
-
         queryParks: {
             reducer(state, action) {
                 const {query} = action.payload
@@ -113,6 +112,21 @@ const parksSlice = createSlice({
                     }
                 }
             }
+        },
+        returnEventsByParkId: {
+            //uses store's Events object that Phil will implement and 
+            //returns subset of events to modal
+            reducer(state, action) {
+               const {parkId} = action.payload
+               return events[parkId]; //TODO: Phil can check if this works
+            },
+            prepare(parkId){
+                return{
+                    payload: {
+                        parkId
+                    }
+                }
+            }
         }
     },
 
@@ -146,5 +160,5 @@ const parksSlice = createSlice({
     }
 });
 
-export const {selectPark, addEvent, deleteEvent, queryParks, fetchParksSuccessful} = parksSlice.actions;
+export const {selectPark, addEvent, deleteEvent, queryParks, fetchParksSuccessful, returnEventsByParkId} = parksSlice.actions;
 export default parksSlice.reducer
