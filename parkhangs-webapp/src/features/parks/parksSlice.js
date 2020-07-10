@@ -5,7 +5,7 @@ import axios from 'axios';
 //Thunk created here; api call for eventsbyparkId stored to store
 export const fetchEventsById = createAsyncThunk(
     'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
-        
+
         try {
              const response = await axios.get(`http://localhost:9000/${id}/events`)
              return response.data.data;
@@ -13,10 +13,10 @@ export const fetchEventsById = createAsyncThunk(
             if (!err.response) {
                return err;
             }
-            
+
            return rejectWithValue(err.response.data)
         }
-       
+
 
     }
 );
@@ -27,7 +27,8 @@ const parksSlice = createSlice({
     initialState: {
         parks: [],
         filteredParks: [],
-        eventsById: [],
+        events: {},
+        eventsById: {},
         loading: 'idle',
         //currentRequestId: undefined,
         error : null //for errors in AJAX calls
@@ -35,11 +36,20 @@ const parksSlice = createSlice({
 
     reducers: {
 
-        fetchParksSuccessful: {
-            reducer(state, action) {
-                const {parksArray} = action.payload;
-                state.parks = parksArray;
-            },
+      fetchParksSuccessful: {
+          reducer(state, action) {
+              const {parksArray} = action.payload;
+              state.parks = parksArray;
+          },
+
+          prepare(parksArray) {
+              return {
+                  payload: {
+                      parksArray
+                  }
+              }
+          }
+      },
 
             prepare(parksArray) {
                 return {
@@ -63,6 +73,60 @@ const parksSlice = createSlice({
                         query,
                     }
                 }
+            }
+        },
+
+        fetchEventsSuccessful: {
+            reducer(state, action) {
+                const {eventsArray} = action.payload;
+                const sortedEvents = {};
+                eventsArray.map((event) => {
+                  const key = event.parkId.toString()
+                  if (!(key in sortedEvents)) {
+                  sortedEvents[key] = [event];
+                } else {
+                  sortedEvents[key].push(event)
+                }
+                })
+                state.events = sortedEvents;
+            },
+
+            prepare(eventsArray) {
+                return {
+                    payload: {
+                        eventsArray
+                    }
+                }
+            }
+        },
+
+        addEventSuccessful: {
+            reducer(state, action) {
+                const {newEvent} = action.payload;
+                state.events.newEvent.parkId.push(newEvent);
+            },
+
+            prepare(newEvent) {
+                return {
+                    payload: {
+                        newEvent
+                    }
+                }
+            }
+        },
+
+
+        selectPark: {
+          reducer(state, action) {
+              const {parkID} = action.payload
+              state.selectedPark = parkID
+            },
+            prepare(parkID) {
+              return {
+                payload: {
+                  parkID
+                }
+              }
             }
         },
 
@@ -114,7 +178,7 @@ const parksSlice = createSlice({
             }
         },
         returnEventsByParkId: {
-            //uses store's Events object that Phil will implement and 
+            //uses store's Events object that Phil will implement and
             //returns subset of events to modal
             reducer(state, action) {
                const {parkId} = action.payload
@@ -134,8 +198,36 @@ const parksSlice = createSlice({
 
         [fetchEventsById.fulfilled]:(state, action) =>{
             //action should return endpoint's call's events
-    
-            const { requestId } = action.meta      
+
+            const { requestId } = action.meta
+            //In the case of no Events; no errors thrown but want to empty array
+            state.eventsById = [];
+
+            for(let i = 0 ; i< action.payload.length; i ++){
+
+                state.eventsById.push(action.payload[i]);
+            }
+        },
+        [fetchEventsById.rejected]: (state, action) => {
+            //action should return endpoint's error
+            if(action.payload){
+                // If a rejected action has a payload, it means that it was returned with rejectWithValue
+                state.eventsById = [] //reset/clear with error
+                state.error = action.payload.errorMessage
+            }
+            else {
+                state.eventsById = [] //reset/clear with error
+                state.error = action.error
+            }
+        }
+    },
+
+    extraReducers: {
+
+        [fetchEventsById.fulfilled]:(state, action) =>{
+            //action should return endpoint's call's events
+
+            const { requestId } = action.meta
             //In the case of no Events; no errors thrown but want to empty array
             state.eventsById = [];
 
@@ -160,5 +252,12 @@ const parksSlice = createSlice({
     }
 });
 
-export const {selectPark, addEvent, deleteEvent, queryParks, fetchParksSuccessful, returnEventsByParkId} = parksSlice.actions;
+export const {
+    selectPark,
+    fetchEventsSuccessful,
+    fetchParksSuccessful,
+    addEventSuccessful,
+    addEvent,
+    deleteEvent,
+    queryParks } = parksSlice.actions;
 export default parksSlice.reducer

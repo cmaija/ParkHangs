@@ -1,6 +1,6 @@
 import React from 'react'
 // import AddEventForm from '../components/AddEventForm'
-import { deleteEvent,returnEventsByParkId } from 'features/parks/parksSlice.js'
+import { deleteEvent, fetchEventsById, returnEventsByParkId } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
@@ -18,8 +18,8 @@ class ModalMapDetail extends React.Component {
             events: []
         };
     }
-        
-    
+
+
     componentDidMount = async () => {
         /* let result =  await this.getEvents(); //NOT USED ANYMORE; REPLACED STORE WITH LOCAL STATE VALUE
         console.log(this.props.error);
@@ -28,7 +28,7 @@ class ModalMapDetail extends React.Component {
         } */
 
         this.state.events = returnEvents(this.props.park.parkId).slice(); //TODO: check;should create a new array with events
-        
+
     };
 
     getEvents = async () => {
@@ -36,13 +36,13 @@ class ModalMapDetail extends React.Component {
             const resultAction = await this.props.fetchEvents(this.props.park.parkId);
             const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
              return events;
-            
+
         }catch (err) {
             console.error(err);
             return err;
         }
     };
-    
+
 
     render() {
         return (
@@ -94,38 +94,41 @@ class ModalMapDetail extends React.Component {
                     <div className="Section">
                         <span className="SectionTitle">Events</span>
                         {
+                            //TODO: need gordon's filter and select park endpoint to work properly
+
+                             // this.props.eventsById.map ((event) =>   {
 
                              this.state.events.map ((event) =>   {
-                               
+
                                     //key may need to be changed to event._id as backend
                                     return <div className="Event" key={event._id}>
                                         {/* <div>
-                                            _id: {event._id} 
+                                            _id: {event._id}
                                         </div>  */}
                                         <div>
-                                            createdDateTime:<br/>{event.createdDateTime} 
-                                        </div> 
-                                        
+                                            createdDateTime:<br/>{event.createdDateTime}
+                                        </div>
+
                                         <div>
                                             creatorID:<br/>{event.creatorId}
-                                        </div> 
-                                        
-                                        <div>
-                                            creator:<br/>{event.creatorName} 
-                                        </div> 
-                                        
-                                        <div>
-                                            details:<br/>{event.details} 
                                         </div>
-                                       
+
+                                        <div>
+                                            creator:<br/>{event.creatorName}
+                                        </div>
+
+                                        <div>
+                                            details:<br/>{event.details}
+                                        </div>
+
                                         <div>
                                             DateTime:<br/>{event.eventDateTime}
                                         </div>
-                                        
+
                                         <div>
                                             parkId:<br/>{event.parkId}
                                         </div>
-                                        
+
                                         <button onClick={() => {
                                             this.props.deleteEventFromPark(this.props.park._id, event.id)
                                         }}>
@@ -133,7 +136,7 @@ class ModalMapDetail extends React.Component {
                                         </button>
                                     </div>;
                                 })
-                                
+
                             }
                         {/*<AddEventForm park={this.props.park}/>*/}
                     </div>

@@ -4,24 +4,25 @@ import Searchbar from '../components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
 import apis from '../api/index'
+import { fetchEventsById } from 'features/parks/parksSlice.js'
 
 class CalendarsView extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            showAllParks: false,
+            showAllParks: true,
         }
     }
 
-    componentDidMount () {
-        if (this.props.parks.length === 0) {
-            this.props.getAllParks()
-        }
-    }
+    componentDidMount = async () => {
+      if (this.props.parks.length === 0) {
+          this.props.getAllParks()
+      }
+    };
 
-    toggleShowAllParks = () => {
+    toggleShowAllParks = (show) => {
         this.setState((state) => {
-            return { showAllParks: true }
+          return { showAllParks: true }
         })
     }
 
@@ -49,11 +50,15 @@ class CalendarsView extends Component {
 const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
-        filteredParks: state.parks.filteredParks
+        filteredParks: state.parks.filteredParks,
+        events: state.parks.events,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(apis.fetchParks())
-})
+    getAllParks: () => dispatch(apis.fetchParks()),
+    getAllEvents: () => dispatch(apis.fetchEvents()),
+    fetchEvents: (parkId) => dispatch(fetchEventsById(parkId))
+});
+
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);
