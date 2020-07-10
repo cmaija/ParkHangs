@@ -18,21 +18,8 @@ class CalendarsView extends Component {
       if (this.props.parks.length === 0) {
           this.props.getAllParks()
       }
-        this.props.getAllEvents()
-        //this.sortEvents()
+        //this.props.getAllEvents()
     };
-
-    // makes an array with [{parkId: 1-216, events: [all events for park x]}, {etc}]
-    sortEvents = () => {
-      const sortedEvents = [];
-      this.props.parks.map((park) => {
-        this.props.fetchEvents(park.parkId)
-        const singleParkEvent = {};
-        singleParkEvent.parkId = park.parkId;
-        singleParkEvent.events = this.props.filteredEvents;
-        sortedEvents.push(singleParkEvent);
-      })
-    }
 
     toggleShowAllParks = (show) => {
         this.setState((state) => {

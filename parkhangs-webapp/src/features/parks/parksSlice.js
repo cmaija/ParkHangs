@@ -28,13 +28,28 @@ const parksSlice = createSlice({
         parks: [],
         filteredParks: [],
         events: [],
-        eventsById: [],
+        eventsById: {},
         loading: 'idle',
         //currentRequestId: undefined,
         error : null //for errors in AJAX calls
     },
 
     reducers: {
+
+      addSortedEvents: {
+          reducer (state, action) {
+            const {sortedEvents} = action.payload;
+                state.eventsById = sortedEvents;
+          },
+
+          prepare (sortedEvents) {
+              return {
+                  payload: {
+                      sortedEvents
+                  }
+              }
+          }
+      },
 
       fetchParksSuccessful: {
           reducer(state, action) {
@@ -199,5 +214,6 @@ export const {
     addEventSuccessful,
     addEvent,
     deleteEvent,
+    addSortedEvents,
     queryParks } = parksSlice.actions;
 export default parksSlice.reducer

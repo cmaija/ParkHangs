@@ -56,12 +56,12 @@ class AddUpdateEventForm extends React.Component {
         //     eventDetail: this.state.eventDetail,
         //     eventDateTime: eventTimestamp,
         // }
-        const eventDetail =  this.state.eventDetail;
+        const detail =  this.state.eventDetail;
         const eventDateTime =  eventTimestamp;
 
         // ADD/UPDATE EVENT DISPATCH GOES HERE!
         if (this.isNewEvent()) {
-           this.props.addOneEvent(this.props.parkId, eventDetail, eventDateTime)
+           this.props.addOneEvent(this.props.parkId, detail, eventDateTime)
         }
         // else {
         //    this.props.updateEvent(this.props.parkId, event)
