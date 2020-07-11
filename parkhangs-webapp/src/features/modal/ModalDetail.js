@@ -1,10 +1,10 @@
 import React from 'react'
-import AddEventForm from 'components/AddEventForm'
 import 'features/modal/ModalDetail.css'
 import moment from 'moment'
 import { connect } from "react-redux"
 import apis from 'api/index'
 import { cloneDeep } from 'lodash'
+import EventForm from "../../components/EventForm";
 
 class ModalDetail extends React.Component {
     constructor (props) {
@@ -21,7 +21,7 @@ class ModalDetail extends React.Component {
     }
 
     editEvent = (eventToEdit) => {
-        this.setState({eventToEdit})
+        this.setState({eventToEdit: eventToEdit})
     }
 
     deleteEvent = async (eventId) => {
@@ -42,7 +42,7 @@ class ModalDetail extends React.Component {
         let eventIndex = newEventsArray.findIndex(event => event._id === eventId)
         newEventsArray[eventIndex].details = eventDetail
         newEventsArray[eventIndex].eventDateTime = `${eventTimestamp}`
-        this.setState({eventsOnCurrentDate: newEventsArray})
+        this.setState({eventsOnCurrentDate: newEventsArray, eventToEdit: null})
     }
 
     render() {
@@ -56,13 +56,19 @@ class ModalDetail extends React.Component {
                         <div className="EventsList-populated">
                         {   this.state.eventsOnCurrentDate.length > 0 &&
                                 this.state.eventsOnCurrentDate.map((event) => {
-                                    return <div className="event"key={event._id}>
+                                    return <div className="event" key={event._id}>
                                         <div className="event-info">
+                                            <div>
+                                                <b>Created At:</b><br/>{event.createdDateTime}
+                                            </div>
+                                            <div>
+                                                <b>Created by:</b><br/>{event.creatorName}
+                                            </div>
                                             <div className="event-details">
-                                                {event.details}
+                                                <b>Details:</b> {event.details}
                                             </div>
                                             <div className="event-datetime">
-                                                {event.eventDateTime}
+                                                <b>Starts at:</b> {event.eventDateTime}
                                             </div>
                                         </div>
                                         <div className="event-buttons">
@@ -80,7 +86,8 @@ class ModalDetail extends React.Component {
                         }
                     </div>
                     <div className="AddEventForm">
-                        <AddEventForm
+                        <EventForm
+                            event={this.state.eventToEdit ? this.state.eventToEdit : null }
                             eventDateTime={this.state.eventToEdit ? this.state.eventToEdit.eventDateTime : false}
                             eventDetails={this.state.eventToEdit ? this.state.eventToEdit.details : false}
                             eventId={this.state.eventToEdit ? this.state.eventToEdit._id : false}

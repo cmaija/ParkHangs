@@ -38,7 +38,7 @@ const parksSliceReducers = {
         reducer(state, action) {
               const {query} = action.payload
               state.filteredParks = state.parks.filter((park) => {
-                  return park.name === query
+                  return park.name.toLowerCase().includes(query.toLowerCase())
               })
           },
 

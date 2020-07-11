@@ -27,7 +27,6 @@ class CalendarWrapper extends React.Component {
                 date: serializedDate,
             }
         }
-        console.log(props)
         this.props.openModal(props)
     }
 
@@ -35,8 +34,8 @@ class CalendarWrapper extends React.Component {
         const dateMoment = moment(date)
         return events.filter((event) => {
             let eventDateMoment = this.convertToMoment(event.eventDateTime)
-            console.log(eventDateMoment)
-            console.log(dateMoment)
+            // console.log(eventDateMoment)
+            // console.log(dateMoment)
             return this.datesAreOnSameDay(eventDateMoment, dateMoment)
         })
     }

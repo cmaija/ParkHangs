@@ -1,45 +1,22 @@
 import React from 'react'
-// import AddEventForm from '../components/AddEventForm'
-import { deleteEvent,fetchEventsById, returnEventsByParkId } from 'features/parks/parksSlice.js'
-import { connect } from 'react-redux'
+import {deleteEvent, fetchEventsById, returnEventsByParkId} from 'features/parks/parksSlice.js'
+import {connect} from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
 
 
 class ModalMapDetail extends React.Component {
 
-    // this.props.park is the current park. Passed in as a prop. Not from store
-
-
-
-    componentDidMount = () => {
-
-    }
-
-   /*  getEvents = async () => {
-        try{
-            const resultAction = await this.props.fetchEvents(this.props.park.parkId);
-            const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
-             return events;
-
-        }catch (err) {
-            console.error(err);
-            return err;
-        }
-    };
- */
     getEventsByPark = () => {
         let res = this.props.events[this.props.park._id]
-        if (res === undefined){
+        if (res === undefined) {
             //no events for that park, return empty array
             return [];
 
-        }
-        else {
+        } else {
             return res; //filtered array
         }
-    }
-
+    };
 
     render() {
         return (
@@ -66,8 +43,9 @@ class ModalMapDetail extends React.Component {
                                 Neighbourhood Name: {this.props.park.neighbourhoodName}
                             </div>
                             <div>
-                                Neighbourhood website URL: {this.props.park.neighbourhoodURL}
+                                Neighbourhood website:
                             </div>
+                            <a href={this.props.park.neighbourhoodURL}>{this.props.park.neighbourhoodURL}</a>
                             <div>
                                 Size (in hectares): {this.props.park.hectares}
                             </div>
@@ -91,51 +69,47 @@ class ModalMapDetail extends React.Component {
                     <div className="Section">
                         <span className="SectionTitle">Events</span>
                         {
-                            //TODO: need gordon's filter and select park endpoint to work properly
 
-                             // this.props.eventsById.map ((event) =>   {
 
-                             this.getEventsByPark().map ((event) =>   {
+                            this.getEventsByPark().length > 0 ?
+
+                                this.getEventsByPark().map((event) => {
 
                                     //key may need to be changed to event._id as backend
                                     return <div className="Event" key={event._id}>
-                                        {/* <div>
-                                            _id: {event._id}
-                                        </div>  */}
                                         <div>
-                                            createdDateTime:<br/>{event.createdDateTime}
+                                            <b>Created At:</b><br/>{event.createdDateTime}
+                                        </div>
+                                        {/*unnecessary, users should not see this*/}
+                                        {/*<div>*/}
+                                        {/*    creatorID:<br/>{event.creatorId}*/}
+                                        {/*</div>*/}
+                                        <div>
+                                            <b>Created by:</b><br/>{event.creatorName}
                                         </div>
 
                                         <div>
-                                            creatorID:<br/>{event.creatorId}
+                                            <b>Details:</b><br/>{event.details}
                                         </div>
-
                                         <div>
-                                            creator:<br/>{event.creatorName}
+                                            <b>Starts at:</b><br/>{event.eventDateTime}
                                         </div>
-
-                                        <div>
-                                            details:<br/>{event.details}
-                                        </div>
-
-                                        <div>
-                                            DateTime:<br/>{event.eventDateTime}
-                                        </div>
-
-                                        <div>
-                                            parkId:<br/>{event.parkId}
-                                        </div>
-
+                                        {/*unnecessary, users should not see this*/}
+                                        {/*<div>*/}
+                                        {/*    parkId:<br/>{event.parkId}*/}
+                                        {/*</div>*/}
                                         <button onClick={() => {
                                             this.props.deleteEventFromPark(this.props.park._id, event.id)
                                         }}>
-                                            X
+                                            <b>X</b>
                                         </button>
                                     </div>;
                                 })
-
-                            }
-                        {/*<AddEventForm park={this.props.park}/>*/}
+                                :
+                                <div>
+                                    There are no events for this park
+                                </div>
+                        }
                     </div>
                 </div>
             </div>
