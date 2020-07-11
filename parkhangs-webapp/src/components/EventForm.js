@@ -29,7 +29,7 @@ class EventForm extends React.Component {
 
     eventTime = () => {
         const date = this.convertToMoment(this.props.eventDateTime)
-        return this.props.eventDateTime ? date.format("hh:m") : null
+        return this.props.eventDateTime ? date.format("HH:m") : null
     }
 
     convertToMoment = (date) => {
