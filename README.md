@@ -28,18 +28,21 @@ One stretch goal is to add the ability to create a user profile and login, so th
 
 **3-5 minimal requirements (will definitely complete)**
 - Make simple queryable park data available to users (address, facilities, size of park) data found at https://opendata.vancouver.ca/explore/dataset/parks/api/
-- Display all parks on a map (google maps or another free api)
+- Display all parks on a map (google maps)
 - Create an event at a park
 - View all events at a park
+- Delete an event at a park
+- Update an event at a park
+- Search by park name in the event calendar
 
 **3-7 "standard" requirements (will most likely complete)**
 - Make more complicated queries like “parks near me” or “parks by clicked location”
-- Allow users to create an account and have “favourite” parks, other customizable settings like “home”
-- Share events from parks to Facebook and Google calendars
-- Allow users to add comments to events and parks, as well as add ratings to parks and their facilities
+- Allow users to create an account and have “favourite” parks and events, other customizable settings like “home” (incorporate oauth)
+- Share events from parks to Google calendars
+- Allow users to add comments to both events and parks, as well as add ratings to parks and their facilities
 
 **2-3 stretch requirements (plan to complete 1!)**
-- Make the app only useable with an account, make the account secure
+- Make the app only useable with an account, make the account secure (
 - Allow users to invite other users within the app
 - Create a cron job that re-populates the park database weekly or monthly to ensure that all the park information is up to date
 - Include “Weekend playfield status”: display events at a playfield so that events are not scheduled at the same time
