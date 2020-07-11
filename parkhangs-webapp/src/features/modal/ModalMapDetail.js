@@ -10,16 +10,13 @@ class ModalMapDetail extends React.Component {
 
     // this.props.park is the current park. Passed in as a prop. Not from store
 
-    componentDidMount = async () => {
-        let result =  await this.getEvents();
-        console.log(this.props.error);
-        if(this.props.error){
-            throw this.props.error
-        }
 
-    };
 
-    getEvents = async () => {
+    componentDidMount = () => {
+
+    }
+
+   /*  getEvents = async () => {
         try{
             const resultAction = await this.props.fetchEvents(this.props.park.parkId);
             const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
@@ -30,19 +27,18 @@ class ModalMapDetail extends React.Component {
             return err;
         }
     };
+ */
+    getEventsByPark = () => {
+        let res = this.props.events[this.props.park._id]
+        if (res === undefined){
+            //no events for that park, return empty array
+            return [];
 
-
-    getEvents = async () => {
-        try{
-            const resultAction = await this.props.fetchEvents(this.props.park.parkId);
-            const events = unwrapResult(resultAction); //resolving the promise and actually getting back the payload
-             return events;
-
-        }catch (err) {
-            console.error(err);
-            return err;
         }
-    };
+        else {
+            return res; //filtered array
+        }
+    }
 
 
     render() {
@@ -97,7 +93,9 @@ class ModalMapDetail extends React.Component {
                         {
                             //TODO: need gordon's filter and select park endpoint to work properly
 
-                             this.props.eventsById.map ((event) =>   {
+                             // this.props.eventsById.map ((event) =>   {
+
+                             this.getEventsByPark().map ((event) =>   {
 
                                     //key may need to be changed to event._id as backend
                                     return <div className="Event" key={event._id}>
@@ -149,14 +147,13 @@ const mapStateToProps = (state) => {
     return {
         //eventsById: state.parks.eventsById, //universal; actions for fulfillment and rejected not connecting? array remains empty
         error: state.parks.error,
-        events:state.events
+        events: state.parks.events
     }
 };
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
-    //fetchEvents: (parkId) => dispatch(fetchEventsById(parkId)) //should then cases be added here?
-    returnEvents: (parkId) => dispatch(returnEventsByParkId(parkId))
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);
