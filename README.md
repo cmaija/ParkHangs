@@ -33,7 +33,7 @@ One stretch goal is to add the ability to create a user profile and login, so th
 - View all events at a park
 
 **3-7 "standard" requirements (will most likely complete)**
-- Make more complicated queries like “parks near me” or “parks near a given set of lat/long points”
+- Make more complicated queries like “parks near me” or “parks by clicked location”
 - Allow users to create an account and have “favourite” parks, other customizable settings like “home”
 - Share events from parks to Facebook and Google calendars
 - Allow users to add comments to events and parks, as well as add ratings to parks and their facilities
