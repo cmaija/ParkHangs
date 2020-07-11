@@ -10,6 +10,8 @@ const getParks = async (req, res) => {
 
     await Park.find({}, (err, parks) => {
 
+        console.log("got to controllers");
+
         if (err) {
             return res.status(400).json({success: false, error: err})
         }
@@ -28,6 +30,7 @@ const getParks = async (req, res) => {
 };
 
 module.exports = {
+    getParks,
     getParks,
     updateEvent,
     deleteEvent,

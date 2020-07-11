@@ -1,0 +1,57 @@
+.MarkerDetails {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.Title {
+    text-transform: uppercase;
+    font-size: 18px;
+    padding: 1rem 0;
+    font-weight: 500;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.Details {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.SectionTitle {
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: 500;
+    padding-bottom: 0.75rem;
+}
+
+.Section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ParkLocationDetails {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.OtherDetails {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.Event {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

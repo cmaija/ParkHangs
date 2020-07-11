@@ -1,101 +1,134 @@
 import React from "react";
-import Calendar from 'react-calendar';
-import DetailModal from "./DetailModal";
-import {connect} from "react-redux";
+import Calendar from 'react-calendar'
+import { connect } from "react-redux"
+import { openModal } from "features/modal/modalSlice"
+import 'components/CalendarWrapper.css'
+import 'react-calendar/dist/Calendar.css'
+import moment from 'moment'
 
 class CalendarWrapper extends React.Component {
-
     constructor(props) {
-
         super(props);
 
         this.state = {
-
-            selectedDate: new Date(), // TODO: need to determine what exactly the selectedDateQuery format should be
-            showCalendar: false,
-            showEventPopup: false
+            selectedDate: new Date(),
+            events: this.props.events[this.props.park._id],
         };
-
-
-        this.onChange = this.onChange.bind(this);
-        this.toggleCalendar = this.toggleCalendar.bind(this);
-        this.closeDetailModal = this.closeDetailModal.bind(this);
     }
 
-    onChange() {
-        //alert("You selected: " + date);
-
-        this.setState(
-            {
-                showCalendar: false,
-                showEventPopup: true
+    openModal = (events, date) => {
+        const dateEvents = this.getCorrespondingEvents(date, events)
+        const serializedDate = Date.parse(date)
+        const props = {
+            component: 'ModalDetail',
+            componentParams: {
+                park: this.props.park,
+                events: dateEvents,
+                date: serializedDate,
             }
-        );
-        // TODO: need to pass in the date to make some sort of a query to the db to view/create/modify/delete events
-
-    };
-
-    closeDetailModal() {
-
-        this.setState({
-                showEventPopup: !this.state.showEventPopup
-            }
-        );
+        }
+        console.log(props)
+        this.props.openModal(props)
     }
 
-    toggleCalendar() {
+    getCorrespondingEvents = (date, events) => {
+        const dateMoment = moment(date)
+        return events.filter((event) => {
+            let eventDateMoment = this.convertToMoment(event.eventDateTime)
+            console.log(eventDateMoment)
+            console.log(dateMoment)
+            return this.datesAreOnSameDay(eventDateMoment, dateMoment)
+        })
+    }
 
-        this.setState({
-            showCalendar: !this.state.showCalendar
-        });
+    tileClassName = (date, view, parkEvents) => {
+        const generateClassNames = false
+        if (parkEvents.length > 0) {
+            const dateMoment = moment(date)
+            const tileHasEvent = parkEvents.some((event) => {
+                let eventDate = this.convertToMoment(event.eventDateTime)
+                if (view === 'decade') {
+                    return this.datesAreOnSameYear(eventDate, dateMoment)
+                }
+
+                if (view === 'year') {
+                    return this.datesAreOnSameMonth(eventDate, dateMoment)
+                }
+
+                if (view === 'month') {
+                    return this.datesAreOnSameDay(eventDate, dateMoment)
+                }
+
+                if (view === 'day') {
+                    return this.datesAreOnSameDay(eventDate, dateMoment)
+                }
+
+            })
+            return tileHasEvent ? 'date-has-event' : false
+        }
+    }
+
+    convertToMoment = (date) => {
+        let eventDate = date
+        if (typeof eventDate === "string") {
+            eventDate = parseInt(eventDate)
+        }
+
+        if (eventDate / 1000000000000 < 1) {
+            eventDate *= 1000
+        }
+
+        eventDate = moment(eventDate)
+        return eventDate
+    }
+
+    datesAreOnSameDay = (firstDay, secondDay) => {
+        return moment(firstDay).isSame(secondDay, 'day')
+    }
+
+    datesAreOnSameMonth = (firstDay, secondDay) => {
+        return moment(firstDay).isSame(secondDay, 'month')
+    }
+
+    datesAreOnSameYear = (firstDay, secondDay) => {
+        return moment(firstDay).isSame(secondDay, 'year')
     }
 
     render() {
+        const parkEvents = this.props.events[this.props.park._id] || []
+        const that = this
+        function generateTileClassName ({date, view}) {
+            return that.tileClassName(date, view, parkEvents)
+        }
+        function openDetailModal (date) {
+            that.openModal(parkEvents, date)
+        }
         return (
-            <div>
-                <i onClick={this.toggleCalendar} className="far fa-calendar-alt"/>
-                {
-                    this.state.showCalendar ?
-                        <div style={{width: "250px"}}>
-                            <Calendar onChange={this.onChange} value={this.state.date}/>
-                        </div> : null
-                }
-
-                <DetailModal close={this.closeDetailModal} showModal={this.state.showEventPopup}
-                             events={this.props.events}/>
+            <div className="CalendarWrapper">
+                <div>{this.props.park.name}</div>
+                <div style={{width: "250px"}}>
+                    <Calendar
+                        onChange={openDetailModal}
+                        value={this.state.date}
+                        tileClassName={generateTileClassName}
+                        defaultView="year"/>
+                </div>
             </div>
         );
 
     }
 }
 
-
 const mapStateToProps = (state) => {
-
-    function filterEvents(state) {
-        const events = [];
-
-        //TODO: find the actual park first instead of all the parks (later tasks)
-
-        // crappy for loop but just demo purposes for now
-
-        for (let i = 0; i < state.parks.parks.length; i++) {
-
-            for (let j = 0; j < state.parks.parks[i].events.length; j++) {
-
-                events.push(state.parks.parks[i].events[j]);
-            }
-
-        }
-
-        return events;
-    }
-
     return {
-        events: filterEvents(state)
+        events: state.parks.events
     }
+}
 
-};
 
-export default connect(mapStateToProps, null)(CalendarWrapper);
+const mapDispatchToProps = (dispatch) => ({
+    openModal: (modalProps) => dispatch(openModal(modalProps)),
+})
 
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarWrapper);
