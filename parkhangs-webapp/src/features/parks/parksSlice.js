@@ -75,20 +75,24 @@ const parksSliceReducers = {
           }
       },
 
-      addEventSuccessful: {
-          reducer(state, action) {
-              const {newEvent} = action.payload;
-              state.events.newEvent.parkId.push(newEvent);
-          },
-
-          prepare(newEvent) {
-              return {
-                  payload: {
-                      newEvent
-                  }
-              }
-          }
-      },
+    addEventSuccessful: {
+        reducer(state, action) {
+            const {newEvent} = action.payload;
+            const key = newEvent.id;
+            if (!(key in state.events)) {
+                state.events[key] = [newEvent];
+            } else {
+                state.events[key].push(event)
+            }
+        },
+        prepare(newEvent) {
+            return {
+                payload: {
+                    newEvent
+                }
+            }
+        }
+    },
 
       deleteEventSuccessful: {
           reducer (state, action) {

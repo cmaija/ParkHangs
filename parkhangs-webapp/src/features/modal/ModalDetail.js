@@ -21,7 +21,7 @@ class ModalDetail extends React.Component {
     }
 
     editEvent = (eventToEdit) => {
-        this.setState({eventToEdit: eventToEdit})
+        this.setState({eventToEdit})
     }
 
     deleteEvent = async (eventId) => {
@@ -45,6 +45,14 @@ class ModalDetail extends React.Component {
         this.setState({eventsOnCurrentDate: newEventsArray, eventToEdit: null})
     }
 
+    getEventTime = (date) => {
+        return moment.unix(date).format("hh:MM a");
+    }
+
+    getCreatedTime = (date) => {
+        return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+    }
+
     render() {
         const date = this.date()
         return (
@@ -59,7 +67,7 @@ class ModalDetail extends React.Component {
                                     return <div className="event" key={event._id}>
                                         <div className="event-info">
                                             <div>
-                                                <b>Created At:</b><br/>{event.createdDateTime}
+                                                <b>Created At:</b><br/>{this.getCreatedTime(event.createdDateTime)}
                                             </div>
                                             <div>
                                                 <b>Created by:</b><br/>{event.creatorName}
@@ -68,7 +76,7 @@ class ModalDetail extends React.Component {
                                                 <b>Details:</b> {event.details}
                                             </div>
                                             <div className="event-datetime">
-                                                <b>Starts at:</b> {event.eventDateTime}
+                                                <b>Starts at:</b> {this.getEventTime(event.eventDateTime)}
                                             </div>
                                         </div>
                                         <div className="event-buttons">

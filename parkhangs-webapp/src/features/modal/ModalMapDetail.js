@@ -3,6 +3,7 @@ import {deleteEvent, fetchEventsById, returnEventsByParkId} from 'features/parks
 import {connect} from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
+import moment from 'moment'
 
 
 class ModalMapDetail extends React.Component {
@@ -17,6 +18,14 @@ class ModalMapDetail extends React.Component {
             return res; //filtered array
         }
     };
+
+    getEventTime = (date) => {
+        return moment.unix(date).format("hh:MM a");
+    }
+
+    getCreatedTime = (date) => {
+        return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+    }
 
     render() {
         return (
@@ -78,7 +87,7 @@ class ModalMapDetail extends React.Component {
                                     //key may need to be changed to event._id as backend
                                     return <div className="Event" key={event._id}>
                                         <div>
-                                            <b>Created At:</b><br/>{event.createdDateTime}
+                                            <b>Created At:</b><br/>{this.getCreatedTime(event.createdDateTime)}
                                         </div>
                                         {/*unnecessary, users should not see this*/}
                                         {/*<div>*/}
@@ -92,7 +101,7 @@ class ModalMapDetail extends React.Component {
                                             <b>Details:</b><br/>{event.details}
                                         </div>
                                         <div>
-                                            <b>Starts at:</b><br/>{event.eventDateTime}
+                                            <b>Starts at:</b><br/>{this.getEventTime(event.eventDateTime)}
                                         </div>
                                         {/*unnecessary, users should not see this*/}
                                         {/*<div>*/}
