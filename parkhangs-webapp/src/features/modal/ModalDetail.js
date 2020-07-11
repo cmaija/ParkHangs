@@ -3,11 +3,34 @@ import AddEventForm from 'components/AddEventForm'
 import 'features/modal/ModalDetail.css'
 import moment from 'moment'
 import { connect } from "react-redux"
+import apis from 'api/index'
 
 class ModalDetail extends React.Component {
+    constructor (props) {
+        super(props)
+        this.state = {
+            eventsOnCurrentDate: this.props.events
+        }
+    }
+
     date = () => {
         const momentDate = moment(this.props.date)
         return momentDate.format("MMMM Do YYYY")
+    }
+
+    deleteEvent = async (eventId) => {
+        try {
+            console.log(typeof eventId)
+            console.log(typeof this.props.park._id)
+            await this.props.deleteOneEvent(eventId, this.props.park._id)
+            const eventIndex = this.state.eventsOnCurrentDate.findIndex(event => event._id === eventId)
+            console.log(eventIndex)
+            const newEventsArray = this.state.eventsOnCurrentDate.splice(eventIndex, 1)
+            this.setState({ eventsOnCurrentDate: newEventsArray })
+        } catch (error) {
+            console.error(error)
+        }
+
     }
 
     render() {
@@ -21,14 +44,20 @@ class ModalDetail extends React.Component {
                         <div className="EventsList-populated">
                         {   this.props.events.length > 0 &&
                                 this.props.events.map((event) => {
-                                    return <div key={event._id}>
-                                        <div>
-                                            {event.details}
+                                    return <div className="event"key={event._id}>
+                                        <div className="event-info">
+                                            <div className="event-details">
+                                                {event.details}
+                                            </div>
+                                            <div className="event-datetime">
+                                                {event.eventDateTime}
+                                            </div>
                                         </div>
-                                        <div>
-                                            {event.eventDateTime}
+                                        <div className="event-buttons">
+                                            <button>Edit</button>
+                                            <button onClick={() => this.deleteEvent(event._id)}>delete</button>
                                         </div>
-                                    </div>;
+                                    </div>
                                 })
 
                         }
@@ -48,10 +77,8 @@ class ModalDetail extends React.Component {
 
 }
 
-const mapStateToProps = (state) => {
-    return {
-        events: state.parks.events
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    deleteOneEvent: (eventId, parkId) => dispatch(apis.deleteEvent(eventId, parkId))
+})
 
-export default connect(mapStateToProps, null)(ModalDetail);
+export default connect(null, mapDispatchToProps)(ModalDetail);

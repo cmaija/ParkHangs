@@ -1,5 +1,10 @@
 import axios from "axios";
-import {fetchParksSuccessful, fetchEventsSuccessful, addEventSuccessful} from '../features/parks/parksSlice.js'
+import {
+    fetchParksSuccessful,
+    fetchEventsSuccessful,
+    addEventSuccessful,
+    deleteEventSuccessful,
+    deleteEventUnsuccessful } from '../features/parks/parksSlice.js'
 
 const api = axios.create({
     baseURL: 'http://localhost:9000',
@@ -68,10 +73,24 @@ export const addEvent = (parkId, details, eventDateTime) => {
     }
 };
 
+export const deleteEvent = (eventId, parkId) => {
+    return async (dispatch) => {
+        const url = `/events/${eventId}`
+        try {
+            const res = await api.delete(url)
+            dispatch(deleteEventSuccessful(eventId, parkId))
+        } catch (error) {
+            console.error(error)
+            dispatch(deleteEventUnsuccessful(error))
+        }
+    }
+}
+
 const apis = {
     fetchParks,
     fetchEvents,
-    addEvent
+    addEvent,
+    deleteEvent,
 };
 
 export default apis;

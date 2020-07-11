@@ -27,9 +27,8 @@ class ModalMapDetail extends React.Component {
             throw this.props.error
         } */
 
-        this.state.events = returnEvents(this.props.park.parkId).slice(); //TODO: check;should create a new array with events
-
-    };
+        this.setState({events: this.props.returnEvents(this.props.park.parkId).slice()})
+    }
 
     getEvents = async () => {
         try{

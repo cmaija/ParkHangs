@@ -10,19 +10,24 @@ class CalendarsView extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            showAllParks: true,
+            showAllParks: false,
         }
     }
 
     componentDidMount = async () => {
-      if (this.props.parks.length === 0) {
-          this.props.getAllParks()
-      }
-    };
+        if (this.props.parks.length === 0) {
+            this.props.getAllParks()
+        }
+        this.props.getAllEvents()
+    }
+
+    onSearch = (showAllParks) => {
+        this.toggleShowAllParks(showAllParks)
+    }
 
     toggleShowAllParks = (show) => {
         this.setState((state) => {
-          return { showAllParks: true }
+          return { showAllParks: show }
         })
     }
 
