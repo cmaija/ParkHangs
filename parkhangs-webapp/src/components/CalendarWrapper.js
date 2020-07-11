@@ -4,101 +4,124 @@ import { connect } from "react-redux"
 import { openModal } from "features/modal/modalSlice"
 import 'components/CalendarWrapper.css'
 import 'react-calendar/dist/Calendar.css'
+import moment from 'moment'
 
 class CalendarWrapper extends React.Component {
-
     constructor(props) {
         super(props);
 
         this.state = {
-            selectedDate: new Date(), // TODO: need to determine what exactly the selectedDateQuery format should be
+            selectedDate: new Date(),
+            events: this.props.events[this.props.park._id],
         };
     }
 
-    openDetailModal = (date) => {
-        const events = this.getCorrespondingEvents(date)
+    openModal = (events, date) => {
+        const dateEvents = this.getCorrespondingEvents(date, events)
         const serializedDate = Date.parse(date)
         const props = {
             component: 'ModalDetail',
             componentParams: {
                 park: this.props.park,
-                events,
+                events: dateEvents,
                 date: serializedDate,
             }
         }
-
+        console.log(props)
         this.props.openModal(props)
     }
 
-    eventDates = () => {
-        // TODO: Events geet loaded here. Not sure how you want to do it,
-        // either get all the events and store them in the store, or when this component mounts,
-        // make a request by parkid. The search bar needs to be a bit smarter or we need to paginate
-        // this calendar view page because I think 150 calendars is too many calendars to show at once.
-        // return this.props.park.events.map(event => new Date(event.eventTime))
-        return []
+    getCorrespondingEvents = (date, events) => {
+        const dateMoment = moment(date)
+        return events.filter((event) => {
+            let eventDateMoment = this.convertToMoment(event.eventDateTime)
+            console.log(eventDateMoment)
+            console.log(dateMoment)
+            return this.datesAreOnSameDay(eventDateMoment, dateMoment)
+        })
     }
 
-    getCorrespondingEvents = (date) => {
-        return this.eventDates().filter((event) => {
-            return this.datesAreOnSameDay(new Date(event.eventTime), date)})
+    tileClassName = (date, view, parkEvents) => {
+        const generateClassNames = false
+        if (parkEvents.length > 0) {
+            const dateMoment = moment(date)
+            const tileHasEvent = parkEvents.some((event) => {
+                let eventDate = this.convertToMoment(event.eventDateTime)
+                if (view === 'decade') {
+                    return this.datesAreOnSameYear(eventDate, dateMoment)
+                }
+
+                if (view === 'year') {
+                    return this.datesAreOnSameMonth(eventDate, dateMoment)
+                }
+
+                if (view === 'month') {
+                    return this.datesAreOnSameDay(eventDate, dateMoment)
+                }
+
+                if (view === 'day') {
+                    return this.datesAreOnSameDay(eventDate, dateMoment)
+                }
+
+            })
+            return tileHasEvent ? 'date-has-event' : false
+        }
     }
 
-    tileClassName = ({ date, view }) => {
-        if (view === 'decade') {
-            if (this.eventDates().some(eventDate => this.datesAreOnSameYear(eventDate, date))) {
-                return 'date-has-event'
-            }
+    convertToMoment = (date) => {
+        let eventDate = date
+        if (typeof eventDate === "string") {
+            eventDate = parseInt(eventDate)
         }
 
-        if (view === 'year') {
-            if (this.eventDates().some(eventDate => this.datesAreOnSameMonth(eventDate, date))) {
-                return 'date-has-event'
-            }
+        if (eventDate / 1000000000000 < 1) {
+            eventDate *= 1000
         }
 
-        if (view === 'month') {
-            if (this.eventDates().some(eventDate => this.datesAreOnSameDay(eventDate, date))) {
-                return 'date-has-event'
-            }
-        }
-
-        if (view === 'day') {
-            if (this.eventDates().some(eventDate => this.datesAreOnSameDay(eventDate, date))) {
-                return 'date-has-event'
-            }
-        }
+        eventDate = moment(eventDate)
+        return eventDate
     }
 
     datesAreOnSameDay = (firstDay, secondDay) => {
-        return firstDay.getFullYear() === secondDay.getFullYear() &&
-        firstDay.getMonth() === secondDay.getMonth() &&
-        firstDay.getDate() === secondDay.getDate()
+        return moment(firstDay).isSame(secondDay, 'day')
     }
 
     datesAreOnSameMonth = (firstDay, secondDay) => {
-        return firstDay.getFullYear() === secondDay.getFullYear() &&
-        firstDay.getMonth() === secondDay.getMonth()
+        return moment(firstDay).isSame(secondDay, 'month')
     }
 
     datesAreOnSameYear = (firstDay, secondDay) => {
-        return firstDay.getFullYear() === secondDay.getFullYear()
+        return moment(firstDay).isSame(secondDay, 'year')
     }
 
     render() {
+        const parkEvents = this.props.events[this.props.park._id] || []
+        const that = this
+        function generateTileClassName ({date, view}) {
+            return that.tileClassName(date, view, parkEvents)
+        }
+        function openDetailModal (date) {
+            that.openModal(parkEvents, date)
+        }
         return (
             <div className="CalendarWrapper">
                 <div>{this.props.park.name}</div>
                 <div style={{width: "250px"}}>
                     <Calendar
-                        onChange={this.openDetailModal}
+                        onChange={openDetailModal}
                         value={this.state.date}
-                        tileClassName={this.tileClassName}
+                        tileClassName={generateTileClassName}
                         defaultView="year"/>
                 </div>
             </div>
         );
 
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        events: state.parks.events
     }
 }
 
@@ -108,4 +131,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 
-export default connect(null, mapDispatchToProps)(CalendarWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarWrapper);

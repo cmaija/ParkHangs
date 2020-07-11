@@ -5,7 +5,7 @@ import Marker from '../components/Marker.js'
 import apis from '../api/index'
 
 class SimpleMap extends Component {
-    
+
     static defaultProps = {
         center: {
             lat: 49.28,
@@ -15,7 +15,7 @@ class SimpleMap extends Component {
     };
 
     render() {
-       
+
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '500px', width: '75%', margin: 'auto'}}>
