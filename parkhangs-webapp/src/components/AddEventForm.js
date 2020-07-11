@@ -96,7 +96,7 @@ class AddUpdateEventForm extends React.Component {
 
         else {
             this.props.updateEvent(this.props.eventId, this.props.parkId, detail, eventTimestamp)
-            this.props.updatedEvent(this.props.eventId, detail, eventTimestamp)
+            this.props.eventChanged(this.props.eventId, detail, eventTimestamp)
         }
 
         console.log("event added")

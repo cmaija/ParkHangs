@@ -87,7 +87,7 @@ class ModalDetail extends React.Component {
                             parkId={this.props.park._id}
                             currentDate={this.props.date}
                             showDayPicker={false}
-                            updatedEvent={(eventId, detail, eventTimestamp) => this.updateEvent(eventId, detail, eventTimestamp)}/>
+                            eventChanged={(eventId, detail, eventTimestamp) => this.updateEvent(eventId, detail, eventTimestamp)}/>
                     </div>
                 </div>
             </div>

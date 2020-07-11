@@ -31,7 +31,6 @@ const getParks = async (req, res) => {
 
 module.exports = {
     getParks,
-    getParks,
     updateEvent,
     deleteEvent,
 };
