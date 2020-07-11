@@ -1,13 +1,13 @@
 import React from 'react'
 import 'features/modal/ModalDetail.css'
 import moment from 'moment'
-import { connect } from "react-redux"
+import {connect} from "react-redux"
 import apis from 'api/index'
-import { cloneDeep } from 'lodash'
+import {cloneDeep} from 'lodash'
 import EventForm from "../../components/EventForm";
 
 class ModalDetail extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props)
         this.state = {
             eventsOnCurrentDate: this.props.events,
@@ -30,7 +30,7 @@ class ModalDetail extends React.Component {
             console.log(this.state.eventsOnCurrentDate)
             let newEventsArray = this.state.eventsOnCurrentDate.filter(event => event._id !== eventId)
             console.log(newEventsArray)
-            this.setState({ eventsOnCurrentDate: newEventsArray })
+            this.setState({eventsOnCurrentDate: newEventsArray})
         } catch (error) {
             console.error(error)
         }
@@ -61,32 +61,32 @@ class ModalDetail extends React.Component {
                 <div className="ModalDetail-Body">
                     <div className="EventsList">
                         <span className="EventsList-Title">Events:</span>
-                        <div className="EventsList-populated">
-                        {   this.state.eventsOnCurrentDate.length > 0 &&
-                                this.state.eventsOnCurrentDate.map((event) => {
-                                    return <div className="event" key={event._id}>
-                                        <div className="event-info">
-                                            <div>
-                                                <b>Created At:</b><br/>{this.getCreatedTime(event.createdDateTime)}
-                                            </div>
-                                            <div>
-                                                <b>Created by:</b><br/>{event.creatorName}
-                                            </div>
-                                            <div className="event-details">
-                                                <b>Details:</b> {event.details}
-                                            </div>
-                                            <div className="event-datetime">
-                                                <b>Starts at:</b> {this.getEventTime(event.eventDateTime)}
-                                            </div>
+                        <div className="EventsList-populated" style={{maxHeight: "200px", overflow: "scroll"}}>
+                            {this.state.eventsOnCurrentDate.length > 0 &&
+                            this.state.eventsOnCurrentDate.map((event) => {
+                                return <div className="event" key={event._id}>
+                                    <div className="event-info">
+                                        <div>
+                                            <b>Created At:</b><br/>{this.getCreatedTime(event.createdDateTime)}
                                         </div>
-                                        <div className="event-buttons">
-                                            <button onClick={() => this.editEvent(event)}>Edit</button>
-                                            <button onClick={() => this.deleteEvent(event._id)}>delete</button>
+                                        <div>
+                                            <b>Created by:</b><br/>{event.creatorName}
+                                        </div>
+                                        <div className="event-details">
+                                            <b>Details:</b> {event.details}
+                                        </div>
+                                        <div className="event-datetime">
+                                            <b>Starts at:</b> {this.getEventTime(event.eventDateTime)}
                                         </div>
                                     </div>
-                                })
+                                    <div className="event-buttons">
+                                        <button onClick={() => this.editEvent(event)}>Edit</button>
+                                        <button onClick={() => this.deleteEvent(event._id)}>delete</button>
+                                    </div>
+                                </div>
+                            })
 
-                        }
+                            }
                         </div>
                         {
                             this.props.events.length === 0 &&
@@ -95,7 +95,7 @@ class ModalDetail extends React.Component {
                     </div>
                     <div className="AddEventForm">
                         <EventForm
-                            event={this.state.eventToEdit ? this.state.eventToEdit : null }
+                            event={this.state.eventToEdit ? this.state.eventToEdit : null}
                             eventDateTime={this.state.eventToEdit ? this.state.eventToEdit.eventDateTime : false}
                             eventDetails={this.state.eventToEdit ? this.state.eventToEdit.details : false}
                             eventId={this.state.eventToEdit ? this.state.eventToEdit._id : false}
