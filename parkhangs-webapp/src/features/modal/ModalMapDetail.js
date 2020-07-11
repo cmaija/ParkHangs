@@ -1,6 +1,6 @@
 import React from 'react'
 // import AddEventForm from '../components/AddEventForm'
-import { deleteEvent, fetchEventsById, returnEventsByParkId } from 'features/parks/parksSlice.js'
+import { deleteEvent,fetchEventsById, returnEventsByParkId } from 'features/parks/parksSlice.js'
 import { connect } from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
@@ -9,11 +9,11 @@ import {unwrapResult} from '@reduxjs/toolkit'
 class ModalMapDetail extends React.Component {
 
     // this.props.park is the current park. Passed in as a prop. Not from store
-    
+
 
 
     componentDidMount = () => {
-      
+
     }
 
    /*  getEvents = async () => {
@@ -153,7 +153,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
-    
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);

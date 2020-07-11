@@ -8,7 +8,7 @@ const Event = new Schema(
         eventDateTime: {type: String, required: true},
         createdDateTime: {type: String, required: true},
         creatorName: {type: String, required: true},
-        creatorId: {type: Number, required: true}
+        creatorId: {type: Number, required: false}
     },
 );
 

@@ -1,7 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 import axios from 'axios';
-
-
 //Thunk created here; api call for eventsbyparkId stored to store
 export const fetchEventsById = createAsyncThunk(
     'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
@@ -92,48 +90,62 @@ const parksSliceReducers = {
           }
       },
 
-
-      selectPark: {
-        reducer(state, action) {
-            const {parkID} = action.payload
-            state.selectedPark = parkID
+      deleteEventSuccessful: {
+          reducer (state, action) {
+              const { deletedEventId, parkId } = action.payload
+              const newEventArray = state.events[parkId].filter(event => event._id !== deletedEventId)
+              console.log(newEventArray)
+              state.events[parkId] = newEventArray
           },
-          prepare(parkID) {
-            return {
-              payload: {
-                parkID
-              }
-            }
-          }
-      },
 
-      deleteEvent: {
-          reducer(state, action) {
-              const {parkId, eventId} = action.payload;
-
-              for (let i = 0; i < state.parks.length; i++) {
-
-                  if (state.parks[i].id === parkId) {
-                      // have the park
-
-                      for (let j = 0; j < state.parks[i].events.length; j++) {
-
-                          if (eventId === state.parks[i].events[j].id) {
-                              state.parks[i].events.splice(j)
-                          }
-                      }
-                  }
-              }
-          },
-          prepare(parkId, eventId) {
+          prepare (deletedEventId, parkId) {
               return {
-                  payload: {
-                      parkId,
-                      eventId
-                  }
+                  payload: { deletedEventId, parkId }
               }
           }
       },
+
+      deleteEventUnsuccessful: {
+          reducer (state, action) {
+              const { error } = action.payload
+              state.deleteEventError = error
+          },
+
+          prepare (error) {
+              return {
+                  payload: { error }
+              }
+          }
+      },
+
+      updateEventSuccessful: {
+          reducer (state, action) {
+              const { updatedEvent, parkId } = action.payload
+              const newEventArray = state.events[parkId].filter(event => event._id !== updatedEvent._id)
+              newEventArray.push(updatedEvent)
+              state.events[parkId] = newEventArray
+          },
+
+          prepare (updatedEvent, parkId) {
+              return {
+                  payload: { updatedEvent, parkId }
+              }
+          }
+      },
+
+      updateEventUnsuccessful: {
+          reducer (state, action) {
+              const { error } = action.payload
+              state.updateEventError = error
+          },
+
+          prepare (error) {
+              return {
+                  payload: { error }
+              }
+          }
+      },
+
       addEvent: {
           reducer(state, action) {
               const {parkId, event} = action.payload
@@ -154,14 +166,12 @@ const parksSliceReducers = {
               }
           }
       },
-     /*  returnEventsByParkId: {
-          //uses store's Events object that returns subset of events to modal
+      returnEventsByParkId: {
+          //uses store's Events object that Phil will implement and
+          //returns subset of events to modal
           reducer(state, action) {
              const {parkId} = action.payload
-             //console.log(parkId);; //DEBUG USE
-             console.log(JSON.stringify(state.events[parkId]));; //DEBUG USE
-             const res = state.events[parkId];
-             return state.events[parkId]; 
+             return state.events[parkId]; //TODO: Phil can check if this works
           },
           prepare(parkId){
               return{
@@ -170,18 +180,19 @@ const parksSliceReducers = {
                   }
               }
           }
-      } */
+      }
 }
 
 const parksSlice = createSlice({
     name: 'parks',
-
     initialState: {
         parks: [],
         filteredParks: [],
         events: {},
         eventsById: {},
         loading: 'idle',
+        deleteEventError: null,
+        updateEventError: null,
         //currentRequestId: undefined,
         error : null //for errors in AJAX calls
     },
@@ -223,7 +234,9 @@ export const {
     addEventSuccessful,
     addEvent,
     deleteEvent,
-    queryParks,
-    //returnEventsByParkId 
-} = parksSlice.actions;
+    deleteEventSuccessful,
+    deleteEventUnsuccessful,
+    updateEventSuccessful,
+    updateEventUnsuccessful,
+    queryParks } = parksSlice.actions;
 export default parksSlice.reducer
