@@ -146,20 +146,6 @@ const parksSliceReducers = {
           }
       },
 
-      selectPark: {
-        reducer(state, action) {
-            const {parkID} = action.payload
-            state.selectedPark = parkID
-          },
-          prepare(parkID) {
-            return {
-              payload: {
-                parkID
-              }
-            }
-          }
-      },
-
       addEvent: {
           reducer(state, action) {
               const {parkId, event} = action.payload
