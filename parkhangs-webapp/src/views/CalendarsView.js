@@ -33,7 +33,7 @@ class CalendarsView extends Component {
     render() {
         return (
             <div className="CalendarsView">
-                <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search..."/>
+                <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search for a park"/>
                 <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
                 <div className="CalendarList">
                 { this.state.showAllParks
@@ -43,7 +43,6 @@ class CalendarsView extends Component {
                     : this.props.filteredParks.map((park) => {
                         return <CalendarWrapper key={park._id} park={park}/>
                     })
-
                 }
                 </div>
             </div>

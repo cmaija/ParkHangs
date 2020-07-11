@@ -38,7 +38,7 @@ const parksSliceReducers = {
         reducer(state, action) {
               const {query} = action.payload
               state.filteredParks = state.parks.filter((park) => {
-                  return park.name === query
+                  return park.name.toLowerCase().includes(query.toLowerCase())
               })
           },
 
@@ -75,20 +75,24 @@ const parksSliceReducers = {
           }
       },
 
-      addEventSuccessful: {
-          reducer(state, action) {
-              const {newEvent} = action.payload;
-              state.events.newEvent.parkId.push(newEvent);
-          },
-
-          prepare(newEvent) {
-              return {
-                  payload: {
-                      newEvent
-                  }
-              }
-          }
-      },
+    addEventSuccessful: {
+        reducer(state, action) {
+            const {newEvent} = action.payload;
+            const key = newEvent.id;
+            if (!(key in state.events)) {
+                state.events[key] = [newEvent];
+            } else {
+                state.events[key].push(event)
+            }
+        },
+        prepare(newEvent) {
+            return {
+                payload: {
+                    newEvent
+                }
+            }
+        }
+    },
 
       deleteEventSuccessful: {
           reducer (state, action) {

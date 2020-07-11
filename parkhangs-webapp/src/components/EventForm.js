@@ -5,15 +5,15 @@ import TimePicker from 'react-time-picker'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
-import './AddEventForm.css'
+import './EventForm.css'
 import apis from '../api/index'
 
-class AddUpdateEventForm extends React.Component {
+class EventForm extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            eventDetail: this.props.detail || null,
+            eventDetail: this.props.eventDetails || null,
             eventTime: this.eventTime(),
             eventDate: this.eventDate(),
         }
@@ -29,7 +29,7 @@ class AddUpdateEventForm extends React.Component {
 
     eventTime = () => {
         const date = this.convertToMoment(this.props.eventDateTime)
-        return this.props.eventDateTime ? date.format("hh:m") : null
+        return this.props.eventDateTime ? date.format("HH:m") : null
     }
 
     convertToMoment = (date) => {
@@ -82,10 +82,7 @@ class AddUpdateEventForm extends React.Component {
     handleAddEvent = (event) => {
         event.preventDefault()
         const eventTimestamp = moment(`${this.parsedEventTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
-        // const newEvent = {
-        //     eventDetail: this.state.eventDetail,
-        //     eventDateTime: eventTimestamp,
-        // }
+
         const detail =  this.state.eventDetail || this.eventDetail();
         const eventDateTime =  eventTimestamp;
 
@@ -98,8 +95,6 @@ class AddUpdateEventForm extends React.Component {
             this.props.updateEvent(this.props.eventId, this.props.parkId, detail, eventTimestamp)
             this.props.eventChanged(this.props.eventId, detail, eventTimestamp)
         }
-
-        console.log("event added")
     }
 
     render() {
@@ -148,4 +143,4 @@ const mapDispatchToProps = (dispatch) => ({
     updateEvent: (eventId, parkId, details, eventDateTime) => dispatch(apis.updateEvent(eventId, parkId, details, eventDateTime))
 })
 
-export default connect(null, mapDispatchToProps)(AddUpdateEventForm);
+export default connect(null, mapDispatchToProps)(EventForm);
