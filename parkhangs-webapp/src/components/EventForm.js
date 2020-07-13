@@ -1,6 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
-import {addEvent} from 'features/parks/parksSlice'
+import { connect } from 'react-redux'
 import TimePicker from 'react-time-picker'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
@@ -13,7 +12,6 @@ class EventForm extends React.Component {
     constructor(props) {
         super(props)
 
-        console.log(this.props.eventEndDateTime);
         this.state = {
             eventDetail: this.props.eventDetails || null,
             eventStartTime: this.eventStartTime(),
