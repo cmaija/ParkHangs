@@ -79,7 +79,7 @@ class ModalMapDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="Section" style={{maxHeight: "300px", overflow: "scroll"}}>
+                    <div className="Section EventTable">
                         <span className="SectionTitle">Events</span>
                         {
                             this.getEventsByPark().length > 0 ?

@@ -80,3 +80,10 @@
     flex-direction: column;
     width: 50%;
 }
+
+.EventsList-populated{
+    max-height: 500px;
+    overflow: scroll
+}
+
+

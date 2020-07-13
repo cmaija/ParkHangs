@@ -67,78 +67,84 @@ class ModalDetail extends React.Component {
                 <div className="ModalDetail-Body">
                     <div className="EventsList">
                         <span className="EventsList-Title">Events:</span>
-                        <div className="EventsList-populated" style={{maxHeight: "500px", overflow: "scroll"}}>
-                            {this.state.eventsOnCurrentDate.length > 0 &&
+                        <div className="EventsList-populated">
+                            {
+                                this.state.eventsOnCurrentDate.length > 0 ?
 
-                            <table>
-                                <thead>
-                                <tr>
-                                    <td>
-                                        <b>Created At:</b>
-                                    </td>
-                                    <td>
-                                        <b>Created by:</b>
-                                    </td>
-                                    <td>
-                                        <b>Details:</b>
-                                    </td>
-                                    <td>
-                                        <b>Starts at:</b>
-                                    </td>
-                                    <td>
-                                        <b>Ends at:</b>
-                                    </td>
-                                    <td>
-                                        <b>Delete</b>
-                                    </td>
-                                    <td>
-                                        <b>Edit</b>
-                                    </td>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {
-                                    this.state.eventsOnCurrentDate.map((event) => {
-                                        return <tr key={event._id}>
+                                    <table>
+                                        <thead>
+                                        <tr>
                                             <td>
-                                                {this.getCreatedTime(event.createdDateTime)}
+                                                <b>Created At:</b>
                                             </td>
                                             <td>
-                                                {event.creatorName}
+                                                <b>Created by:</b>
                                             </td>
                                             <td>
-                                                {event.details}
+                                                <b>Details:</b>
                                             </td>
                                             <td>
-                                                {this.getEventTime(event.eventDateTime)}
+                                                <b>Starts at:</b>
                                             </td>
                                             <td>
-                                                {
-                                                    this.getEventTime(event.eventEndDateTime) != null ?
-
-                                                        <div className="event-datetime">
-                                                            {this.getEventTime(event.eventEndDateTime)}
-                                                        </div>
-                                                        :
-                                                        null
-                                                }
+                                                <b>Ends at:</b>
                                             </td>
                                             <td>
-                                                <button onClick={() => this.editEvent(event)}>Edit</button>
-
+                                                <b>Delete</b>
                                             </td>
                                             <td>
-                                                <button onClick={() => this.deleteEvent(event._id)}>delete</button>
+                                                <b>Edit</b>
                                             </td>
                                         </tr>
-                                    })
+                                        </thead>
+                                        <tbody>
 
-                                }
+                                        {
+                                            this.state.eventsOnCurrentDate.map((event) => {
+                                                return <tr key={event._id}>
+                                                    <td>
+                                                        {this.getCreatedTime(event.createdDateTime)}
+                                                    </td>
+                                                    <td>
+                                                        {event.creatorName}
+                                                    </td>
+                                                    <td>
+                                                        {event.details}
+                                                    </td>
+                                                    <td>
+                                                        {this.getEventTime(event.eventDateTime)}
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            this.getEventTime(event.eventEndDateTime) != null ?
 
-                                </tbody>
+                                                                <div className="event-datetime">
+                                                                    {this.getEventTime(event.eventEndDateTime)}
+                                                                </div>
+                                                                :
+                                                                null
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <button onClick={() => this.editEvent(event)}>Edit</button>
 
-                            </table>
+                                                    </td>
+                                                    <td>
+                                                        <button onClick={() => this.deleteEvent(event._id)}>delete
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            })
+
+                                        }
+
+                                        </tbody>
+
+                                    </table>
+                                    :
+                                    <div>
+                                        There are no events for this date.
+                                    </div>
                             }
 
                         </div>
