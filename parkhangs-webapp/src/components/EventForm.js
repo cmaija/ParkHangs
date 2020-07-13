@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addEvent } from 'features/parks/parksSlice'
+import {connect} from 'react-redux'
+import {addEvent} from 'features/parks/parksSlice'
 import TimePicker from 'react-time-picker'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
@@ -12,9 +12,12 @@ class EventForm extends React.Component {
 
     constructor(props) {
         super(props)
+
+        console.log(this.props.eventEndDateTime);
         this.state = {
             eventDetail: this.props.eventDetails || null,
-            eventTime: this.eventTime(),
+            eventStartTime: this.eventStartTime(),
+            eventEndTime: this.eventEndTime(),
             eventDate: this.eventDate(),
         }
     }
@@ -23,13 +26,27 @@ class EventForm extends React.Component {
         return this.props.eventDetails || ''
     }
 
-    parsedEventTime = () => {
-        return this.state.eventTime || this.eventTime()
+    parsedEventStartTime = () => {
+        return this.state.eventStartTime || this.eventStartTime()
     }
 
-    eventTime = () => {
+    parsedEventEndTime = () => {
+        return this.state.eventEndTime || this.eventEndTime()
+    }
+
+    eventStartTime = () => {
         const date = this.convertToMoment(this.props.eventDateTime)
         return this.props.eventDateTime ? date.format("HH:m") : null
+    }
+
+    eventEndTime = () => {
+
+        if (this.props.eventEndDateTime != null) {
+            const date = this.convertToMoment(this.props.eventEndDateTime)
+            return this.props.eventEndDateTime ? date.format("HH:m") : null
+        } else {
+            return null;
+        }
     }
 
     convertToMoment = (date) => {
@@ -65,8 +82,12 @@ class EventForm extends React.Component {
         return !this.props.eventId
     }
 
-    handleEventTimeChange = (time) => {
-        this.setState({eventTime: time})
+    handleEventStartTimeChange = (time) => {
+        this.setState({eventStartTime: time})
+    }
+
+    handleEventEndTimeChange = (time) => {
+        this.setState({eventEndTime: time})
     }
 
     handleUpdateDetails = (event) => {
@@ -76,36 +97,43 @@ class EventForm extends React.Component {
     }
 
     handleUpdateDate = (date) => {
-        this.setState({ eventDate: date })
+        this.setState({eventDate: date})
     }
 
     handleAddEvent = (event) => {
         event.preventDefault()
-        const eventTimestamp = moment(`${this.parsedEventTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
 
-        const detail =  this.state.eventDetail || this.eventDetail();
-        const eventDateTime =  eventTimestamp;
+        const eventStartTimestamp = moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
+
+        let eventEndTimestamp;
+
+        if (this.parsedEventEndTime() != null) {
+            eventEndTimestamp = moment(`${this.parsedEventEndTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
+        }
+
+        const detail = this.state.eventDetail || this.eventDetail();
 
         // ADD/UPDATE EVENT DISPATCH GOES HERE!
         if (!this.props.eventId) {
-           this.props.addOneEvent(this.props.parkId, detail, eventDateTime)
-        }
-
-        else {
-            this.props.updateEvent(this.props.eventId, this.props.parkId, detail, eventTimestamp)
-            this.props.eventChanged(this.props.eventId, detail, eventTimestamp)
+            this.props.addOneEvent(this.props.parkId, detail, eventStartTimestamp, eventEndTimestamp)
+        } else {
+            this.props.updateEvent(this.props.eventId, this.props.parkId, detail, eventStartTimestamp, eventEndTimestamp)
+            this.props.eventChanged(this.props.eventId, detail, eventStartTimestamp, eventEndTimestamp)
         }
     }
 
     render() {
         const eventDate = this.eventDate()
-        const eventTime = this.eventTime()
+        const eventStartTime = this.eventStartTime()
+        const eventEndTime = this.eventEndTime()
+
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
-        return(
+
+        return (
             <div className="EventForm">
-                <span>{this.isNewEvent ? 'Add New Event' : 'Edit Event' }</span>
+                <span>{this.isNewEvent ? 'Add New Event' : 'Edit Event'}</span>
                 <form className="EventForm">
                     {
                         showCalendar && <div className="formsection date">
@@ -114,12 +142,20 @@ class EventForm extends React.Component {
                         </div>
                     }
                     <div className="formsection time">
-                        <label htmlFor="eventTime">Time:</label>
+                        <label htmlFor="eventTime">Event Start Time:</label>
                         <TimePicker
-                            onChange={this.handleEventTimeChange}
-                            id="eventTime"
+                            onChange={this.handleEventStartTimeChange}
+                            id="eventStartTime"
                             disableClock={true}
-                            value={eventTime}/>
+                            value={eventStartTime}/>
+                    </div>
+                    <div className="formsection time">
+                        <label htmlFor="eventTime">Event End Time: (optional)</label>
+                        <TimePicker
+                            onChange={this.handleEventEndTimeChange}
+                            id="eventEndTime"
+                            disableClock={true}
+                            value={eventEndTime}/>
                     </div>
                     <div className="formsection details">
                         <label htmlFor="eventDetail">Details: </label>
@@ -139,8 +175,8 @@ class EventForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addOneEvent: (parkId, details, eventDateTime) => dispatch(apis.addEvent(parkId, details, eventDateTime)),
-    updateEvent: (eventId, parkId, details, eventDateTime) => dispatch(apis.updateEvent(eventId, parkId, details, eventDateTime))
+    addOneEvent: (parkId, details, createdTime, eventStartTime, eventEndTime) => dispatch(apis.addEvent(parkId, details, createdTime, eventStartTime, eventEndTime)),
+    updateEvent: (eventId, parkId, details, eventStartTime, eventEndTime) => dispatch(apis.updateEvent(eventId, parkId, details, eventStartTime, eventEndTime))
 })
 
 export default connect(null, mapDispatchToProps)(EventForm);

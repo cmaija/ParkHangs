@@ -2,7 +2,7 @@ const Event = require('../models/EventModel');
 const express = require('express');
 const Request = require("request");
 var assert = require('assert');
-var mongoose = require( 'mongoose' );
+var mongoose = require('mongoose');
 const database = require('../database/index');
 const moment = require('moment');
 // var { uuid } = require('uuidv4');
@@ -10,8 +10,8 @@ const moment = require('moment');
 var router = express.Router();
 router.use(express.json())
 
-database.once("open", function() {
-  console.log("MongoDB database connection established successfully");
+database.once("open", function () {
+    console.log("MongoDB database connection established successfully");
 });
 
 // Gets all events
@@ -32,20 +32,22 @@ const getEvents = async (req, res) => {
 // Adds a new event
 const addEvent = async (req, res) => {
     var {
-      parkId,
-      details,
-      eventDateTime
+        parkId,
+        details,
+        eventDateTime,
+        eventEndDateTime
     } = req.body
     var newEvent = {
-      parkId: parkId ? parkId : null,
-      details: details ? details : null,
-      eventDateTime: eventDateTime ? eventDateTime : null,
+        parkId: parkId ? parkId : null,
+        details: details ? details : null,
+        eventDateTime: eventDateTime ? eventDateTime : null,
+        eventEndDateTime: eventEndDateTime ? eventEndDateTime : null // not required
     }
     // console.log(newEvent.parkId);
     // console.log(newEvent.details);
     // console.log(newEvent.eventDateTime);
     if (newEvent.parkId === null || newEvent.details === null || newEvent.eventDateTime === null) {
-      return res.status(400).json({success: false,  error: `Missing one or more fields`})
+        return res.status(400).json({success: false, error: `Missing one or more fields`})
     }
 
     // newEvent._id = uuid();
@@ -57,14 +59,14 @@ const addEvent = async (req, res) => {
     newEvent.creatorID = 0;
 
     try {
-      res.setHeader('Content-Type', 'application/json');
-      let inserted = await database.collection('events').insertOne(newEvent);
-      assert.equal(1, inserted.insertedCount);
-      console.log('item inserted');
-      return res.status(200).json({success: true, data: newEvent})
-  } catch (error) {
-    return res.status(404).json({success: false, error: 'Could not add event'})
-  }
+        res.setHeader('Content-Type', 'application/json');
+        let inserted = await database.collection('events').insertOne(newEvent);
+        assert.equal(1, inserted.insertedCount);
+        console.log('item inserted');
+        return res.status(200).json({success: true, data: newEvent})
+    } catch (error) {
+        return res.status(404).json({success: false, error: 'Could not add event'})
+    }
 }
 
 const updateEvent = async (req, res) => {
@@ -80,7 +82,8 @@ const updateEvent = async (req, res) => {
     const {
         parkId,
         details,
-        eventDateTime } = req.body
+        eventDateTime
+    } = req.body
 
     const update = {
         parkId: parkId ? parkId : null,
