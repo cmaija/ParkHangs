@@ -1,5 +1,8 @@
 import React from 'react'
-import {deleteEvent, fetchEventsById, returnEventsByParkId} from 'features/parks/parksSlice.js'
+import { deleteEvent } from 'features/events/eventsSlice'
+import {
+    fetchEventsById,
+    returnEventsByParkId} from 'features/parks/parksSlice.js'
 import {connect} from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
@@ -108,7 +111,7 @@ class ModalMapDetail extends React.Component {
                                         {/*    parkId:<br/>{event.parkId}*/}
                                         {/*</div>*/}
                                         <button onClick={() => {
-                                            this.props.deleteEventFromPark(this.props.park._id, event.id)
+                                            this.props.deleteEventFromPark(event._id, this.props.park._id)
                                         }}>
                                             <b>X</b>
                                         </button>
@@ -128,15 +131,13 @@ class ModalMapDetail extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        //eventsById: state.parks.eventsById, //universal; actions for fulfillment and rejected not connecting? array remains empty
         error: state.parks.error,
-        events: state.parks.events
+        events: state.events.eventsByParkId
     }
-};
+}
 
 const mapDispatchToProps = (dispatch) => ({
-    deleteEventFromPark: (parkId, eventId) => dispatch(deleteEvent(parkId, eventId)),
-
-});
+    deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);

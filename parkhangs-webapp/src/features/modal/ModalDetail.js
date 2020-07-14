@@ -2,7 +2,7 @@ import React from 'react'
 import 'features/modal/ModalDetail.css'
 import moment from 'moment'
 import {connect} from "react-redux"
-import apis from 'api/index'
+import { deleteEvent } from 'features/events/eventsSlice'
 import {cloneDeep} from 'lodash'
 import EventForm from "../../components/EventForm";
 
@@ -27,9 +27,7 @@ class ModalDetail extends React.Component {
     deleteEvent = async (eventId) => {
         try {
             await this.props.deleteOneEvent(eventId, this.props.park._id)
-            console.log(this.state.eventsOnCurrentDate)
             let newEventsArray = this.state.eventsOnCurrentDate.filter(event => event._id !== eventId)
-            console.log(newEventsArray)
             this.setState({eventsOnCurrentDate: newEventsArray})
         } catch (error) {
             console.error(error)
@@ -112,7 +110,7 @@ class ModalDetail extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    deleteOneEvent: (eventId, parkId) => dispatch(apis.deleteEvent(eventId, parkId))
+    deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId))
 })
 
 export default connect(null, mapDispatchToProps)(ModalDetail);

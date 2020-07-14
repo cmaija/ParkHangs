@@ -1,12 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addEvent } from 'features/parks/parksSlice'
+import {
+    addEvent,
+    updateEvent } from 'features/events/eventsSlice'
 import TimePicker from 'react-time-picker'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
-import apis from '../api/index'
 
 class EventForm extends React.Component {
 
@@ -84,15 +85,25 @@ class EventForm extends React.Component {
         const eventTimestamp = moment(`${this.parsedEventTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
 
         const detail =  this.state.eventDetail || this.eventDetail();
-        const eventDateTime =  eventTimestamp;
+        const eventDateTime = eventTimestamp
 
-        // ADD/UPDATE EVENT DISPATCH GOES HERE!
         if (!this.props.eventId) {
-           this.props.addOneEvent(this.props.parkId, detail, eventDateTime)
+            const newEvent = {
+                parkId: this.props.parkId,
+                details: detail,
+                eventDateTime,
+            }
+            this.props.addOneEvent(newEvent)
         }
 
         else {
-            this.props.updateEvent(this.props.eventId, this.props.parkId, detail, eventTimestamp)
+            const updatedEvent = {
+                eventId: this.props.eventId,
+                parkId: this.props.parkId,
+                details: detail,
+                eventDateTime,
+            }
+            this.props.updateEvent(updatedEvent)
             this.props.eventChanged(this.props.eventId, detail, eventTimestamp)
         }
     }
@@ -139,8 +150,8 @@ class EventForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addOneEvent: (parkId, details, eventDateTime) => dispatch(apis.addEvent(parkId, details, eventDateTime)),
-    updateEvent: (eventId, parkId, details, eventDateTime) => dispatch(apis.updateEvent(eventId, parkId, details, eventDateTime))
+    addOneEvent: (newEvent) => dispatch(addEvent(newEvent)),
+    updateEvent: (updatedEvent) => dispatch(updateEvent(updatedEvent))
 })
 
 export default connect(null, mapDispatchToProps)(EventForm);

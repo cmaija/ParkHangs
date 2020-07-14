@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { queryParks } from "features/parks/parksSlice";
+import { filterParks } from 'features/parks/parksSlice'
 
 class Searchbar extends React.Component {
 
@@ -123,7 +123,7 @@ class Searchbar extends React.Component {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    setFilter: (filter) => dispatch(queryParks(filter))
+    setFilter: (filter) => dispatch(filterParks(filter))
 })
 
 const mapStateToProps = (state) => ({

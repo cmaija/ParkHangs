@@ -6,6 +6,9 @@ import rootReducer from './reducers'
 import { BrowserRouter as Router } from 'react-router-dom'
 import Routes from './router/Routes'
 import thunk from 'redux-thunk'
+import ApiService from 'services/api.service'
+
+ApiService.init()
 
 const store = configureStore({
     middlewares: thunk,
