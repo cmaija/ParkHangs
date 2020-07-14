@@ -20,7 +20,7 @@ export const fetchEventsById = createAsyncThunk(
 )
 
 const parksSlice = createSlice({
-    name: 'newParks',
+    name: 'parks',
     initialState: {
         parks: [],
         filteredParks: [],
