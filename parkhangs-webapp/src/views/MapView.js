@@ -8,7 +8,6 @@ import { connect } from 'react-redux'
 class MapView extends Component {
     componentDidMount = async () => {
         await this.props.getAllEvents()
-        console.log('done!')
     }
 
 
