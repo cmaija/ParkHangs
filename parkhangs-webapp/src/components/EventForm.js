@@ -112,7 +112,7 @@ class EventForm extends React.Component {
         }
 
         const detail =  this.state.eventDetail || this.eventDetail()
-        const eventDateTime = eventTimestamp
+        const eventDateTime = eventStartTimestamp
 
         if (!this.props.eventId) {
             const newEvent = {
@@ -132,7 +132,7 @@ class EventForm extends React.Component {
                 eventDateTime,
             }
             this.props.updateEvent(updatedEvent)
-            this.props.eventChanged(this.props.eventId, detail, eventTimestamp, eventEndTimestamp)
+            this.props.eventChanged(this.props.eventId, detail, eventDateTime, eventEndDateTime)
         }
     }
 
