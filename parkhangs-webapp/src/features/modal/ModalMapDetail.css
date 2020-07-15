@@ -55,3 +55,8 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.EventTable {
+    max-height: 300px;
+    overflow: scroll
+}

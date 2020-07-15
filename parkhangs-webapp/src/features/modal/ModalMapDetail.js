@@ -23,7 +23,11 @@ class ModalMapDetail extends React.Component {
     };
 
     getEventTime = (date) => {
-        return moment.unix(date).format("hh:MM a");
+        if (date != null) {
+            return moment.unix(date).format("hh:MM a");
+        } else {
+            return "";
+        }
     }
 
     getCreatedTime = (date) => {
@@ -78,45 +82,76 @@ class ModalMapDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="Section">
+                    <div className="Section EventTable">
                         <span className="SectionTitle">Events</span>
                         {
-
-
                             this.getEventsByPark().length > 0 ?
 
-                                this.getEventsByPark().map((event) => {
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <td>
+                                            <b>Created At:</b>
+                                        </td>
+                                        <td>
+                                            <b>Created by:</b>
+                                        </td>
+                                        <td>
+                                            <b>Details:</b>
+                                        </td>
+                                        <td>
+                                            <b>Starts at:</b>
+                                        </td>
+                                        <td>
+                                            <b>Ends at:</b>
+                                        </td>
+                                        <td>
+                                            <b>Delete</b>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
 
-                                    //key may need to be changed to event._id as backend
-                                    return <div className="Event" key={event._id}>
-                                        <div>
-                                            <b>Created At:</b><br/>{this.getCreatedTime(event.createdDateTime)}
-                                        </div>
-                                        {/*unnecessary, users should not see this*/}
-                                        {/*<div>*/}
-                                        {/*    creatorID:<br/>{event.creatorId}*/}
-                                        {/*</div>*/}
-                                        <div>
-                                            <b>Created by:</b><br/>{event.creatorName}
-                                        </div>
+                                        this.getEventsByPark().map((event) => {
+                                            return <tr key={event._id}>
+                                                <td>
+                                                    {this.getCreatedTime(event.createdDateTime)}
+                                                </td>
+                                                <td>
+                                                    {event.creatorName}
+                                                </td>
+                                                <td>
+                                                    {event.details}
+                                                </td>
+                                                <td>
+                                                    {this.getEventTime(event.eventDateTime)}
+                                                </td>
+                                                <td>
+                                                    {
+                                                        this.getEventTime(event.eventEndDateTime) != null ?
 
-                                        <div>
-                                            <b>Details:</b><br/>{event.details}
-                                        </div>
-                                        <div>
-                                            <b>Starts at:</b><br/>{this.getEventTime(event.eventDateTime)}
-                                        </div>
-                                        {/*unnecessary, users should not see this*/}
-                                        {/*<div>*/}
-                                        {/*    parkId:<br/>{event.parkId}*/}
-                                        {/*</div>*/}
-                                        <button onClick={() => {
-                                            this.props.deleteEventFromPark(event._id, this.props.park._id)
-                                        }}>
-                                            <b>X</b>
-                                        </button>
-                                    </div>;
-                                })
+                                                            <div className="event-datetime">
+                                                                {this.getEventTime(event.eventEndDateTime)}
+                                                            </div>
+                                                            :
+                                                            null
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <button onClick={() => {
+                                                        this.props.deleteEventFromPark(event._id, this.props.park._id)
+                                                    }}>
+                                                        <b>X</b>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        })
+
+                                    }
+                                    </tbody>
+
+                                </table>
                                 :
                                 <div>
                                     There are no events for this park
