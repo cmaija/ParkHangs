@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import Map from '../components/Map.js';
 import './MapView.css';
-import apis from '../api/index';
+import { fetchEvents } from 'features/events/eventsSlice'
 import { connect } from 'react-redux'
-import { addSortedEvents } from 'features/parks/parksSlice';
 
 
 class MapView extends Component {
-
-  componentDidMount = async () => {
-    await this.props.getAllEvents()
+    componentDidMount = async () => {
+        await this.props.getAllEvents()
     }
 
 
@@ -24,12 +22,12 @@ class MapView extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        events: state.parks.events,
+        events: state.events.eventsByParkId,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllEvents: () => dispatch(apis.fetchEvents())
+    getAllEvents: () => dispatch(fetchEvents())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapView);

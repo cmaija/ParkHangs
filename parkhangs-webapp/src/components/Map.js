@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
 import Marker from '../components/Marker.js'
-import apis from '../api/index'
+import { fetchParks } from 'features/parks/parksSlice'
 
 class SimpleMap extends Component {
 
@@ -15,7 +15,6 @@ class SimpleMap extends Component {
     };
 
     render() {
-
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '500px', width: '75%', margin: 'auto'}}>
@@ -35,39 +34,18 @@ class SimpleMap extends Component {
     }
 
     componentDidMount = async () => {
-
-        //await this.props.getAllParks().then().catch();
-
-        this.props.getAllParks();
-
-        // try {
-        //     let resultAction = await this.props.getAllParks();
-        //     console.log("resultaction:" + resultAction);
-        //     const parks = unwrapResult(resultAction);
-        //     console.log('parks:' + parks);
-        // } catch (err) {
-        //     console.log('error with componentdidmount:' + err);
-        // }
-        //
-        //
-        // // await this.props.getAllParks()
-        // //     .then((parks) => {
-        // //         const unwrappedParks = unwrapResult(parks);
-        // //         console.log("unwrappedParks: " + unwrappedParks);
-        // //         return unwrappedParks;
-        // //     })
-        // //     .catch((err) => {
-        // //         console.log(err);
-        // //     });
-    };
+        this.props.getAllParks()
+    }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(apis.fetchParks())
-});
+    getAllParks: () => dispatch(fetchParks())
+})
 
 const mapStateToProps = (state) => { //name is by convention
-    return {parks: state.parks.parks}; //now it will appear as props
-};
+    return {
+        parks: state.parks.parks
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SimpleMap);

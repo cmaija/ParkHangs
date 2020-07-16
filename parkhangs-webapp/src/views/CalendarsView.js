@@ -3,7 +3,8 @@ import CalendarWrapper from '../components/CalendarWrapper';
 import Searchbar from '../components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
-import apis from '../api/index'
+import { fetchParks } from 'features/parks/parksSlice'
+import { fetchEvents } from 'features/events/eventsSlice'
 
 class CalendarsView extends Component {
     constructor (props) {
@@ -54,13 +55,13 @@ const mapStateToProps = (state) => {
     return {
         parks: state.parks.parks,
         filteredParks: state.parks.filteredParks,
-        events: state.parks.events,
+        events: state.events.eventsByParkId,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(apis.fetchParks()),
-    getAllEvents: () => dispatch(apis.fetchEvents()),
+    getAllParks: () => dispatch(fetchParks()),
+    getAllEvents: () => dispatch(fetchEvents()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);
