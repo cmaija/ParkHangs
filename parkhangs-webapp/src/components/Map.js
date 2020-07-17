@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
-import DetailModal from './DetailModal.js'
-import Marker from './Marker.js'
+import Marker from '../components/Marker.js'
+import { fetchParks } from 'features/parks/parksSlice'
 
 class SimpleMap extends Component {
+
     static defaultProps = {
         center: {
             lat: 49.28,
@@ -17,31 +18,34 @@ class SimpleMap extends Component {
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '500px', width: '75%', margin: 'auto'}}>
-                <GoogleMapReact
-                    bootstrapURLKeys={{key: 'API KEY HERE!'}}
-                    defaultCenter={this.props.center}
-                    defaultZoom={this.props.zoom}
-                >
+                <GoogleMapReact bootstrapURLKeys={{key: process.env.REACT_APP_MAP_API_KEY}}
+                                defaultCenter={this.props.center}
+                                defaultZoom={this.props.zoom}>
                     {this.props.parks.map((park) => {
-                            return <Marker key={park.id}
-                                           lat={park.lat}
-                                           lng={park.lng}
-                                           text={park.parkName}
-                                           events={park.events}
-                                           park={park}
-                            />
+                            return <Marker key={park._id} park={park}
+                                           lat={park.googleMapsLatLon[0]}
+                                           lng={park.googleMapsLatLon[1]}/>
                         }
-                    )
-                    }
+                    )}
 
                 </GoogleMapReact>
             </div>
         );
     }
+
+    componentDidMount = async () => {
+        this.props.getAllParks()
+    }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    getAllParks: () => dispatch(fetchParks())
+})
 
 const mapStateToProps = (state) => { //name is by convention
-    return {parks: state.parks.parks}; //now it will appear as props
+    return {
+        parks: state.parks.parks
+    }
 }
 
-export default connect(mapStateToProps, null)(SimpleMap);
+export default connect(mapStateToProps, mapDispatchToProps)(SimpleMap);

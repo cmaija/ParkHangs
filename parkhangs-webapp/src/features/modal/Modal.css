@@ -31,24 +31,3 @@
     justify-content: center;
     color: black;
 }
-
-.detailed-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-}
-
-.detailed-content-main {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 0.5rem;
-}
-
-.detailed-content-top {
-    display: flex;
-    justify-content: flex-start;
-    font-size: 14px;
-    font-weight: bold;
-}
