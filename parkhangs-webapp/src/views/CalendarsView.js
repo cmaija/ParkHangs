@@ -37,14 +37,6 @@ class CalendarsView extends Component {
                 <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search for a park"/>
                 <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
                 <div className="CalendarList">
-                { this.state.showAllParks
-                    ? this.props.parks.map((park) => {
-                        return <CalendarWrapper key={park._id} park={park}/>
-                    })
-                    : this.props.filteredParks.map((park) => {
-                        return <CalendarWrapper key={park._id} park={park}/>
-                    })
-                }
                 </div>
             </div>
         );

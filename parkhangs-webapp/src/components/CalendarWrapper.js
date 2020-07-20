@@ -120,7 +120,9 @@ class CalendarWrapper extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        events: state.events.eventsByParkId
+        events: state.events.eventsByParkId,
+        parks: state.parks.parks,
+        filteredParks: state.parks.filteredParks,
     }
 }
 
