@@ -167,7 +167,7 @@ class ModalMapDetail extends React.Component {
 const mapStateToProps = (state) => {
     return {
         error: state.parks.error,
-        events: state.events.eventsByParkId
+        events: state.events.eventsByParkId //do we need this?
     }
 }
 

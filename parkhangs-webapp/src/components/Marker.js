@@ -28,21 +28,27 @@ class Marker extends Component {
     render() {
         return (
             <div>
-                <img alt="map-marker" src={MarkerIcon}/>
                 <div className="marker" onClick={() => {
                     this.handleSelect(this.props.park)
                 }}
                 >
+                  <img alt="map-marker" src={MarkerIcon}/>   
                     {/*TODO: should we display the name of the park*/}
-                    {this.props.park.name}
+                    {/* {this.props.park.name} */}
                 </div>
             </div>
         );
     };
 }
 
+const mapStateToProps = (state) => {
+    return {
+        marker: state.parks.marker
+    }
+}
+
 const mapDispatchToProps = (dispatch) => ({
     openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 
-export default connect(null, mapDispatchToProps)(Marker);
+export default connect(mapStateToProps, mapDispatchToProps)(Marker);
