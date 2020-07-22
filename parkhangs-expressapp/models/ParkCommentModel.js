@@ -3,13 +3,16 @@ const Schema = mongoose.Schema;
 
 const ParkComment = new Schema(
     {
-        parkId: {type: Number, required: true},
-        parkCommentId: {type: Number, required: true},
+        parkId: {type: String, required: true},
+        parkCommentId: {type: String, required: true},
         comment: {type: String, required: true},
         creatorId: {type: Number, required: true},
         creatorName: {type: String, required: true},
         createdDateTime: {type: String, required: true}
     },
+    {
+      collection : 'parkComments'
+    }
 );
 
 module.exports = mongoose.model('parkComments', ParkComment);
