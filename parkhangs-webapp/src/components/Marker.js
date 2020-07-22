@@ -41,14 +41,10 @@ class Marker extends Component {
     };
 }
 
-const mapStateToProps = (state) => {
-    return {
-        marker: state.parks.marker
-    }
-}
+
 
 const mapDispatchToProps = (dispatch) => ({
     openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Marker);
+export default connect(null, mapDispatchToProps)(Marker);
