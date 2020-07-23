@@ -7,7 +7,6 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
-        googleAccessToken: null, //TODO: should be here?
         isLoggedIn: false, // if user is not null, must be logged in
         error: null,
         loadingUser: true

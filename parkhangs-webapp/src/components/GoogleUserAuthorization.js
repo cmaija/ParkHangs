@@ -10,7 +10,7 @@ import {
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_API_CLIENT_ID;
 
-class GoogleButtons extends Component {
+class GoogleUserAuthorization extends Component {
 
     constructor(props) {
         super(props);
@@ -27,7 +27,6 @@ class GoogleButtons extends Component {
             const firstName = response.profileObj.givenName;
             const lastName = response.profileObj.familyName;
             const email = response.profileObj.email;
-            const accessToken = response.accessToken; // TODO: could be use for Google Calendar integration
             const googleImageURL = response.profileObj.imageUrl;
 
             //get the user
@@ -90,4 +89,4 @@ const mapDispatchToProps = (dispatch) => ({
     logout: () => dispatch(logout())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(GoogleButtons);
+export default connect(mapStateToProps, mapDispatchToProps)(GoogleUserAuthorization);

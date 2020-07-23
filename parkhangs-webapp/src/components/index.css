@@ -4,30 +4,3 @@ body {
   font-family: sans-serif;
 }
 
-.Google-Image {
-  padding: 1.25rem;
-}
-
-.Edit-Profile-Button{
-  width: 6rem;
-  height: 1.875rem;
-  margin: 1.5625rem;
-}
-
-.Favourite-Parks-Title{
-  margin-top: 5rem;
-}
-
-.Favourite-Parks-Table{
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.Favourite-Parks-Table-Rows{
-  width: 16rem;
-}
-
-.Not-Logged-In{
-  margin-top: 6.25rem;
-}
-

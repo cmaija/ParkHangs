@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {openModal} from "../features/modal/modalSlice";
-import "components/index.css";
+import "views/UserProfileView.css";
 import {toggleSavedPark} from "../features/users/userSlice";
 
 
