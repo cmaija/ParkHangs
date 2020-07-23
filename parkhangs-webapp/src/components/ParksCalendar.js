@@ -30,6 +30,22 @@ class ParksCalendar extends React.Component {
         })
     }
 
+    addNewEvent = (event) => {
+        console.log(event)
+        const start = event.start.getTime()
+        const end = event.end.getTime()
+        const props = {
+            component: 'ModalNewEvent',
+            componentParams: {
+                selectedSlot: {
+                    start,
+                    end,
+                },
+            }
+        }
+        this.props.openModal(props)
+    }
+
     render () {
         let eventsArray
 
@@ -68,6 +84,8 @@ class ParksCalendar extends React.Component {
                     onSelectEvent={this.openModal}
                     events={eventsArray}
                     views={allViews}
+                    selectable={true}
+                    onSelectSlot={this.addNewEvent}
                 />
             </div>
         )

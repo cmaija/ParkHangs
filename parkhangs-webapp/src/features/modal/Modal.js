@@ -3,6 +3,7 @@ import 'features/modal/Modal.css'
 import ModalDetail from 'features/modal/ModalDetail'
 import ModalMapDetail from 'features/modal/ModalMapDetail'
 import ModalEventDetail from 'features/modal/ModalEventDetail'
+import ModalNewEvent from 'features/modal/ModalNewEvent'
 import { connect } from 'react-redux'
 
 import {
@@ -22,6 +23,7 @@ class Modal extends React.Component {
         'ModalDetail': ModalDetail,
         'ModalMapDetail': ModalMapDetail,
         'ModalEventDetail': ModalEventDetail,
+        'ModalNewEvent': ModalNewEvent,
     }
 
     close = () => {
