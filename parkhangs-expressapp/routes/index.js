@@ -2,6 +2,8 @@ var express = require('express');
 const parkController = require('../controllers/parkController');
 const eventController = require('../controllers/eventController');
 const userController = require('../controllers/userController');
+const parkCommentController = require('../controllers/parkCommentController');
+const eventCommentController = require('../controllers/eventCommentController');
 var assert = require('assert');
 var mongoose = require("mongoose");
 const eventbyparkIdController = require('../controllers/getEventsByParkId');
@@ -19,5 +21,13 @@ router.post('/events', eventController.addEvent);
 router.get('/user/:email', userController.getUser);
 router.patch('/user/:userId', userController.updateUser);
 router.post('/user', userController.addUser);
+
+router.get('/parkComments', parkCommentController.getParkComments);
+router.post('/parkComments', parkCommentController.addParkComment);
+router.delete('/parkComments', parkCommentController.deleteParkComment);
+router.get('/eventComments', eventCommentController.getEventComments);
+router.post('/eventComments', eventCommentController.addEventComment);
+router.delete('/eventComments', eventCommentController.deleteEventComment);
+
 
 module.exports = router;
