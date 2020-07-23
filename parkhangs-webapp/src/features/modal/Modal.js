@@ -1,13 +1,15 @@
 import React from 'react'
 import 'features/modal/Modal.css'
 import ModalDetail from 'features/modal/ModalDetail'
+import ModalEventDetail from 'features/modal/ModalEventDetail'
+import ModalUserEdit from "./ModalUserEdit"
+import ModalParkDetail from "./ModalParkDetail"
+
 import { connect } from 'react-redux'
 
 import {
     openModal,
     closeModal } from 'features/modal/modalSlice';
-import ModalUserEdit from "./ModalUserEdit";
-import ModalParkDetail from "./ModalParkDetail";
 
 class Modal extends React.Component {
     constructor(props) {
@@ -21,7 +23,8 @@ class Modal extends React.Component {
     components = {
         'ModalDetail': ModalDetail,
         'ModalParkDetail': ModalParkDetail,
-        'ModalUserEdit' : ModalUserEdit
+        'ModalUserEdit' : ModalUserEdit,
+        'ModalEventDetail': ModalEventDetail,
     }
 
     close = () => {
