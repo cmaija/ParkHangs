@@ -37,7 +37,7 @@ class ModalUserEdit extends React.Component {
             this.props.editUsername(userId, this.state.newUserName.trim());
 
             this.setState({
-                invalidSearch: false
+                invalidInput: false
             })
         }
     }

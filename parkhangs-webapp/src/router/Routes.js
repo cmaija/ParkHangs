@@ -7,7 +7,7 @@ import NoMatch from 'views/NoMatch'
 import Modal from 'features/modal/Modal'
 import 'App.css'
 import { connect } from "react-redux";
-import UserInfo from "../components/UserInfo";
+import UserProfileView from "../views/UserProfileView";
 
 class Routes extends Component {
     render() {
@@ -18,7 +18,7 @@ class Routes extends Component {
                     <Switch>
                         <Route exact path="/" component={MapView}/>
                         <Route exact path="/park-events" component={CalendarsView}/>
-                        <Route exact path="/user" component={UserInfo}/>
+                        <Route exact path="/user" component={UserProfileView}/>
                         <Route component={NoMatch}/>
                     </Switch>
                 </div>

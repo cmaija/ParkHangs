@@ -57,23 +57,23 @@
 }
 
 .EventTable {
-    max-height: 300px;
+    max-height: 19rem;
     overflow: scroll
 }
 
 .FilledHeartIcon {
     position: absolute;
     align-self: flex-end;
-    height: 30px;
-    width: 30px;
-    padding: 10px;
+    height: 1.875rem;
+    width: 1.875rem;
+    padding: 0.625rem;
     fill: red
 }
 
 .NotFillHeartIcon {
     position: absolute;
     align-self: flex-end;
-    height: 30px;
-    width: 30px;
-    padding: 10px;
+    height: 1.875rem;
+    width: 1.875rem;
+    padding: 0.625rem;
 }

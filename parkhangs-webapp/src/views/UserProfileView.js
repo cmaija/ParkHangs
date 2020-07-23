@@ -5,7 +5,7 @@ import "components/index.css";
 import {toggleSavedPark} from "../features/users/userSlice";
 
 
-class UserInfo extends React.Component {
+class UserProfileView extends React.Component {
 
     constructor(props) {
         super(props);
@@ -151,4 +151,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfileView);
