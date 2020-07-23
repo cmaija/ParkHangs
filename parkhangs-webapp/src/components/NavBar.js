@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {connect} from 'react-redux'
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'
 import 'components/NavBar.css'
 import MapIcon from 'assets/icons/map-icon.svg'
 import CalendarIcon from 'assets/icons/calendar-icon.svg'

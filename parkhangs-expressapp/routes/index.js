@@ -1,5 +1,5 @@
 var express = require('express');
-const controller = require('../controllers/index');
+const parkController = require('../controllers/parkController');
 const eventController = require('../controllers/eventController');
 const userController = require('../controllers/userController');
 var assert = require('assert');
@@ -10,7 +10,7 @@ var router = express.Router();
 router.use(express.json())
 
 //PLACE ROUTES HERE!
-router.get('/parks', controller.getParks);
+router.get('/parks', parkController.getParks);
 router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);
 router.get('/events', eventController.getEvents);

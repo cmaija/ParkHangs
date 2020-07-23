@@ -1,12 +1,7 @@
 import React from 'react'
 import {deleteEvent} from 'features/events/eventsSlice'
-import {
-    fetchEventsById,
-    returnEventsByParkId
-} from 'features/parks/parksSlice.js'
 import {connect} from 'react-redux'
 import 'features/modal/ModalParkDetail.css'
-import {unwrapResult} from '@reduxjs/toolkit'
 import moment from 'moment'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
