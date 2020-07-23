@@ -11,7 +11,7 @@ class CalendarsView extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            showAllParks: false,
+            showAllParks: true,
         }
     }
 
@@ -38,7 +38,7 @@ class CalendarsView extends Component {
                 <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search for a park"/>
                 <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
                 <div className="CalendarList">
-                <ParksCalendar />
+                <ParksCalendar showAllParks={this.state.showAllParks}/>
                 </div>
             </div>
         );

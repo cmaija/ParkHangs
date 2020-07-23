@@ -65,12 +65,11 @@ class ModalEventDetail extends React.Component {
 
     descriptionTab = (event) => {
         return (
-            <div>
-                <div className="EventDetails">
-                    <span className="EventDetails-Title">Event:</span>
-                    <div className="EventDetails-populated">
-                    </div>
-                </div>
+            <div className="ModalEventDetail-description">
+                <div className="ModalEventDetail-description-section"></div>
+                <div className="ModalEventDetail-description-section"></div>
+                <div className="ModalEventDetail-description-section"></div>
+                <div className="ModalEventDetail-description-section"></div>
             </div>
         )
     }

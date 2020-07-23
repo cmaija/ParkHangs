@@ -24,8 +24,22 @@ class ParksCalendar extends React.Component {
         this.props.openModal(props)
     }
 
+    filterEvents = (parks) => {
+        return this.props.events.filter((event) => {
+            return parks.filter(park => event.parkId === park._id).length > 0
+        })
+    }
+
     render () {
-        let eventsArray = this.props.events
+        let events
+
+        if (this.props.showAllParks) {
+            events = this.props.events
+        } else {
+            events = this.filterEvents(this.props.filteredParks)
+        }
+
+        let eventsArray = events
 
         eventsArray = eventsArray.map((event) => {
             let transformedEvent = cloneDeep(event)
@@ -66,6 +80,7 @@ const mapStateToProps = (state) => {
     return {
         events: state.events.flattenedEvents,
         parks: state.parks.parks,
+        filteredParks: state.parks.filteredParks,
     }
 }
 
