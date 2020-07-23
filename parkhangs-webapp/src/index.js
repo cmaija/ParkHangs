@@ -13,7 +13,14 @@ ApiService.init()
 const store = configureStore({
     middlewares: thunk,
     reducer: rootReducer
-});
+})
+
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./reducers/index', () => {
+    const newRootReducer = require('./reducers/index').default
+    store.replaceReducer(newRootReducer)
+  })
+}
 
 render(
     <Provider store={store}>

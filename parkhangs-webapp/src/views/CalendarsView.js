@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import CalendarWrapper from '../components/CalendarWrapper';
-import Searchbar from '../components/Searchbar'
+import CalendarWrapper from 'components/CalendarWrapper'
+import ParksCalendar from 'components/ParksCalendar'
+import Searchbar from 'components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
 import { fetchParks } from 'features/parks/parksSlice'
@@ -37,6 +38,7 @@ class CalendarsView extends Component {
                 <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search for a park"/>
                 <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
                 <div className="CalendarList">
+                <ParksCalendar />
                 </div>
             </div>
         );

@@ -5,6 +5,7 @@ const eventSlice = createSlice({
     name: 'events',
     initialState: {
         eventsByParkId: {},
+        flattenedEvents: [],
         loadingEvents: true,
         updatingEvent: false,
         deletingEvent: false,
@@ -19,6 +20,7 @@ const eventSlice = createSlice({
 
         fetchEventsSuccessful (state, action) {
             const events = action.payload
+            state.flattenedEvents = action.payload
             const parsedEvents = events.reduce(function (acc, event) {
                 const parkId = event.parkId.toString()
                 const hasSeenParkSoFar = !!acc[parkId]
