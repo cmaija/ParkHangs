@@ -125,7 +125,7 @@ class ModalMapDetail extends React.Component {
 
                                         this.getEventsByPark().map((event) => {
                                             
-                                            let newE = {
+                                            let newEvent = {
                                                 title: event.details,
                                                 description: event.details,
                                                 location: this.props.park.name + " BC, Canada",
@@ -164,7 +164,7 @@ class ModalMapDetail extends React.Component {
                                                     </button>
                                                 </td>
                                                 <td>
-                                                   <AddToCalendar event={newE}/>
+                                                   <AddToCalendar event={newEvent}/>
                                                 </td>
                                             </tr>
                                         })
