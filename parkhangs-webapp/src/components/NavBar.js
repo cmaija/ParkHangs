@@ -5,7 +5,7 @@ import 'components/NavBar.css'
 import MapIcon from 'assets/icons/map-icon.svg'
 import CalendarIcon from 'assets/icons/calendar-icon.svg'
 import UserIcon from 'assets/icons/user-icon.svg'
-import GoogleButtons from "./GoogleButtons";
+import GoogleUserAuthorization from "./GoogleUserAuthorization";
 
 class NavBar extends React.Component {
     render() {
@@ -39,7 +39,7 @@ class NavBar extends React.Component {
                     }
 
                     <li className="NavLink">
-                        <GoogleButtons/>
+                        <GoogleUserAuthorization/>
                     </li>
                 </ul>
             </nav>

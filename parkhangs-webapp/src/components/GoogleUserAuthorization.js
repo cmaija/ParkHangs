@@ -27,6 +27,7 @@ class GoogleUserAuthorization extends Component {
             const firstName = response.profileObj.givenName;
             const lastName = response.profileObj.familyName;
             const email = response.profileObj.email;
+            const accessToken = response.accessToken;
             const googleImageURL = response.profileObj.imageUrl;
 
             //get the user
