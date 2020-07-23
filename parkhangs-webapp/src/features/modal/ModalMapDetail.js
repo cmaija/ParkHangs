@@ -124,7 +124,7 @@ class ModalMapDetail extends React.Component {
                                     {
 
                                         this.getEventsByPark().map((event) => {
-                                            console.log (this.getEventTime(event.eventDateTime));
+                                            
                                             let newE = {
                                                 title: event.details,
                                                 description: event.details,
@@ -188,7 +188,7 @@ class ModalMapDetail extends React.Component {
 const mapStateToProps = (state) => {
     return {
         error: state.parks.error,
-        events: state.events.eventsByParkId //do we need this?
+        events: state.events.eventsByParkId 
     }
 }
 

@@ -33,8 +33,6 @@ class Marker extends Component {
                 }}
                 >
                   <img alt="map-marker" src={MarkerIcon}/>   
-                    {/*TODO: should we display the name of the park*/}
-                    {/* {this.props.park.name} */}
                 </div>
             </div>
         );
