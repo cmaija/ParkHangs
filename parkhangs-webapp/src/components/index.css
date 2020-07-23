@@ -3,3 +3,35 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.marker-icon {
+  background-size: 8px 8px;
+}
+
+.Google-Image {
+  padding: 20px;
+}
+
+.Edit-Profile-Button{
+  width: 100px;
+  height: 30px;
+  margin: 25px;
+}
+
+.Favourite-Parks-Title{
+  margin-top: 75px;
+}
+
+.Favourite-Parks-Table{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.Favourite-Parks-Table-Rows{
+  width: 250px;
+}
+
+.Not-Logged-In{
+  margin-top: 100px
+}
+

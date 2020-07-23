@@ -60,3 +60,20 @@
     max-height: 300px;
     overflow: scroll
 }
+
+.FilledHeartIcon {
+    position: absolute;
+    align-self: flex-end;
+    height: 30px;
+    width: 30px;
+    padding: 10px;
+    fill: red
+}
+
+.NotFillHeartIcon {
+    position: absolute;
+    align-self: flex-end;
+    height: 30px;
+    width: 30px;
+    padding: 10px;
+}
