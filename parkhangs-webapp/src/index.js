@@ -15,13 +15,6 @@ const store = configureStore({
     reducer: rootReducer
 })
 
-if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept('./reducers/index', () => {
-    const newRootReducer = require('./reducers/index').default
-    store.replaceReducer(newRootReducer)
-  })
-}
-
 render(
     <Provider store={store}>
         <Router>

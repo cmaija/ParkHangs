@@ -6,7 +6,6 @@ const eventSlice = createSlice({
     initialState: {
         eventsByParkId: {},
         flattenedEvents: [],
-        filteredEvents: [],
         loadingEvents: true,
         updatingEvent: false,
         deletingEvent: false,

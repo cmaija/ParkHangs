@@ -31,15 +31,13 @@ class ParksCalendar extends React.Component {
     }
 
     render () {
-        let events
+        let eventsArray
 
         if (this.props.showAllParks) {
-            events = this.props.events
+            eventsArray = this.props.events
         } else {
-            events = this.filterEvents(this.props.filteredParks)
+            eventsArray = this.filterEvents(this.props.filteredParks)
         }
-
-        let eventsArray = events
 
         eventsArray = eventsArray.map((event) => {
             let transformedEvent = cloneDeep(event)

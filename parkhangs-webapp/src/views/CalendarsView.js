@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import CalendarWrapper from 'components/CalendarWrapper'
 import ParksCalendar from 'components/ParksCalendar'
 import Searchbar from 'components/Searchbar'
 import { connect } from 'react-redux'
