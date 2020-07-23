@@ -13,7 +13,7 @@ ApiService.init()
 const store = configureStore({
     middlewares: thunk,
     reducer: rootReducer
-});
+})
 
 render(
     <Provider store={store}>

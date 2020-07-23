@@ -147,7 +147,7 @@ class EventForm extends React.Component {
 
         return (
             <div className="EventForm">
-                <span>{this.isNewEvent ? 'Add New Event' : 'Edit Event'}</span>
+                <span>{isNewEvent ? 'Add New Event' : 'Edit Event'}</span>
                 <form className="EventForm">
                     {
                         showCalendar && <div className="formsection date">
