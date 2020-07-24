@@ -49,9 +49,10 @@ const eventSlice = createSlice({
         addEventSuccessful (state, action) {
             const newEvent = action.payload
             const parkId = newEvent.parkId
-            const currentEvents = state.eventsByParkId[parkId]
+            let currentEvents = state.eventsByParkId[parkId]
             if (!currentEvents) {
                 state.eventsByParkId[parkId] = []
+                currentEvents = state.eventsByParkId[parkId]
             }
             currentEvents.push(newEvent)
             state.eventsByParkId[parkId] = currentEvents
