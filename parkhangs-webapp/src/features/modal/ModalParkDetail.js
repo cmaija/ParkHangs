@@ -6,6 +6,8 @@ import moment from 'moment'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import {toggleSavedPark} from "features/users/userSlice";
+import AddToCalendar from 'react-add-to-calendar';
+
 
 class ModalParkDetail extends React.Component {
 
@@ -18,7 +20,7 @@ class ModalParkDetail extends React.Component {
     }
 
     getEventsByPark = () => {
-        let res = this.props.events[this.props.park._id]
+        let res= this.props.events[this.props.park._id]
         if (res === undefined) {
             //no events for that park, return empty array
             return [];
@@ -30,7 +32,7 @@ class ModalParkDetail extends React.Component {
 
     getEventTime = (date) => {
         if (date != null) {
-            return moment.unix(date).format("hh:MM a");
+            return moment.unix(date).format("YYYY/MM/DD hh:MM a");
         } else {
             return "";
         }
@@ -60,6 +62,10 @@ class ModalParkDetail extends React.Component {
         }
     }
 
+    getExportedTime = (date) => {
+        let formattedDate = moment.unix(date).format("YYYYMMDDTHHmmssZ");
+        return formattedDate.replace("+00:00", "Z");
+    }
 
     render() {
         return (
@@ -138,12 +144,23 @@ class ModalParkDetail extends React.Component {
                                         <td>
                                             <b>Delete</b>
                                         </td>
+                                        <td>
+                                            <b>Add To GCalendar</b>
+                                        </td>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {
 
                                         this.getEventsByPark().map((event) => {
+                                            
+                                            let newEvent = {
+                                                title: event.details,
+                                                description: event.details,
+                                                location: this.props.park.name + " BC, Canada",
+                                                startTime: this.getExportedTime(event.eventDateTime),
+                                                endTime:  this.getExportedTime(event.eventEndDateTime)
+                                            }
                                             return <tr key={event._id}>
                                                 <td>
                                                     {this.getCreatedTime(event.createdDateTime)}
@@ -174,6 +191,9 @@ class ModalParkDetail extends React.Component {
                                                     }}>
                                                         <b>X</b>
                                                     </button>
+                                                </td>
+                                                <td>
+                                                   <AddToCalendar event={newEvent}/>
                                                 </td>
                                             </tr>
                                         })
