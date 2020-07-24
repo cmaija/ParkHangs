@@ -21,6 +21,7 @@
     "react-time-picker": "^4.0.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "serve": "^11.3.2",
     "timepicker": "^1.13.11"
   },
   "devDependencies": {},
@@ -29,5 +30,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
