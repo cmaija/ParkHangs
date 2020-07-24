@@ -27,16 +27,14 @@ const getParkComments = async (req, res) => {
 const addParkComment = async (req, res) => {
     var {
         parkId,
-        parkCommentId,
         comment
     } = req.body
     var newParkComment = {
         parkId: parkId ? parkId : null,
-        parkCommentId: parkCommentId ? parkCommentId : null,
         comment: comment ? comment : null
     }
 
-    if (newParkComment.parkId === null || newParkComment.parkCommentId === null || newParkComment.comment === null) {
+    if (newParkComment.parkId === null || newParkComment.comment === null) {
         return res.status(400).json({success: false, error: `Missing one or more fields`})
     }
 

@@ -7,14 +7,32 @@ import {connect} from 'react-redux'
 import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
 import moment from 'moment'
-
+import CommentForm from 'components/CommentForm'
+import { fetchParkComments } from 'features/comments/commentSlice'
 
 class ModalMapDetail extends React.Component {
+
+  componentDidMount = () => {
+    console.log(this.props.park._id)
+    console.log(this.props.comments[this.props.park._id])
+  }
+
 
     getEventsByPark = () => {
         let res = this.props.events[this.props.park._id]
         if (res === undefined) {
             //no events for that park, return empty array
+            return [];
+
+        } else {
+            return res; //filtered array
+        }
+    };
+
+    getCommentsByPark = () => {
+        let res = this.props.comments[this.props.park._id]
+        if (res === undefined) {
+            //no comments for that park, return empty array
             return [];
 
         } else {
@@ -41,6 +59,31 @@ class ModalMapDetail extends React.Component {
                     {this.props.park.name}
                 </div>
                 <div className="Details">
+                  <div className="Section">
+                    <div className="ParkComments">
+                      <div>
+                        <span className="SectionTitle">Park Comments</span>
+                        { this.getCommentsByPark().map((comment) => {
+                          return <table>
+                            <tbody>
+                              <tr key={comment._id}>
+                                <td>{comment.comment}</td>
+                                <td>
+                                  <button onClick={() => {
+                                      this.props.deleteEventFromPark(event._id, this.props.park._id)
+                                    }}>
+                                    <b>X</b>
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          })
+                        }
+                        <CommentForm parkId={this.props.park._id} />
+                      </div>
+                    </div>
+                  </div>
                     <div className="Section">
                         <span className="SectionTitle">Park Details</span>
                         <div className="ParkLocationDetails">
@@ -167,7 +210,8 @@ class ModalMapDetail extends React.Component {
 const mapStateToProps = (state) => {
     return {
         error: state.parks.error,
-        events: state.events.eventsByParkId
+        events: state.events.eventsByParkId,
+        comments: state.comments.commentsByParkId
     }
 }
 
