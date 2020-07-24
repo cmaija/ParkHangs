@@ -1,7 +1,10 @@
 import React from 'react'
 import 'features/modal/Modal.css'
 import ModalDetail from 'features/modal/ModalDetail'
-import ModalMapDetail from 'features/modal/ModalMapDetail'
+import ModalEventDetail from 'features/modal/ModalEventDetail'
+import ModalUserEdit from "./ModalUserEdit"
+import ModalParkDetail from "./ModalParkDetail"
+
 import { connect } from 'react-redux'
 
 import {
@@ -19,7 +22,9 @@ class Modal extends React.Component {
 
     components = {
         'ModalDetail': ModalDetail,
-        'ModalMapDetail': ModalMapDetail,
+        'ModalParkDetail': ModalParkDetail,
+        'ModalUserEdit' : ModalUserEdit,
+        'ModalEventDetail': ModalEventDetail,
     }
 
     close = () => {

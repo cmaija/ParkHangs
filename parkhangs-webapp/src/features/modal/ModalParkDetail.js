@@ -1,15 +1,21 @@
 import React from 'react'
-import { deleteEvent } from 'features/events/eventsSlice'
-import {
-    fetchEventsById,
-    returnEventsByParkId} from 'features/parks/parksSlice.js'
+import {deleteEvent} from 'features/events/eventsSlice'
 import {connect} from 'react-redux'
-import 'features/modal/ModalMapDetail.css'
-import {unwrapResult} from '@reduxjs/toolkit'
+import 'features/modal/ModalParkDetail.css'
 import moment from 'moment'
+import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
+import FilledHeartIcon from 'assets/icons/heart-filled.svg'
+import {toggleSavedPark} from "features/users/userSlice";
 
+class ModalParkDetail extends React.Component {
 
-class ModalMapDetail extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggleFavouritePark = this.toggleFavouritePark.bind(this);
+        this.getSavedParkIcon = this.getSavedParkIcon.bind(this);
+
+    }
 
     getEventsByPark = () => {
         let res = this.props.events[this.props.park._id]
@@ -34,12 +40,36 @@ class ModalMapDetail extends React.Component {
         return moment.unix(date).format("YYYY/MM/DD hh:MM a");
     }
 
+    toggleFavouritePark() {
+
+        this.props.toggleSavedPark(this.props.user, this.props.park._id);
+    }
+
+    getSavedParkIcon() {
+
+        if (this.props.user != null) {
+
+            if (this.props.user.savedParks.includes(this.props.park._id)) {
+
+                return <img className="FilledHeartIcon" src={FilledHeartIcon}
+                            onClick={this.toggleFavouritePark}/>
+            } else {
+                return <img className="NotFillHeartIcon" src={NoFilledHeartIcon}
+                            onClick={this.toggleFavouritePark}/>
+            }
+        }
+    }
+
+
     render() {
         return (
             <div className="MarkerDetails">
                 <div className="Title">
                     {this.props.park.name}
                 </div>
+
+                {this.getSavedParkIcon()}
+
                 <div className="Details">
                     <div className="Section">
                         <span className="SectionTitle">Park Details</span>
@@ -167,12 +197,16 @@ class ModalMapDetail extends React.Component {
 const mapStateToProps = (state) => {
     return {
         error: state.parks.error,
-        events: state.events.eventsByParkId
+        events: state.events.eventsByParkId,
+        user: state.user.user
     }
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
-})
+    toggleSavedPark: (user, parkId) => {
+        dispatch(toggleSavedPark(user, parkId))
+    }
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalParkDetail);
