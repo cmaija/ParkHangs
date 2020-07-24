@@ -82,7 +82,7 @@
 }
 
 .EventsList-populated{
-    max-height: 500px;
+    max-height: 31rem;
     overflow: scroll
 }
 
