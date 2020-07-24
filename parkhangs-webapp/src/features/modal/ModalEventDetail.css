@@ -1,6 +1,7 @@
 .detailed-content-main {
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: 100%;
     width: 100%;
 }
@@ -78,7 +79,18 @@
 }
 
 .ModalEventDetail-Body {
-    background-color: #ededed;
     width: 100%;
     min-height: 13rem;
+    padding-left: 2.5rem;
+    padding-top: 1rem;
+}
+
+.ModalEventDetail-description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.ModalEventDetail-description-section {
+    padding: 0.5rem 0;
 }

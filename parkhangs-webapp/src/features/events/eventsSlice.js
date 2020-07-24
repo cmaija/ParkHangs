@@ -49,10 +49,18 @@ const eventSlice = createSlice({
         addEventSuccessful (state, action) {
             const newEvent = action.payload
             const parkId = newEvent.parkId
-            const currentEvents = state.eventsByParkId[parkId]
+            let currentEvents = state.eventsByParkId[parkId]
+            if (!currentEvents) {
+                state.eventsByParkId[parkId] = []
+                currentEvents = state.eventsByParkId[parkId]
+            }
             currentEvents.push(newEvent)
-
             state.eventsByParkId[parkId] = currentEvents
+
+            const flattenedEvents = state.flattenedEvents
+            flattenedEvents.push(newEvent)
+            state.flattenedEvents = flattenedEvents
+
             state.addingEvent = false
             state.error = null
         },
@@ -74,6 +82,12 @@ const eventSlice = createSlice({
             const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== eventId)
             newEventArray.push(updatedEvent)
             state.eventsByParkId[parkId] = newEventArray
+
+            const newFlattenedEventArray = state.flattenedEvents.filter(event => event._id !== eventId)
+            newFlattenedEventArray.push(updatedEvent)
+            state.flattenedEvents = newFlattenedEventArray
+
+
             state.updatingEvent = false
             state.error = null
         },
@@ -90,8 +104,13 @@ const eventSlice = createSlice({
 
         deleteEventSuccessful (state, action) {
             const { _id, parkId } = action.payload
+
             const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== _id)
             state.eventsByParkId[parkId] = newEventArray
+
+            const newFlattenedEventArray = state.flattenedEvents.filter(event => event._id !== _id)
+            state.flattenedEvents = newFlattenedEventArray
+
             state.updatingEvent = false
             state.error = null
         },
@@ -99,7 +118,7 @@ const eventSlice = createSlice({
         deleteEventFailure (state, action) {
             state.deletingEvent = true
             state.error = action.payload
-        }
+        },
     }
 })
 

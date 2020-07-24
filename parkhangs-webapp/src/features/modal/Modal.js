@@ -4,6 +4,7 @@ import ModalDetail from 'features/modal/ModalDetail'
 import ModalEventDetail from 'features/modal/ModalEventDetail'
 import ModalUserEdit from "./ModalUserEdit"
 import ModalParkDetail from "./ModalParkDetail"
+import ModalNewEvent from 'features/modal/ModalNewEvent'
 
 import { connect } from 'react-redux'
 
@@ -25,6 +26,7 @@ class Modal extends React.Component {
         'ModalParkDetail': ModalParkDetail,
         'ModalUserEdit' : ModalUserEdit,
         'ModalEventDetail': ModalEventDetail,
+        'ModalNewEvent': ModalNewEvent,
     }
 
     close = () => {
