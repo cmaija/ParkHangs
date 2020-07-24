@@ -82,13 +82,15 @@ const updateEvent = async (req, res) => {
     const {
         parkId,
         details,
-        eventDateTime
+        eventDateTime,
+        eventEndDateTime,
     } = req.body
 
     const update = {
         parkId: parkId ? parkId : null,
         details: details ? details : null,
         eventDateTime: eventDateTime ? eventDateTime : null,
+        eventEndDateTime: eventEndDateTime ? eventEndDateTime : null
     }
 
     let eventToUpdate = {}
