@@ -31,7 +31,6 @@ class ParksCalendar extends React.Component {
     }
 
     addNewEvent = (event) => {
-        console.log(event)
         const start = event.start.getTime()
         const end = event.end.getTime()
         const props = {
