@@ -5,20 +5,26 @@ const commentSlice = createSlice({
     name: 'comments',
     initialState: {
         commentsByParkId: {},
-        flattenedComments: [],
-        loadingComments: true,
+        commentsByEventId: {},
+        flattenedParkComments: [],
+        flatennedEventsComments: [],
+        loadingParkComments: true,
+        loadingEventComments: false,
         addingComment: false,
         error : null
     },
     reducers: {
         fetchParkCommentsStart (state) {
-            state.loadingParks = true
+            state.loadingParkComments = true
             state.error = null
         },
 
         fetchParkCommentsSuccessful (state, action) {
+          // if (Object.keys(state.commentsByParkId).length !== 0) {
+          //   state.commentsByParkId = {};
+          // }
             const events = action.payload
-            state.flattenedComments = action.payload
+            state.flattenedParkComments = action.payload
             const parsedComments = events.reduce(function (acc, comment) {
                 const parkId = comment.parkId.toString()
                 const hasSeenParkSoFar = !!acc[parkId]
@@ -34,7 +40,7 @@ const commentSlice = createSlice({
         },
 
         fetchParkCommentsFailure (state, action) {
-            state.loadingComments= false
+            state.loadingParkComments = false
             state.error = action.payload
         },
 
@@ -57,6 +63,55 @@ const commentSlice = createSlice({
         addParkCommentFailure (state, action) {
             state.addingComment = false
             state.error = action.payload
+        },
+
+        fetchEventCommentsStart (state) {
+            state.loadingEventComments = true
+            state.error = null
+        },
+
+        fetchEventCommentsSuccessful (state, action) {
+            const events = action.payload
+            state.flattenedEventsComments = action.payload
+            const parsedComments = events.reduce(function (acc, comment) {
+                const eventId = comment.eventId.toString()
+                const hasSeenEventSoFar = !!acc[eventId]
+                if (hasSeenEventSoFar) {
+                    acc[eventId].push(comment)
+                }
+                else {
+                    acc[eventId] = [comment]
+                }
+                console.log(acc)
+                return acc
+            }, {})
+            state.commentsByEventId = parsedComments
+        },
+
+        fetchEventCommentsFailure (state, action) {
+            state.loadingEventComments = false
+            state.error = action.payload
+        },
+
+        addEventCommentStart (state, action) {
+            state.addingEventComment = true
+            state.error = null
+        },
+
+        addEventCommentSuccessful (state, action) {
+            const newComment = action.payload
+            const eventId = newComment.eventId
+            const currentComments = state.commentsByEventId[eventId]
+            currentComments.push(newComment)
+
+            state.commentsByEventId[eventId] = currentComments
+            state.addingComment = false
+            state.error = null
+        },
+
+        addEventCommentFailure (state, action) {
+            state.addingEventComment = false
+            state.error = action.payload
         }
     }
 })
@@ -68,6 +123,12 @@ export const {
     addParkCommentStart,
     addParkCommentSuccessful,
     addParkCommentFailure,
+    fetchEventCommentsStart,
+    fetchEventCommentsSuccessful,
+    fetchEventCommentsFailure,
+    addEventCommentStart,
+    addEventCommentSuccessful,
+    addEventCommentFailure,
 } = commentSlice.actions
 
 export default commentSlice.reducer
@@ -89,6 +150,26 @@ export const addParkComment = (newComment) => async dispatch => {
         dispatch(addParkCommentSuccessful(successfulNewComment))
     } catch (error) {
         dispatch(addParkCommentFailure(error.toString()))
+    }
+}
+
+export const fetchEventComments = () => async dispatch => {
+    try {
+        dispatch(fetchEventCommentsStart())
+        const eventComments = await CommentService.getEventComments()
+        dispatch(fetchEventCommentsSuccessful(eventComments))
+    } catch (error) {
+        dispatch(fetchEventCommentsFailure(error.toString()))
+    }
+}
+
+export const addEventComment = (newComment) => async dispatch => {
+    try {
+        dispatch(addEventCommentStart())
+        const successfulNewComment = await CommentService.addEventComment(newComment)
+        dispatch(addEventCommentSuccessful(successfulNewComment))
+    } catch (error) {
+        dispatch(addEventCommentFailure(error.toString()))
     }
 }
 

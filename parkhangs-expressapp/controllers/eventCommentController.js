@@ -27,16 +27,14 @@ const getEventComments = async (req, res) => {
 const addEventComment = async (req, res) => {
     var {
         eventId,
-        eventCommentId,
         comment
     } = req.body
     var newEventComment = {
         eventId: eventId ? eventId : null,
-        eventCommentId: eventCommentId ? eventCommentId : null,
         comment: comment ? comment : null
     }
 
-    if (newEventComment.eventId === null || newEventComment.eventCommentId === null || newEventComment.comment === null) {
+    if (newEventComment.eventId === null || newEventComment.comment === null) {
         return res.status(400).json({success: false, error: `Missing one or more fields`})
     }
 

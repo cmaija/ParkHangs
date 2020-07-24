@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { deleteEvent } from 'features/events/eventsSlice'
 import { cloneDeep } from 'lodash'
 import EventForm from 'components/EventForm'
+import CommentForm from 'components/CommentForm'
+import { fetchEventComments } from 'features/comments/commentSlice'
 
 class ModalEventDetail extends React.Component {
 
@@ -74,9 +76,44 @@ class ModalEventDetail extends React.Component {
         )
     }
 
+    getCommentsByEvent = () => {
+      console.log(this.props.comments)
+      let res = this.props.comments[this.props.eventId]
+      if (res === undefined) {
+          //no comments for that park, return empty array
+          return [];
+        } else {
+          return res; //filtered array
+        }
+      };
+
     commentsTab = (event) => {
         return (
-            <div> comments </div>
+            <div className="Section">
+              <div className="EventComments">
+                <div>
+                  <span className="SectionTitle">Event Comments</span>
+                  { this.getCommentsByEvent().map((comment) => {
+                    return <table>
+                      <tbody>
+                        <tr key={comment._id}>
+                          <td>{comment.comment}</td>
+                          <td>
+                            <button onClick={() => {
+                                this.props.deleteEventFromPark(event._id, this.props.park._id)
+                              }}>
+                              <b>X</b>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    })
+                  }
+                  <CommentForm eventId={this.props.eventId}/>
+                </div>
+              </div>
+            </div>
         )
     }
 
@@ -129,6 +166,9 @@ class ModalEventDetail extends React.Component {
                                 `${this.state.currentTab === 'comments' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
                                 onClick={() => this.selectTab('comments')}>
                                 <span className="ModalEventDetail-tabName">Comments</span>
+                                <div>
+
+                                </div>
                             </div>
                             <div className={
                                 `${this.state.currentTab === 'edit' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
@@ -157,6 +197,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
     events: state.events.flattenedEvents,
     parks: state.parks.parks,
+    comments: state.comments.commentsByEventId
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalEventDetail);

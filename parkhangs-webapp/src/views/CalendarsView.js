@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import './CalendarsView.css'
 import { fetchParks } from 'features/parks/parksSlice'
 import { fetchEvents } from 'features/events/eventsSlice'
+import { fetchEventComments } from 'features/comments/commentSlice'
 
 class CalendarsView extends Component {
     constructor (props) {
@@ -19,6 +20,7 @@ class CalendarsView extends Component {
             this.props.getAllParks()
         }
         this.props.getAllEvents()
+        this.props.getAllComments()
     }
 
     onSearch = (showAllParks) => {
@@ -55,6 +57,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     getAllParks: () => dispatch(fetchParks()),
     getAllEvents: () => dispatch(fetchEvents()),
+    getAllComments:() => dispatch(fetchEventComments())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);

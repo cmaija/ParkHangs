@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { addParkComment } from 'features/comments/commentSlice'
+import { addParkComment, addEventComment } from 'features/comments/commentSlice'
 import moment from 'moment'
 import './CommentForm.css'
 
@@ -28,17 +28,29 @@ class CommentForm extends React.Component {
         event.preventDefault()
 
         const commentText =  this.state.comment || this.comment()
-        const parkId = this.props.parkId;
 
-        const newComment = {
-          parkId: this.props.parkId,
-          comment: commentText
+        if ("parkId" in this.props) {
+          const parkId = this.props.parkId;
+          const newComment = {
+            parkId: this.props.parkId,
+            comment: commentText
+          }
+          this.props.addParkComment(newComment)
+          this.setState({
+              comments: ''
+            })
+          } else if ("eventId" in this.props){
+            const eventId = this.props.eventId;
+            const newComment = {
+              eventId: this.props.eventId,
+              comment: commentText
+            }
+            this.props.addEventComment(newComment)
+            this.setState({
+                comments: ''
+              })
+          }
         }
-        this.props.addParkComment(newComment)
-        this.setState({
-            comments: ''
-        })
-    }
 
     render() {
         const comment = this.comment();
@@ -66,6 +78,7 @@ class CommentForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     addParkComment: (newComment) => dispatch(addParkComment(newComment)),
+    addEventComment: (newComment) => dispatch(addEventComment(newComment))
 })
 
 export default connect(null, mapDispatchToProps)(CommentForm);
