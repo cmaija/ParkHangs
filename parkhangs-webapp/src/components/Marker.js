@@ -15,7 +15,7 @@ class Marker extends Component {
 
     handleSelect = (park) => {
         const modalProps = {
-            component: 'ModalMapDetail',
+            component: 'ModalParkDetail',
             componentParams: {
                 park,
             }

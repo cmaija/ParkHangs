@@ -2,9 +2,6 @@ const Park = require('../models/ParkModel');
 
 const express = require('express');
 const Request = require("request");
-const {
-    updateEvent,
-    deleteEvent } = require('./eventController')
 
 const getParks = async (req, res) => {
 
@@ -28,7 +25,5 @@ const getParks = async (req, res) => {
 };
 
 module.exports = {
-    getParks,
-    updateEvent,
-    deleteEvent,
+    getParks
 };
