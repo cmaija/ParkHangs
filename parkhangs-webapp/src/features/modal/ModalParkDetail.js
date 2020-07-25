@@ -23,12 +23,6 @@ class ModalParkDetail extends React.Component {
 
     }
 
-  componentDidMount = () => {
-    console.log(this.props.park._id)
-    console.log(this.props.comments[this.props.park._id])
-  }
-
-
     getEventsByPark = () => {
         let res= this.props.events[this.props.park._id]
         if (res === undefined) {

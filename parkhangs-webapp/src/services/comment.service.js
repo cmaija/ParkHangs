@@ -44,7 +44,6 @@ const CommentService = {
     deleteParkComment: async function (parkCommentId) {
         const url = `/parkComments/${parkCommentId}`
         try {
-            console.log(parkCommentId)
             const response = await ApiService.delete(url)
             return response.data.data
         } catch (error) {
