@@ -18,6 +18,7 @@ router.get('/parks/:parkId', parkController.getParkById);
 router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);
 router.get('/events', eventController.getEvents);
+router.get('/events/:eventId', eventController.getEventById)
 router.post('/events', eventController.addEvent);
 
 router.get('/user/:email', userController.getUser);

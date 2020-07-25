@@ -3,7 +3,7 @@ import ApiService from 'services/api.service'
 const UserService = {
 
     getUser: async function (email) {
-        const url = `/user/${email}`;
+        const url = `/user/${email}`
         try {
             const response = await ApiService.get(url);
             return response.data.data
@@ -13,8 +13,7 @@ const UserService = {
     },
 
     addUser: async function (user) {
-
-        const url = `/user`;
+        const url = `/user`
         try {
             const response = await ApiService.post(url, user);
             return response.data.newUser
@@ -24,8 +23,7 @@ const UserService = {
     },
 
     updateUser: async function (userId, updatedUserParam) {
-
-        const url = `/user/${userId}`;
+        const url = `/user/${userId}`
 
         try {
             const response = await ApiService.patch(url, updatedUserParam);

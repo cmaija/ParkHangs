@@ -10,6 +10,7 @@ const User = new Schema(
         googleImageURL: {type: String, required: true},
         //accessToken: {type: String, required: true},  // // TODO: could be use for Google Calendar integration
         savedParks: {type: Array, required: true},
+        savedEvents: {type: Array, required: true}
         // Vancouver Park API parkId, not the ObjectId from Mongoose. initially empty
     },
 );
