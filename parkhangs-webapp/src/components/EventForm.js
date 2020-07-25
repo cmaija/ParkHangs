@@ -1,13 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {
     addEvent,
-    updateEvent } from 'features/events/eventsSlice'
+    updateEvent
+} from 'features/events/eventsSlice'
 import TimePicker from 'react-time-picker'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
+import { closeModal } from 'features/modal/modalSlice';
 
 class EventForm extends React.Component {
 
@@ -100,7 +102,7 @@ class EventForm extends React.Component {
         this.setState({eventDate: date})
     }
 
-    handleAddEvent = (event, parkId) => {
+    handleAddEvent = (event) => {
         event.preventDefault()
 
         const eventStartTimestamp = moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
@@ -111,31 +113,39 @@ class EventForm extends React.Component {
             eventEndDateTime = moment(`${this.parsedEventEndTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
         }
 
-        const detail =  this.state.eventDetail || this.eventDetail()
+        const detail = this.state.eventDetail || this.eventDetail()
         const eventDateTime = eventStartTimestamp
 
         if (!this.props.eventId) {
+
             const newEvent = {
                 parkId: this.state.parkId,
                 details: detail,
-                eventDateTime,
-                eventEndDateTime,
+                eventDateTime: eventDateTime,
+                eventEndDateTime: eventEndDateTime,
             }
-            this.props.addOneEvent(newEvent)
-        }
 
-        else {
+            this.props.addOneEvent(this.props.user, newEvent)
+        } else {
             const updatedEvent = {
                 eventId: this.props.eventId,
                 details: detail,
-                eventDateTime,
-                eventEndDateTime,
+                eventDateTime: eventDateTime,
+                eventEndDateTime: eventEndDateTime,
             }
             this.props.updateEvent(updatedEvent)
+
         }
+
+        this.props.closeModal();
     }
+
     handleUpdateSelectedPark = (event) => {
-        this.setState({parkId: event.target.value})
+
+        this.setState({
+            parkId: event.target.value
+        });
+
     }
 
     render() {
@@ -205,12 +215,14 @@ class EventForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addOneEvent: (newEvent) => dispatch(addEvent(newEvent)),
-    updateEvent: (updatedEvent) => dispatch(updateEvent(updatedEvent))
+    addOneEvent: (user, newEvent) => dispatch(addEvent(user, newEvent)),
+    updateEvent: (updatedEvent) => dispatch(updateEvent(updatedEvent)),
+    closeModal: () => dispatch(closeModal(false)),
 })
 
 const mapStateToProps = (state) => ({
-    parks: state.parks.parks
+    parks: state.parks.parks,
+    user: state.user.user
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventForm);
