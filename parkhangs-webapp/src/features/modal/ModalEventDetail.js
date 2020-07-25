@@ -272,7 +272,7 @@ const mapStateToProps = (state) => ({
     events: state.events.flattenedEvents,
     updatingEvent: state.events.updatingEvent,
     parks: state.parks.parks,
-    comments: state.comments.commentsByEventId
+    comments: state.comments.commentsByEventId,
     user: state.user.user
 })
 

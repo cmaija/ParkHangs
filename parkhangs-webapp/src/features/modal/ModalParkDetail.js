@@ -9,8 +9,8 @@ import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
 import AddToCalendar from 'react-add-to-calendar';
-import { addRating } from 'features/parks/parksSlice',
-import ShareCalendar from 'components/ShareCalendar'
+import { addRating } from 'features/parks/parksSlice';
+import ShareCalendar from 'components/ShareCalendar';
 
 
 class ModalParkDetail extends React.Component {
