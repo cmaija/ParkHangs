@@ -1,5 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import UserService from 'services/user.service'
+import { updateParkById } from 'features/parks/parksSlice'
 
 // import EventService from 'services/event.service'
 
@@ -193,11 +194,8 @@ export const editUsername = (userId, username) => async (dispatch) => {
 };
 
 export const toggleSavedPark = (user, parkId) => async (dispatch) => {
-
     try {
-
         dispatch(updateUserStart());
-
         let newSavedParkArray = [...user.savedParks]; //copies original array to a local variable
 
         const parkIsAlreadySaved = newSavedParkArray.includes(parkId);
@@ -215,6 +213,7 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
         };
 
         const successfulUpdateUser = await UserService.updateUser(user._id, newSaveParksObject);
+        dispatch(updateParkById(parkId))
         dispatch(updateUserSuccessful(successfulUpdateUser));
 
     } catch (error) {
