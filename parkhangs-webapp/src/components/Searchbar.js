@@ -62,8 +62,6 @@ class Searchbar extends React.Component {
 
     render() {
 
-        //TODO: move all styling to CSS or whatever we chose to do
-
         return <form onSubmit={this.handleSearchSubmit}>
             <input placeholder={this.props.placeholder}
                    onChange={this.handleSearchInput}

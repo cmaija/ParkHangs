@@ -30,6 +30,21 @@ class ParksCalendar extends React.Component {
         })
     }
 
+    addNewEvent = (event) => {
+        const start = event.start.getTime()
+        const end = event.end.getTime()
+        const props = {
+            component: 'ModalNewEvent',
+            componentParams: {
+                selectedSlot: {
+                    start,
+                    end,
+                },
+            }
+        }
+        this.props.openModal(props)
+    }
+
     render () {
         let eventsArray
 
@@ -42,10 +57,10 @@ class ParksCalendar extends React.Component {
         eventsArray = eventsArray.map((event) => {
             let transformedEvent = cloneDeep(event)
             transformedEvent.eventDateTime = new Date(parseInt(transformedEvent.eventDateTime) * 1000)
-            if (!!event.eventEndTime) {
-                transformedEvent.eventEndTime = new Date(parseInt(transformedEvent.eventEndTime) * 1000)
+            if (!!event.eventEndDateTime) {
+                transformedEvent.eventEndDateTime = new Date(parseInt(transformedEvent.eventEndDateTime) * 1000)
             } else {
-                const endTime = (parseInt(event.eventDateTime) + 360) * 1000
+                const endTime = (parseInt(event.eventEndDateTime) + 360) * 1000
                 transformedEvent.eventEndDateTime = new Date(endTime)
             }
 
@@ -68,6 +83,8 @@ class ParksCalendar extends React.Component {
                     onSelectEvent={this.openModal}
                     events={eventsArray}
                     views={allViews}
+                    selectable={true}
+                    onSelectSlot={this.addNewEvent}
                 />
             </div>
         )

@@ -27,8 +27,10 @@
     padding: 0;
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .NavLink {
     padding: 0 1rem;
 }
+
