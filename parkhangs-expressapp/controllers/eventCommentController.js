@@ -56,13 +56,13 @@ const addEventComment = async (req, res) => {
 
 // delete a event comment with given id
 const deleteEventComment = async (req, res) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.eventId)) {
+    if (!mongoose.Types.ObjectId.isValid(req.params.eventCommentId)) {
         return res.status(400).json({success: false, error: `The provided id is not valid`})
     }
 
     try {
         eventToDelete = await EventComment.findByIdAndDelete(
-            mongoose.Types.ObjectId(req.params.eventId))
+            mongoose.Types.ObjectId(req.params.eventCommentId))
         return res.status(200).json({success: true, data: eventToDelete})
     } catch (error) {
         return res.status(404).json({success: false, error: `Could not find and delete the event comment with that id`})

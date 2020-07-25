@@ -18,9 +18,9 @@ router.get('/events', eventController.getEvents);
 router.post('/events', eventController.addEvent);
 router.get('/parkComments', parkCommentController.getParkComments);
 router.post('/parkComments', parkCommentController.addParkComment);
-router.delete('/parkComments', parkCommentController.deleteParkComment);
+router.delete('/parkComments/:parkCommentId', parkCommentController.deleteParkComment);
 router.get('/eventComments', eventCommentController.getEventComments);
 router.post('/eventComments', eventCommentController.addEventComment);
-router.delete('/eventComments', eventCommentController.deleteEventComment);
+router.delete('/eventComments/:eventCommentId', eventCommentController.deleteEventComment);
 
 module.exports = router;

@@ -8,7 +8,7 @@ import 'features/modal/ModalMapDetail.css'
 import {unwrapResult} from '@reduxjs/toolkit'
 import moment from 'moment'
 import CommentForm from 'components/CommentForm'
-import { fetchParkComments } from 'features/comments/commentSlice'
+import { fetchParkComments, deleteParkComment } from 'features/comments/commentSlice'
 
 class ModalMapDetail extends React.Component {
 
@@ -70,7 +70,7 @@ class ModalMapDetail extends React.Component {
                                 <td>{comment.comment}</td>
                                 <td>
                                   <button onClick={() => {
-                                      this.props.deleteEventFromPark(event._id, this.props.park._id)
+                                      this.props.deleteCommentFromPark(comment._id, this.props.park._id)
                                     }}>
                                     <b>X</b>
                                   </button>
@@ -217,6 +217,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
+    deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalMapDetail);

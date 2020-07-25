@@ -10,6 +10,8 @@ const commentSlice = createSlice({
         flatennedEventsComments: [],
         loadingParkComments: true,
         loadingEventComments: false,
+        deletingParkComment: false,
+        deletingEventComment: false,
         addingComment: false,
         error : null
     },
@@ -82,7 +84,6 @@ const commentSlice = createSlice({
                 else {
                     acc[eventId] = [comment]
                 }
-                console.log(acc)
                 return acc
             }, {})
             state.commentsByEventId = parsedComments
@@ -112,7 +113,46 @@ const commentSlice = createSlice({
         addEventCommentFailure (state, action) {
             state.addingEventComment = false
             state.error = action.payload
+        },
+
+        deleteParkCommentStart (state, action) {
+          console.log("hello")
+            state.deletingParkComment = true
+            state.error = null
+        },
+
+        deleteParkCommentSuccessful (state, action) {
+            const { _id, parkId } = action.payload
+            const newCommentArray = state.commentsByParkId[parkId].filter(comment => comment._id !== _id)
+            console.log(newCommentArray)
+            state.commentsByParkId[parkId] = newCommentArray
+            state.deletingParkComment = false
+            state.error = null
+        },
+
+        deleteParkCommentFailure (state, action) {
+            state.deletingParkComment = true
+            state.error = action.payload
+        },
+
+        deleteEventCommentStart (state, action) {
+            state.deletingEventComment = true
+            state.error = null
+        },
+
+        deleteEventCommentSuccessful (state, action) {
+            const { _id, eventId } = action.payload
+            const newCommentArray = state.commentsByEventId[eventId].filter(comment => comment._id !== _id)
+            state.commentsByEventId[eventId] = newCommentArray
+            state.deletingEventComment = false
+            state.error = null
+        },
+
+        deleteEventCommentFailure (state, action) {
+            state.deletingEventComment = true
+            state.error = action.payload
         }
+
     }
 })
 
@@ -129,6 +169,12 @@ export const {
     addEventCommentStart,
     addEventCommentSuccessful,
     addEventCommentFailure,
+    deleteParkCommentStart,
+    deleteParkCommentSuccessful,
+    deleteParkCommentFailure,
+    deleteEventCommentStart,
+    deleteEventCommentSuccessful,
+    deleteEventCommentFailure
 } = commentSlice.actions
 
 export default commentSlice.reducer
@@ -173,12 +219,22 @@ export const addEventComment = (newComment) => async dispatch => {
     }
 }
 
-// export const deleteEvent = (eventId, parkId) => async dispatch => {
-//     try {
-//         dispatch(deleteEventStart())
-//         const successfulDeletedEvent = await EventService.deleteEvent(eventId, parkId)
-//         dispatch(deleteEventSuccessful(successfulDeletedEvent))
-//     } catch (error) {
-//         dispatch(deleteEventFailure(error.toString()))
-//     }
-// }
+export const deleteParkComment = (parkCommentId, parkId) => async dispatch => {
+    try {
+        dispatch(deleteParkCommentStart())
+        const successfulDeletedComment = await CommentService.deleteParkComment(parkCommentId)
+        dispatch(deleteParkCommentSuccessful(successfulDeletedComment))
+    } catch (error) {
+        dispatch(deleteParkCommentFailure(error.toString()))
+    }
+}
+
+export const deleteEventComment = (eventCommentId, eventId) => async dispatch => {
+    try {
+        dispatch(deleteEventCommentStart())
+        const successfulDeletedComment = await CommentService.deleteEventComment(eventCommentId)
+        dispatch(deleteEventCommentSuccessful(successfulDeletedComment))
+    } catch (error) {
+        dispatch(deleteEventCommentFailure(error.toString()))
+    }
+}

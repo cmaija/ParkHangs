@@ -6,7 +6,7 @@ import { deleteEvent } from 'features/events/eventsSlice'
 import { cloneDeep } from 'lodash'
 import EventForm from 'components/EventForm'
 import CommentForm from 'components/CommentForm'
-import { fetchEventComments } from 'features/comments/commentSlice'
+import { fetchEventComments, deleteEventComment } from 'features/comments/commentSlice'
 
 class ModalEventDetail extends React.Component {
 
@@ -100,7 +100,7 @@ class ModalEventDetail extends React.Component {
                           <td>{comment.comment}</td>
                           <td>
                             <button onClick={() => {
-                                this.props.deleteEventFromPark(event._id, this.props.park._id)
+                                this.props.deleteCommentFromEvent(comment._id, this.props.eventId)
                               }}>
                               <b>X</b>
                             </button>
@@ -191,7 +191,8 @@ class ModalEventDetail extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId))
+    deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
+    deleteCommentFromEvent: (eventCommentId, eventId) => dispatch(deleteEventComment(eventCommentId, eventId))
 })
 
 const mapStateToProps = (state) => ({

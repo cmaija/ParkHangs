@@ -41,8 +41,19 @@ const CommentService = {
         }
     },
 
-    deleteEvent: async function (parkCommentId) {
-        const url = `/eventComments/${parkCommentId}`
+    deleteParkComment: async function (parkCommentId) {
+        const url = `/parkComments/${parkCommentId}`
+        try {
+            console.log(parkCommentId)
+            const response = await ApiService.delete(url)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
+
+    deleteEventComment: async function (eventCommentId) {
+        const url = `/eventComments/${eventCommentId}`
         try {
             const response = await ApiService.delete(url)
             return response.data.data
