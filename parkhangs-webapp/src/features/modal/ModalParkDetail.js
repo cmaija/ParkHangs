@@ -6,7 +6,6 @@ import moment from 'moment'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
-import AddToCalendar from 'react-add-to-calendar';
 import ShareCalendar from 'components/ShareCalendar'
 
 
@@ -41,10 +40,15 @@ class ModalParkDetail extends React.Component {
     getSavedParkIcon = () => {
         if (this.props.user != null) {
             if (this.props.user.savedParks.includes(this.props.park._id)) {
-                return <img className="FilledHeartIcon" src={FilledHeartIcon}
+                return <img
+                            alt="filled heart"
+                            className="FilledHeartIcon"
+                            src={FilledHeartIcon}
                             onClick={this.toggleFavouritePark}/>
             } else {
-                return <img className="NotFillHeartIcon" src={NoFilledHeartIcon}
+                return <img
+                            alt="unfilled heart"
+                            className="NotFillHeartIcon" src={NoFilledHeartIcon}
                             onClick={this.toggleFavouritePark}/>
             }
         }
@@ -185,7 +189,7 @@ class ModalParkDetail extends React.Component {
                                                     </button>
                                                 </td>
                                                 <td>
-                                                   <button id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                                                   <button id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                                                 </td>
                                             </tr>
                                         })

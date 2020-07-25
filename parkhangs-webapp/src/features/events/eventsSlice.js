@@ -97,6 +97,33 @@ const eventSlice = createSlice({
             state.error = action.payload
         },
 
+        updateEventByIdStart (state, action) {
+            state.updatingEvent = true
+            state.error = null
+        },
+
+        updateEventByIdSuccessful (state, action) {
+            const updatedEvent = action.payload
+            const parkId = updatedEvent.parkId
+            const eventId = updatedEvent._id
+
+            const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== eventId)
+            newEventArray.push(updatedEvent)
+            state.eventsByParkId[parkId] = newEventArray
+
+            const newFlattenedEventArray = state.flattenedEvents.filter(event => event._id !== eventId)
+            newFlattenedEventArray.push(updatedEvent)
+            state.flattenedEvents = newFlattenedEventArray
+
+            state.updatingEvent = false
+            state.error = null
+        },
+
+        updateEventByIdFailure (state, action) {
+            state.updatingEvent = false
+            state.error = action.payload
+        },
+
         deleteEventStart (state, action) {
             state.deletingEvent = true
             state.error = null
@@ -132,6 +159,9 @@ export const {
     updateEventStart,
     updateEventSuccessful,
     updateEventFailure,
+    updateEventByIdStart,
+    updateEventByIdSuccessful,
+    updateEventByIdFailure,
     deleteEventStart,
     deleteEventSuccessful,
     deleteEventFailure,
@@ -166,6 +196,16 @@ export const updateEvent = (updatedEvent) => async dispatch => {
         dispatch(updateEventSuccessful(successfulUpdatedEvent))
     } catch (error) {
         dispatch(updateEventFailure(error.toString()))
+    }
+}
+
+export const updateEventById = (eventId) => async dispatch => {
+    try {
+        dispatch(updateEventByIdStart())
+        const event = await EventService.getEventById(eventId)
+        dispatch(updateEventByIdSuccessful(event))
+    } catch (error) {
+        dispatch(updateEventByIdFailure(error.toString()))
     }
 }
 

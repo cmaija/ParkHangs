@@ -1,4 +1,4 @@
-const EventComment = require('../models/eventCommentModel');
+const EventComment = require('../models/EventCommentModel');
 const express = require('express');
 const Request = require("request");
 var assert = require('assert');
