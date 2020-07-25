@@ -119,7 +119,6 @@ class ModalEventDetail extends React.Component {
     }
 
     getCommentsByEvent = () => {
-      console.log(this.props.comments)
       let res = this.props.comments[this.props.eventId]
       if (res === undefined) {
           //no comments for that park, return empty array
@@ -133,7 +132,6 @@ class ModalEventDetail extends React.Component {
         return (
             <div className="Section">
               <div className="EventComments">
-                <div>
                   <span className="SectionTitle">Event Comments</span>
                   { this.getCommentsByEvent().map((comment) => {
                     return <table>
@@ -155,7 +153,6 @@ class ModalEventDetail extends React.Component {
                   <CommentForm eventId={this.props.eventId}/>
                 </div>
               </div>
-            </div>
         )
     }
 

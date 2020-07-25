@@ -275,7 +275,6 @@ const mapStateToProps = (state) => {
         user: state.user.user,
         parks: state.parks.parks,
         comments: state.comments.commentsByParkId,
-        user: state.user.user
     }
 };
 
