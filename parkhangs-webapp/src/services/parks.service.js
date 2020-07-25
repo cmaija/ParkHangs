@@ -19,6 +19,16 @@ const ParkService = {
         } catch (error) {
             throw new Error(error.response)
         }
+    },
+
+    getParkById: async function (id) {
+        const url = `/parks/${id}/`
+        try {
+            const response = await ApiService.get(url)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
     }
 }
 

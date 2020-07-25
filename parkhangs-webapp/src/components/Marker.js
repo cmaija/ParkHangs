@@ -18,6 +18,7 @@ class Marker extends Component {
             component: 'ModalParkDetail',
             componentParams: {
                 park,
+                parkId: park._id
             }
         };
 
@@ -32,7 +33,7 @@ class Marker extends Component {
                     this.handleSelect(this.props.park)
                 }}
                 >
-                  <img alt="map-marker" src={MarkerIcon}/>   
+                  <img alt="map-marker" src={MarkerIcon}/>
                 </div>
             </div>
         );

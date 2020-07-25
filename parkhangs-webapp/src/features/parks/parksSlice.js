@@ -51,6 +51,26 @@ const parksSlice = createSlice({
                 return park.name.toLowerCase().includes(query.toLowerCase())
             })
         },
+
+        updateParkByIdStart (state, action) {
+            state.loadingParks = true
+            state.error = null
+        },
+
+        updateParkByIdSuccessful (state, action) {
+            const newPark = action.payload
+            let newParksList = state.parks.filter(park => park._id !== newPark._id)
+
+            newParksList.push(newPark)
+            state.parks = newParksList
+            state.loadingParks = false
+            state.error = null
+        },
+
+        updateParkByIdFailure (state, action) {
+            state.loadingParks = false
+            state.error = action.payload
+        }
     },
 
     extraReducers: {
@@ -86,9 +106,22 @@ export const {
     fetchParksSuccessful,
     fetchParksFailure,
     filterParks,
+    updateParkByIdStart,
+    updateParkByIdSuccessful,
+    updateParkByIdFailure,
 } = parksSlice.actions
 
 export default parksSlice.reducer
+
+export const updateParkById = (parkId) => async dispatch => {
+    try {
+        dispatch(updateParkByIdStart())
+        const park = await ParkService.getParkById(parkId)
+        dispatch(updateParkByIdSuccessful(park))
+    } catch (error) {
+        dispatch(updateParkByIdFailure(error.toString()))
+    }
+}
 
 export const fetchParks = () => async dispatch => {
     try {
