@@ -22,12 +22,9 @@ const commentSlice = createSlice({
         },
 
         fetchParkCommentsSuccessful (state, action) {
-          // if (Object.keys(state.commentsByParkId).length !== 0) {
-          //   state.commentsByParkId = {};
-          // }
-            const events = action.payload
+            const comments = action.payload
             state.flattenedParkComments = action.payload
-            const parsedComments = events.reduce(function (acc, comment) {
+            const parsedComments = comments.reduce(function (acc, comment) {
                 const parkId = comment.parkId.toString()
                 const hasSeenParkSoFar = !!acc[parkId]
                 if (hasSeenParkSoFar) {
@@ -116,7 +113,6 @@ const commentSlice = createSlice({
         },
 
         deleteParkCommentStart (state, action) {
-          console.log("hello")
             state.deletingParkComment = true
             state.error = null
         },
@@ -124,7 +120,6 @@ const commentSlice = createSlice({
         deleteParkCommentSuccessful (state, action) {
             const { _id, parkId } = action.payload
             const newCommentArray = state.commentsByParkId[parkId].filter(comment => comment._id !== _id)
-            console.log(newCommentArray)
             state.commentsByParkId[parkId] = newCommentArray
             state.deletingParkComment = false
             state.error = null

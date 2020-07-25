@@ -5,7 +5,6 @@ var assert = require('assert');
 var mongoose = require('mongoose');
 const database = require('../database/index');
 const moment = require('moment');
-// var { uuid } = require('uuidv4');
 
 var router = express.Router();
 router.use(express.json())
@@ -59,7 +58,6 @@ const deleteParkComment = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.parkCommentId)) {
         return res.status(400).json({success: false, error: `The provided id is not valid`})
     }
-    console.log(req.params.parkCommentId)
     try {
         commentToDelete = await ParkComment.findByIdAndDelete(
             mongoose.Types.ObjectId(req.params.parkCommentId))

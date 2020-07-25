@@ -5,7 +5,6 @@ var assert = require('assert');
 var mongoose = require('mongoose');
 const database = require('../database/index');
 const moment = require('moment');
-// var { uuid } = require('uuidv4');
 
 var router = express.Router();
 router.use(express.json())

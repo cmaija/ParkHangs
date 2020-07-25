@@ -14,7 +14,6 @@ router.use(express.json())
 //PLACE ROUTES HERE!
 router.get('/parks', parkController.getParks);
 router.get('/parks/:parkId', parkController.getParkById);
-// router.patch('/parks:parkId', eventController.addRating);
 
 router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);

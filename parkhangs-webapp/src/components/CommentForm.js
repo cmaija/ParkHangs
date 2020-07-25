@@ -39,7 +39,7 @@ class CommentForm extends React.Component {
           this.setState({
               comments: ''
             })
-          } else if ("eventId" in this.props){
+          } else if ("eventId" in this.props) {
             const eventId = this.props.eventId;
             const newComment = {
               eventId: this.props.eventId,
