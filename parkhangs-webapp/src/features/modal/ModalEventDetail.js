@@ -5,10 +5,11 @@ import { connect } from 'react-redux'
 import { deleteEvent } from 'features/events/eventsSlice'
 import { toggleSavedEvent } from 'features/users/userSlice'
 import { closeModal } from 'features/modal/modalSlice'
-import { cloneDeep } from 'lodash'
 import EventForm from 'components/EventForm'
 import LoadingSpinner from 'components/LoadingSpinner'
 import ShareCalendar from 'components/ShareCalendar'
+import FilledHeartIcon from 'assets/icons/heart-filled.svg'
+import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 
 class ModalEventDetail extends React.Component {
 
@@ -65,8 +66,14 @@ class ModalEventDetail extends React.Component {
     }
 
     favouriteEvent = (eventId) => {
-        console.log(eventId)
         this.props.saveEvent(this.props.user, eventId)
+    }
+
+    isFavorited = (event) => {
+        if (this.props.user) {
+            return this.props.user.savedEvents && this.props.user.savedEvents.includes(event._id)
+        }
+        return false
     }
 
     getCreatedTime = (date) => {
@@ -78,11 +85,24 @@ class ModalEventDetail extends React.Component {
         return formattedDate.replace("+00:00", "Z");
     }
 
+    favoritedEventIcon = (isFavorited) => {
+        if (isFavorited) {
+            return <img
+                        alt="filled heart"
+                        className="filledHeart"
+                        src={FilledHeartIcon} />
+        }
+        return <img
+                    alt="empty heart"
+                    className="emptyHeart"
+                    src={NoFilledHeartIcon} />
+    }
+
     descriptionTab = (event, formattedStart, formattedEnd) => {
         return (
             <div className="ModalEventDetail-description">
                 <div className="ModalEventDetail-description-section">
-                    <span>{event.favorites || 0} people have favorited this event</span>
+                    <span>{event.favoritesCount || 0} people have favorited this event</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span>{`${formattedStart} to ${formattedEnd}`}</span>
@@ -129,6 +149,7 @@ class ModalEventDetail extends React.Component {
         const formattedEnd = this.eventEndTime(event.eventEndDateTime)
         const parkStrNum = this.props.parks.find(park => park._id === event.parkId).streetNumber
         const parkStrName = this.props.parks.find(park => park._id === event.parkId).streetName
+        const isFavorited = this.isFavorited(event)
 
         let newEvent = {
             title: event.details,
@@ -137,6 +158,8 @@ class ModalEventDetail extends React.Component {
             startTime: this.getExportedTime(event.eventDateTime),
             endTime:  this.getExportedTime(event.eventEndDateTime)
         }
+
+        const favoritedEventIcon = this.favoritedEventIcon(isFavorited)
 
         let currentTab
 
@@ -179,9 +202,13 @@ class ModalEventDetail extends React.Component {
                                 this.props.user != null &&
                                 <button
                                     onClick={() => this.favouriteEvent(event._id)}
-                                    className="ModalEventDetail-actionButton">Favourite</button>
+                                    className="ModalEventDetail-actionButton">
+                                    {
+                                        favoritedEventIcon
+                                    }
+                                </button>
                             }
-                            <button className="ModalEventDetail-actionButton" id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                            <button className="ModalEventDetail-actionButton" id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                             <button
                                 className="ModalEventDetail-actionButton"
                                 onClick={() => this.deleteEvent(event.parkId)}>Delete</button>
@@ -199,7 +226,7 @@ class ModalEventDetail extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
-    saveEvent: (eventId) => dispatch(toggleSavedEvent(eventId)),
+    saveEvent: (user, eventId) => dispatch(toggleSavedEvent(user, eventId)),
     closeModal: () => dispatch(closeModal())
 })
 

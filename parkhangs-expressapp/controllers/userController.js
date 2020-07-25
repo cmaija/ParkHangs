@@ -111,9 +111,11 @@ const updateUser = async (req, res) => {
                 console.log('unable to update event favorite count')
                 return res.status(404).json({
                     error,
-                    message: `unable to update event with id:${body.savedEvents} favourite count`
+                    message: `unable to update event with ids:${body.savedEvents} favourite count`
                 })
             }
+
+            user.savedEvents = body.savedEvents
         }
 
         user.save()
@@ -174,21 +176,27 @@ async function saveEvents (savedEvents, newSavedEvents) {
     const eventsToFavorite = []
     const eventsToUnFavorite = []
 
-    for (event of savedEvents) {
+    let userEvents = savedEvents
+
+    if (!userEvents || userEvents.langth > 0) {
+        userEvents = []
+    }
+
+    for (event of userEvents) {
         if (!newSavedEvents.includes(event)) {
             eventsToUnFavorite.push(event)
         }
     }
 
     for (event of newSavedEvents) {
-        if (!savedEvents.includes(event)) {
+        if (!userEvents.includes(event)) {
             eventsToFavorite.push(event)
         }
     }
 
     for (event of eventsToFavorite) {
         const favoritedEvent = await Event.findOne({_id: event})
-        if (!favoritedEvent.favoritesCount || likedPark.favoritesCount === 0) {
+        if (!favoritedEvent.favoritesCount || favoritedEvent.favoritesCount === 0) {
             favoritedEvent.favoritesCount = 0
         }
         favoritedEvent.favoritesCount += 1

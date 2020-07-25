@@ -76,8 +76,6 @@ const parksSlice = createSlice({
     extraReducers: {
         [fetchEventsById.fulfilled]: (state, action) => {
             //action should return endpoint's call's events
-
-            const { requestId } = action.meta
             //In the case of no Events; no errors thrown but want to empty array
             state.eventsById = [];
 

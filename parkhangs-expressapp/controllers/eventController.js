@@ -32,10 +32,10 @@ const getEvents = async (req, res) => {
 const getEventById = async (req, res) => {
     const eventId = req.params.eventId
     try {
-        await Event.findOne({_id: eventId})
+        const event = await Event.findOne({_id: eventId})
         return res.status(200).json({
             success: true,
-            data: events})
+            data: event})
     } catch (error) {
         return res
             .status(404)

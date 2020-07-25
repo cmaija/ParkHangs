@@ -103,3 +103,10 @@
     padding: 0.1rem
 }
 
+.filledHeart {
+    height: 1rem;
+}
+
+.emptyHeart {
+    height: 1rem;
+}

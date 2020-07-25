@@ -223,10 +223,12 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
 
 
 export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
-    console.log('saving event')
     try {
         dispatch(updateUserStart())
-        let newSavedEventArray = [...user.savedEvents]
+        let newSavedEventArray = []
+        if (user.savedEvents) {
+            newSavedEventArray = [...user.savedEvents]
+        }
 
         const eventIsAlreadySaved = newSavedEventArray.includes(eventId)
 
@@ -241,7 +243,6 @@ export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
         }
 
         const successfulUpdateUser = await UserService.updateUser(user._id, newSavedEventsObject)
-        console.log('wtf lol')
         dispatch(updateEventById(eventId))
         dispatch(updateUserSuccessful(successfulUpdateUser));
 
