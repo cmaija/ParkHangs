@@ -38,6 +38,9 @@ const addRating = async (req, res) => {
         return res.status(200).json({success: true, data: newEvent})
     } catch (error) {
         return res.status(404).json({success: false, error: 'Could not add rating'})
+      }
+    }
+
 const getParkById = async (req, res) => {
     const parkId = req.params.parkId
     try {

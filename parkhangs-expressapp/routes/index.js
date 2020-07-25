@@ -13,13 +13,13 @@ router.use(express.json())
 
 //PLACE ROUTES HERE!
 router.get('/parks', parkController.getParks);
-router.get('/parks/:parkId', parkController.getParkById)
+router.get('/parks/:parkId', parkController.getParkById);
+// router.patch('/parks:parkId', eventController.addRating);
 
 router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);
 router.get('/events', eventController.getEvents);
 router.post('/events', eventController.addEvent);
-router.patch('/parks', eventController.addRating);
 
 router.get('/user/:email', userController.getUser);
 router.patch('/user/:userId', userController.updateUser);
