@@ -21,7 +21,9 @@ class SimpleMap extends Component {
                 <GoogleMapReact bootstrapURLKeys={{key: process.env.REACT_APP_MAP_API_KEY}}
                                 defaultCenter={this.props.center}
                                 defaultZoom={this.props.zoom}>
-                    {this.props.parks.map((park) => {
+                    {
+                        this.props.parks && this.props.parks.length > 0 &&
+                        this.props.parks.map((park) => {
                             return <Marker key={park._id} park={park}
                                            lat={park.googleMapsLatLon[0]}
                                            lng={park.googleMapsLatLon[1]}/>

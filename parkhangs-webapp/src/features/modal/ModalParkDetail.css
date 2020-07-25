@@ -57,7 +57,7 @@
     justify-content: space-between;
 }
 
-.EventTable {
+.EventTable{
     max-height: 19rem;
     overflow: scroll
 }
@@ -77,4 +77,13 @@
     height: 1.875rem;
     width: 1.875rem;
     padding: 0.625rem;
+}
+
+#ShareCalendar * {
+    list-style: none;
+    margin: 0;
+    text-align: initial;
+    font-weight: lighter;
+    text-decoration: none;
+    padding: 0.1rem;
 }

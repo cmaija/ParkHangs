@@ -1,4 +1,6 @@
 const User = require('../models/UserModel');
+const Park = require('../models/ParkModel')
+const lodash = require('lodash')
 
 const express = require('express');
 const Request = require("request");
@@ -70,7 +72,7 @@ const updateUser = async (req, res) => {
         })
     }
 
-    await User.findOne({_id: req.params.userId}, (err, user) => {
+    await User.findOne({_id: req.params.userId}, async (err, user)  => {
 
         if (err) {
             return res.status(404).json({
@@ -86,7 +88,18 @@ const updateUser = async (req, res) => {
         }
 
         if (body.savedParks !== undefined) {
-            user.savedParks = body.savedParks;
+            try {
+                await savePark(user.savedParks, body.savedParks)
+            } catch (error) {
+                console.error(error.message)
+                console.log("unable to update park favourite count")
+                return res.status(404).json({
+                    error,
+                    message: `unable to update park with id:${body.savedparks} favourite count`
+                })
+            }
+
+            user.savedParks = body.savedParks
         }
 
         user.save()
@@ -105,6 +118,43 @@ const updateUser = async (req, res) => {
     })
 
 };
+
+async function savePark (savedParks, newSavedParks) {
+    const parksToUnFavorite = []
+    const parksToFavorite = []
+
+    for (park of savedParks) {
+        if (!newSavedParks.includes(park)) {
+            parksToUnFavorite.push(park)
+        }
+    }
+
+    for (park of newSavedParks) {
+        if (!savedParks.includes(park)) {
+            parksToFavorite.push(park)
+        }
+    }
+
+    for (park of parksToFavorite) {
+        const likedPark = await Park.findOne({_id: park})
+        if (!likedPark.favoritesCount || likedPark.favoritesCount === 0) {
+            likedPark.favoritesCount = 0
+        }
+        likedPark.favoritesCount += 1
+        await likedPark.save()
+    }
+
+    for (park of parksToUnFavorite) {
+        const likedPark = await Park.findOne({_id: park})
+        if (!!likedPark.favoritesCount && likedPark.favoritesCount !== 0) {
+            likedPark.favoritesCount -= 1
+        }
+
+        await likedPark.save()
+    }
+
+    return
+}
 
 module.exports = {
     addUser,

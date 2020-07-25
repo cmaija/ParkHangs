@@ -7,9 +7,10 @@ import CommentForm from 'components/CommentForm'
 import { fetchParkComments, deleteParkComment } from 'features/comments/commentSlice'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
-import {toggleSavedPark} from "features/users/userSlice";
+import { toggleSavedPark } from "features/users/userSlice";
 import AddToCalendar from 'react-add-to-calendar';
 import { addRating } from 'features/parks/parksSlice'
+import ShareCalendar from 'components/ShareCalendar'
 
 
 class ModalParkDetail extends React.Component {
@@ -62,17 +63,13 @@ class ModalParkDetail extends React.Component {
         return moment.unix(date).format("YYYY/MM/DD hh:MM a");
     }
 
-    toggleFavouritePark() {
-
+    toggleFavouritePark = () => {
         this.props.toggleSavedPark(this.props.user, this.props.park._id);
     }
 
-    getSavedParkIcon() {
-
+    getSavedParkIcon = () => {
         if (this.props.user != null) {
-
             if (this.props.user.savedParks.includes(this.props.park._id)) {
-
                 return <img className="FilledHeartIcon" src={FilledHeartIcon}
                             onClick={this.toggleFavouritePark}/>
             } else {
@@ -96,10 +93,11 @@ class ModalParkDetail extends React.Component {
     }
 
     render() {
+        const park = this.props.parks.find(park => park._id === this.props.parkId)
         return (
             <div className="MarkerDetails">
                 <div className="Title">
-                    {this.props.park.name}
+                    {park.name}
                 </div>
 
                 {this.getSavedParkIcon()}
@@ -135,40 +133,43 @@ class ModalParkDetail extends React.Component {
                         <span className="SectionTitle">Park Details</span>
                         <div className="ParkLocationDetails">
                             <div>
-                                Address: {this.props.park.streetNumber + " " + this.props.park.streetName}
+                                Address: {park.streetNumber + " " + park.streetName}
                             </div>
                             <div>
-                                Lat: {this.props.park.googleMapsLatLon[0]}
+                                Lat: {park.googleMapsLatLon[0]}
                             </div>
                             <div>
-                                Lon: {this.props.park.googleMapsLatLon[1]}
+                                Lon: {park.googleMapsLatLon[1]}
                             </div>
                         </div>
                         <div className="OtherDetails">
                             <div>
-                                Neighbourhood Name: {this.props.park.neighbourhoodName}
+                                Neighbourhood Name: {park.neighbourhoodName}
                             </div>
                             <div>
                                 Neighbourhood website:
                             </div>
-                            <a href={this.props.park.neighbourhoodURL}>{this.props.park.neighbourhoodURL}</a>
+                            <a href={park.neighbourhoodURL}>{park.neighbourhoodURL}</a>
                             <div>
-                                Size (in hectares): {this.props.park.hectares}
+                                Size (in hectares): {park.hectares}
                             </div>
                             <div>
-                                Washrooms available?: {this.props.park.hasWashrooms ? "yes" : "no"}
+                                Washrooms available?: {park.hasWashrooms ? "yes" : "no"}
                             </div>
                             <div>
-                                Facilities available?: {this.props.park.hasFacilities ? "yes" : "no"}
+                                Facilities available?: {park.hasFacilities ? "yes" : "no"}
                             </div>
                             <div>
-                                Park advisories?: {this.props.park.hasAdvisories ? "yes" : "no"}
+                                Park advisories?: {park.hasAdvisories ? "yes" : "no"}
                             </div>
                             <div>
-                                Special Features?: {this.props.park.hasSpecialFeatures ? "yes" : "no"}
+                                Special Features?: {park.hasSpecialFeatures ? "yes" : "no"}
                             </div>
                             <div>
-                                Rating: {this.props.park.rating}
+                                Rating: {park.rating}
+                            </div>
+                            <div>
+                                Number of Favorites: {park.favoritesCount || 0}
                             </div>
                         </div>
                     </div>
@@ -211,7 +212,7 @@ class ModalParkDetail extends React.Component {
                                             let newEvent = {
                                                 title: event.details,
                                                 description: event.details,
-                                                location: this.props.park.name + " BC, Canada",
+                                                location: park.streetNumber + " " + park.streetName + " BC, Canada",
                                                 startTime: this.getExportedTime(event.eventDateTime),
                                                 endTime:  this.getExportedTime(event.eventEndDateTime)
                                             }
@@ -241,13 +242,13 @@ class ModalParkDetail extends React.Component {
                                                 </td>
                                                 <td>
                                                     <button onClick={() => {
-                                                        this.props.deleteEventFromPark(event._id, this.props.park._id)
+                                                        this.props.deleteEventFromPark(event._id, park._id)
                                                     }}>
                                                         <b>X</b>
                                                     </button>
                                                 </td>
                                                 <td>
-                                                   <AddToCalendar event={newEvent}/>
+                                                   <button id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                                                 </td>
                                             </tr>
                                         })
@@ -272,6 +273,8 @@ const mapStateToProps = (state) => {
     return {
         error: state.parks.error,
         events: state.events.eventsByParkId,
+        user: state.user.user,
+        parks: state.parks.parks,
         comments: state.comments.commentsByParkId,
         user: state.user.user
     }

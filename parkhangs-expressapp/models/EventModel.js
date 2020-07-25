@@ -9,7 +9,8 @@ const Event = new Schema(
         eventEndDateTime: {type: String, required: false}, //when it ends/ not required
         createdDateTime: {type: String, required: true}, // when you made this event
         creatorName: {type: String, required: true},
-        creatorId: {type: Number, required: false}
+        creatorId: {type: Number, required: false},
+        favoritesCount: {type: Number, required: false},
     },
 );
 
