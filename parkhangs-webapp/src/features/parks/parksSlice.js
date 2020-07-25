@@ -25,6 +25,7 @@ const parksSlice = createSlice({
         parks: [],
         filteredParks: [],
         loadingParks: true,
+        addingRating: false,
         error : null
     },
     reducers: {
@@ -51,6 +52,28 @@ const parksSlice = createSlice({
                 return park.name.toLowerCase().includes(query.toLowerCase())
             })
         },
+        addRatingStart (state) {
+            state.addingRating = true
+            state.error = null
+        },
+
+        addRatingSuccessful (state, action) {
+            const parkId = action.payload.parkId
+            const rating = action.payload.rating
+            const newParkArray = state.parks.map((park) => {
+              if (park.Id === parkId) {
+                park.ratings.push(rating)
+              }
+            })
+            state.parks = newParkArray
+            state.addingRating = false
+            state.error = null
+        },
+
+        addRatingFailure (state, action) {
+            state.addingRating = false
+            state.error = action.payload
+        }
     },
 
     extraReducers: {
@@ -86,6 +109,9 @@ export const {
     fetchParksSuccessful,
     fetchParksFailure,
     filterParks,
+    addRatingStart,
+    addRatingSuccessful,
+    addRatingFailure
 } = parksSlice.actions
 
 export default parksSlice.reducer
@@ -97,5 +123,15 @@ export const fetchParks = () => async dispatch => {
         dispatch(fetchParksSuccessful(parks))
     } catch (error) {
         dispatch(fetchParksFailure(error.toString()))
+    }
+}
+
+export const addRating = (parkIdAndRating) => async dispatch => {
+    try {
+        dispatch(addRatingStart())
+        const response = await ParkService.addRating(parkIdAndRating)
+        dispatch(addRatingSuccessful(parkIdAndRating))
+    } catch (error) {
+        dispatch(addRatingFailure(error.toString()))
     }
 }

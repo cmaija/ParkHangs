@@ -9,6 +9,7 @@ import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import {toggleSavedPark} from "features/users/userSlice";
 import AddToCalendar from 'react-add-to-calendar';
+import { addRating } from 'features/parks/parksSlice'
 
 
 class ModalParkDetail extends React.Component {
@@ -86,6 +87,14 @@ class ModalParkDetail extends React.Component {
         return formattedDate.replace("+00:00", "Z");
     }
 
+    handleAddRating = (rating, parkId) => {
+      let ratingToSend = {};
+      // can add actual users here
+      ratingToSend.user = rating;
+      ratingToSend.parkId = parkId;
+      this.props.addRating(ratingToSend);
+    }
+
     render() {
         return (
             <div className="MarkerDetails">
@@ -96,6 +105,7 @@ class ModalParkDetail extends React.Component {
                 {this.getSavedParkIcon()}
 
                 <div className="Details">
+
                   <div className="Section">
                     <div className="ParkComments">
                       <div>
@@ -262,18 +272,16 @@ const mapStateToProps = (state) => {
     return {
         error: state.parks.error,
         events: state.events.eventsByParkId,
-        comments: state.comments.commentsByParkId
+        comments: state.comments.commentsByParkId,
         user: state.user.user
     }
 };
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
-    deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId))
-})
-    toggleSavedPark: (user, parkId) => {
-        dispatch(toggleSavedPark(user, parkId))
-    }
+    deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId)),
+    toggleSavedPark: (user, parkId) => dispatch(toggleSavedPark(user, parkId)),
+    addRating: (rating) => dispatch(addRating(rating))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalParkDetail);

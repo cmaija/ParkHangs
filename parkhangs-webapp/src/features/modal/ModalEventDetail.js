@@ -212,7 +212,7 @@ class ModalEventDetail extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
-    deleteCommentFromEvent: (eventCommentId, eventId) => dispatch(deleteEventComment(eventCommentId, eventId))
+    deleteCommentFromEvent: (eventCommentId, eventId) => dispatch(deleteEventComment(eventCommentId, eventId)),
     closeModal: () => dispatch(closeModal())
 })
 

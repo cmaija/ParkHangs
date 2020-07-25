@@ -19,6 +19,16 @@ const ParkService = {
         } catch (error) {
             throw new Error(error.response)
         }
+    },
+
+    addRating: async function (parkIdAndRating) {
+        const url = `/parks`
+        try {
+            const response = await ApiService.patch(url, parkIdAndRating)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
     }
 }
 

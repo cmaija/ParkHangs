@@ -17,6 +17,7 @@ router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);
 router.get('/events', eventController.getEvents);
 router.post('/events', eventController.addEvent);
+router.patch('/parks', eventController.addRating);
 
 router.get('/user/:email', userController.getUser);
 router.patch('/user/:userId', userController.updateUser);
