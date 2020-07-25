@@ -149,10 +149,10 @@ export const fetchEvents = () => async dispatch => {
     }
 }
 
-export const addEvent = (newEvent) => async dispatch => {
+export const addEvent = (user, newEvent) => async dispatch => {
     try {
         dispatch(addEventStart())
-        const successfulNewEvent = await EventService.addEvent(newEvent)
+        const successfulNewEvent = await EventService.addEvent(user, newEvent)
         dispatch(addEventSuccessful(successfulNewEvent))
     } catch (error) {
         dispatch(addEventFailure(error.toString()))
