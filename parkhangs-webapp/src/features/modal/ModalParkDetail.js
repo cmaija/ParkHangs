@@ -6,7 +6,7 @@ import moment from 'moment'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import {toggleSavedPark} from "features/users/userSlice";
-import AddToCalendar from 'react-add-to-calendar';
+import ShareCalendar from 'components/ShareCalendar'
 
 
 class ModalParkDetail extends React.Component {
@@ -118,7 +118,7 @@ class ModalParkDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="Section EventTable">
+                    <div className="Section" id = "EventTable">
                         <span className="SectionTitle">Events</span>
                         {
                             this.getEventsByPark().length > 0 ?
@@ -157,7 +157,7 @@ class ModalParkDetail extends React.Component {
                                             let newEvent = {
                                                 title: event.details,
                                                 description: event.details,
-                                                location: this.props.park.name + " BC, Canada",
+                                                location: this.props.park.streetNumber + " " + this.props.park.streetName + " BC, Canada",
                                                 startTime: this.getExportedTime(event.eventDateTime),
                                                 endTime:  this.getExportedTime(event.eventEndDateTime)
                                             }
@@ -193,7 +193,7 @@ class ModalParkDetail extends React.Component {
                                                     </button>
                                                 </td>
                                                 <td>
-                                                   <AddToCalendar event={newEvent}/>
+                                                   <button id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                                                 </td>
                                             </tr>
                                         })
