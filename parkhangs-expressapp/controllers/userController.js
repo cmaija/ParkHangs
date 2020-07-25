@@ -1,5 +1,6 @@
 const User = require('../models/UserModel');
 const Park = require('../models/ParkModel')
+const Event = require('../models/EventModel')
 const lodash = require('lodash')
 
 const express = require('express');
@@ -89,7 +90,7 @@ const updateUser = async (req, res) => {
 
         if (body.savedParks !== undefined) {
             try {
-                await savePark(user.savedParks, body.savedParks)
+                await saveParks(user.savedParks, body.savedParks)
             } catch (error) {
                 console.error(error.message)
                 console.log("unable to update park favourite count")
@@ -100,6 +101,19 @@ const updateUser = async (req, res) => {
             }
 
             user.savedParks = body.savedParks
+        }
+
+        if (body.savedEvents !== undefined) {
+            try {
+                await saveEvents(user.savedEvents, body.savedEvents)
+            } catch (error) {
+                console.error(error)
+                console.log('unable to update event favorite count')
+                return res.status(404).json({
+                    error,
+                    message: `unable to update event with id:${body.savedEvents} favourite count`
+                })
+            }
         }
 
         user.save()
@@ -119,7 +133,7 @@ const updateUser = async (req, res) => {
 
 };
 
-async function savePark (savedParks, newSavedParks) {
+async function saveParks (savedParks, newSavedParks) {
     const parksToUnFavorite = []
     const parksToFavorite = []
 
@@ -151,6 +165,43 @@ async function savePark (savedParks, newSavedParks) {
         }
 
         await likedPark.save()
+    }
+
+    return
+}
+
+async function saveEvents (savedEvents, newSavedEvents) {
+    const eventsToFavorite = []
+    const eventsToUnFavorite = []
+
+    for (event of savedEvents) {
+        if (!newSavedEvents.includes(event)) {
+            eventsToUnFavorite.push(event)
+        }
+    }
+
+    for (event of newSavedEvents) {
+        if (!savedEvents.includes(event)) {
+            eventsToFavorite.push(event)
+        }
+    }
+
+    for (event of eventsToFavorite) {
+        const favoritedEvent = await Event.findOne({_id: event})
+        if (!favoritedEvent.favoritesCount || likedPark.favoritesCount === 0) {
+            favoritedEvent.favoritesCount = 0
+        }
+        favoritedEvent.favoritesCount += 1
+        await favoritedEvent.save()
+    }
+
+    for (event of eventsToUnFavorite) {
+        const unfavoritedEvent = await Event.findOne({_id: event})
+        if (!!unfavoritedEvent.favoritesCount && unfavoritedEvent.favoritesCount !== 0) {
+            unfavoritedEvent.favoritesCount -= 1
+        }
+
+        await unfavoritedEvent.save()
     }
 
     return

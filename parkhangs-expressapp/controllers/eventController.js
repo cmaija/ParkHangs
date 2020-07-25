@@ -29,6 +29,24 @@ const getEvents = async (req, res) => {
     }).catch(err => console.log(err))
 };
 
+const getEventById = async (req, res) => {
+    const eventId = req.params.eventId
+    try {
+        await Event.findOne({_id: eventId})
+        return res.status(200).json({
+            success: true,
+            data: events})
+    } catch (error) {
+        return res
+            .status(404)
+            .json({
+                success: false,
+                error: `event with id: ${eventId} not found`,
+                message: error.toString()
+            })
+    }
+}
+
 // Adds a new event
 const addEvent = async (req, res) => {
 
@@ -185,4 +203,5 @@ module.exports = {
     addEvent,
     deleteEvent,
     updateEvent,
+    getEventById,
 };

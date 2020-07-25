@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 import UserService from 'services/user.service'
 import { updateParkById } from 'features/parks/parksSlice'
-
+import { updateEventById } from 'features/events/eventsSlice'
 // import EventService from 'services/event.service'
 
 const userSlice = createSlice({
@@ -114,7 +114,7 @@ export const {
 
 export default userSlice.reducer;
 
-const addUser = (userParams) => async (dispatch) => {
+export const addUser = (userParams) => async (dispatch) => {
 
     //TODO: can't call this for some reason.
     try {
@@ -219,7 +219,36 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
     } catch (error) {
         dispatch(updateUserFailure())
     }
-};
+}
+
+
+export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
+    console.log('saving event')
+    try {
+        dispatch(updateUserStart())
+        let newSavedEventArray = [...user.savedEvents]
+
+        const eventIsAlreadySaved = newSavedEventArray.includes(eventId)
+
+        if (eventIsAlreadySaved) {
+            newSavedEventArray = newSavedEventArray.filter((oldEvent) => oldEvent !== eventId)
+        } else {
+            newSavedEventArray.push(eventId)
+        }
+
+        const newSavedEventsObject = {
+            savedEvents: newSavedEventArray
+        }
+
+        const successfulUpdateUser = await UserService.updateUser(user._id, newSavedEventsObject)
+        console.log('wtf lol')
+        dispatch(updateEventById(eventId))
+        dispatch(updateUserSuccessful(successfulUpdateUser));
+
+    } catch (error) {
+        dispatch(updateUserFailure())
+    }
+}
 
 export const logout = () => async (dispatch) => {
     try {

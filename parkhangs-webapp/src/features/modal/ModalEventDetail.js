@@ -3,6 +3,7 @@ import 'features/modal/ModalEventDetail.css'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import { deleteEvent } from 'features/events/eventsSlice'
+import { toggleSavedEvent } from 'features/users/userSlice'
 import { closeModal } from 'features/modal/modalSlice'
 import { cloneDeep } from 'lodash'
 import EventForm from 'components/EventForm'
@@ -61,6 +62,11 @@ class ModalEventDetail extends React.Component {
             this.props.deleteOneEvent(this.props.eventId, parkId)
             this.props.closeModal()
         }
+    }
+
+    favouriteEvent = (eventId) => {
+        console.log(eventId)
+        this.props.saveEvent(this.props.user, eventId)
     }
 
     getCreatedTime = (date) => {
@@ -129,7 +135,7 @@ class ModalEventDetail extends React.Component {
             description: event.details,
             location: parkStrNum + " " + parkStrName + " BC, Canada",
             startTime: this.getExportedTime(event.eventDateTime),
-            endTime:  this.getExportedTime(event.eventEndDateTime) 
+            endTime:  this.getExportedTime(event.eventEndDateTime)
         }
 
         let currentTab
@@ -169,7 +175,12 @@ class ModalEventDetail extends React.Component {
                             </div>
                         </div>
                         <div className="ModalEventDetail-rightToolbar">
-                            <button className="ModalEventDetail-actionButton">Favourite</button>
+                            {
+                                this.props.user != null &&
+                                <button
+                                    onClick={() => this.favouriteEvent(event._id)}
+                                    className="ModalEventDetail-actionButton">Favourite</button>
+                            }
                             <button className="ModalEventDetail-actionButton" id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                             <button
                                 className="ModalEventDetail-actionButton"
@@ -188,6 +199,7 @@ class ModalEventDetail extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
+    saveEvent: (eventId) => dispatch(toggleSavedEvent(eventId)),
     closeModal: () => dispatch(closeModal())
 })
 
@@ -195,6 +207,7 @@ const mapStateToProps = (state) => ({
     events: state.events.flattenedEvents,
     updatingEvent: state.events.updatingEvent,
     parks: state.parks.parks,
+    user: state.user.user
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalEventDetail);
