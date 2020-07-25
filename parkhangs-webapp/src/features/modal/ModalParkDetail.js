@@ -118,7 +118,7 @@ class ModalParkDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="Section" id = "EventTable">
+                    <div className="Section EventTable">
                         <span className="SectionTitle">Events</span>
                         {
                             this.getEventsByPark().length > 0 ?

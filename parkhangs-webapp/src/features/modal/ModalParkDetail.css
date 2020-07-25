@@ -56,7 +56,7 @@
     justify-content: space-between;
 }
 
-#EventTable{
+.EventTable{
     max-height: 19rem;
     overflow: scroll
 }
