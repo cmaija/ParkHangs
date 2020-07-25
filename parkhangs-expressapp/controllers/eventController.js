@@ -31,21 +31,17 @@ const getEvents = async (req, res) => {
 
 // Adds a new event
 const addEvent = async (req, res) => {
-    var {
-        parkId,
-        details,
-        eventDateTime,
-        eventEndDateTime
-    } = req.body
+
+    const user = req.body.user;
+    const eventDetails = req.body.newEvent;
+
     var newEvent = {
-        parkId: parkId ? parkId : null,
-        details: details ? details : null,
-        eventDateTime: eventDateTime ? eventDateTime : null,
-        eventEndDateTime: eventEndDateTime ? eventEndDateTime : null // not required
+        parkId: eventDetails.parkId ? eventDetails.parkId : null,
+        details: eventDetails.details ? eventDetails.details : null,
+        eventDateTime: eventDetails.eventDateTime ? eventDetails.eventDateTime : null,
+        eventEndDateTime: eventDetails.eventEndDateTime ? eventDetails.eventEndDateTime : null // not required
     }
-    // console.log(newEvent.parkId);
-    // console.log(newEvent.details);
-    // console.log(newEvent.eventDateTime);
+
     if (newEvent.parkId === null || newEvent.details === null || newEvent.eventDateTime === null) {
         return res.status(400).json({success: false, error: `Missing one or more fields`})
     }
@@ -54,9 +50,17 @@ const addEvent = async (req, res) => {
     // let d = new Date();
     // let strDate = d.getFullYear() + "/" + (d.getMonth()+1) + "/" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
     var now = moment(new Date(), 'hh:mm D MM YY').unix()
+
     newEvent.createdDateTime = now;
-    newEvent.creatorName = "user";
-    newEvent.creatorID = 0;
+
+    if (user != null){
+
+        newEvent.creatorName = user.firstName + " " + user.lastName;
+        newEvent.creatorID = user._id;
+    } else {
+        newEvent.creatorName = "anonymous";
+        newEvent.creatorID = 0;
+    }
 
     try {
         res.setHeader('Content-Type', 'application/json');

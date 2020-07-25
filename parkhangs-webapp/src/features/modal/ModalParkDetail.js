@@ -7,6 +7,7 @@ import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
 import AddToCalendar from 'react-add-to-calendar';
+import ShareCalendar from 'components/ShareCalendar'
 
 
 class ModalParkDetail extends React.Component {
@@ -148,7 +149,7 @@ class ModalParkDetail extends React.Component {
                                             let newEvent = {
                                                 title: event.details,
                                                 description: event.details,
-                                                location: park.name + " BC, Canada",
+                                                location: park.streetNumber + " " + park.streetName + " BC, Canada",
                                                 startTime: this.getExportedTime(event.eventDateTime),
                                                 endTime:  this.getExportedTime(event.eventEndDateTime)
                                             }
@@ -184,7 +185,7 @@ class ModalParkDetail extends React.Component {
                                                     </button>
                                                 </td>
                                                 <td>
-                                                   <AddToCalendar event={newEvent}/>
+                                                   <button id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                                                 </td>
                                             </tr>
                                         })

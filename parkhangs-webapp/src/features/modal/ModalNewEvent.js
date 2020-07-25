@@ -108,7 +108,7 @@ class ModalNewEvent extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId))
+    deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
 })
 
 const mapStateToProps = (state) => ({

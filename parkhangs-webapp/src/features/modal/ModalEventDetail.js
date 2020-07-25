@@ -7,6 +7,7 @@ import { closeModal } from 'features/modal/modalSlice'
 import { cloneDeep } from 'lodash'
 import EventForm from 'components/EventForm'
 import LoadingSpinner from 'components/LoadingSpinner'
+import ShareCalendar from 'components/ShareCalendar'
 
 class ModalEventDetail extends React.Component {
 
@@ -66,6 +67,11 @@ class ModalEventDetail extends React.Component {
         return moment.unix(date).format("YYYY/MM/DD hh:MM a");
     }
 
+    getExportedTime = (date) => {
+        let formattedDate = moment.unix(date).format("YYYYMMDDTHHmmssZ");
+        return formattedDate.replace("+00:00", "Z");
+    }
+
     descriptionTab = (event, formattedStart, formattedEnd) => {
         return (
             <div className="ModalEventDetail-description">
@@ -115,6 +121,16 @@ class ModalEventDetail extends React.Component {
         const parkName =  this.props.parks.find(park => park._id === event.parkId).name
         const eventStart = this.eventStartTime(event.eventDateTime)
         const formattedEnd = this.eventEndTime(event.eventEndDateTime)
+        const parkStrNum = this.props.parks.find(park => park._id === event.parkId).streetNumber
+        const parkStrName = this.props.parks.find(park => park._id === event.parkId).streetName
+
+        let newEvent = {
+            title: event.details,
+            description: event.details,
+            location: parkStrNum + " " + parkStrName + " BC, Canada",
+            startTime: this.getExportedTime(event.eventDateTime),
+            endTime:  this.getExportedTime(event.eventEndDateTime) 
+        }
 
         let currentTab
 
@@ -154,7 +170,7 @@ class ModalEventDetail extends React.Component {
                         </div>
                         <div className="ModalEventDetail-rightToolbar">
                             <button className="ModalEventDetail-actionButton">Favourite</button>
-                            <button className="ModalEventDetail-actionButton">Share</button>
+                            <button className="ModalEventDetail-actionButton" id ="ShareCalendar"><ShareCalendar event={newEvent}/></button>
                             <button
                                 className="ModalEventDetail-actionButton"
                                 onClick={() => this.deleteEvent(event.parkId)}>Delete</button>

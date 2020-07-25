@@ -15,7 +15,6 @@
 .modal-container {
     z-index: 101;
     background-color: white;
-    opacity: 100%;
     width: 70%;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
     border-radius: 0.1875rem;
@@ -85,5 +84,3 @@
     max-height: 31rem;
     overflow: scroll
 }
-
-
