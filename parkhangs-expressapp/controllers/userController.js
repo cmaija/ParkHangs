@@ -72,20 +72,7 @@ const updateUser = async (req, res) => {
         })
     }
 
-
-    try {
-        const user = await User.findOne({_id: req.params.userId})
-        await savePark(user.savedParks, body.savedParks)
-    } catch (error) {
-        console.error(error.message)
-        console.log("unable to update park favourite count")
-        return res.status(404).json({
-            error,
-            message: `unable to update park with id:${body.savedparks} favourite count`
-        })
-    }
-
-    await User.findOne({_id: req.params.userId}, (err, user) => {
+    await User.findOne({_id: req.params.userId}, async (err, user)  => {
 
         if (err) {
             return res.status(404).json({
@@ -101,6 +88,17 @@ const updateUser = async (req, res) => {
         }
 
         if (body.savedParks !== undefined) {
+            try {
+                await savePark(user.savedParks, body.savedParks)
+            } catch (error) {
+                console.error(error.message)
+                console.log("unable to update park favourite count")
+                return res.status(404).json({
+                    error,
+                    message: `unable to update park with id:${body.savedparks} favourite count`
+                })
+            }
+
             user.savedParks = body.savedParks
         }
 
@@ -139,19 +137,16 @@ async function savePark (savedParks, newSavedParks) {
 
     for (park of parksToFavorite) {
         const likedPark = await Park.findOne({_id: park})
-
-        if (!likedPark.favoritesCount || likedParks.favoritesCount === 0) {
+        if (!likedPark.favoritesCount || likedPark.favoritesCount === 0) {
             likedPark.favoritesCount = 0
         }
         likedPark.favoritesCount += 1
-
         await likedPark.save()
     }
 
     for (park of parksToUnFavorite) {
         const likedPark = await Park.findOne({_id: park})
-
-        if (likedPark.favoritesCount || likedParks.favoritesCount !== 0) {
+        if (!!likedPark.favoritesCount && likedPark.favoritesCount !== 0) {
             likedPark.favoritesCount -= 1
         }
 
