@@ -47,7 +47,7 @@ class Modal extends React.Component {
                                 {hasComponent && <ComponentName {...this.props.modalProps.componentParams}/>}
                             </div>
                         </div>
-                        <button className="button" onClick={this.close}>close</button>
+                        <button className="button close" onClick={this.close}>close</button>
                     </div>
                 </div>
             )

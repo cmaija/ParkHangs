@@ -1,5 +1,6 @@
 import React from 'react';
 import AddToCalendar from 'react-add-to-calendar';
+import "react-add-to-calendar/dist/react-add-to-calendar.css";
 
  
 class ShareCalendar extends React.Component {

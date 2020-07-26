@@ -95,14 +95,6 @@
     padding: 0.5rem 0;
 }
 
-#ShareCalendar * {
-    list-style: none;
-    margin: 0;
-    text-align: initial;
-    color: black;
-    padding: 0.1rem
-}
-
 .filledHeart {
     height: 1rem;
 }

@@ -208,7 +208,7 @@ class ModalEventDetail extends React.Component {
                                     }
                                 </button>
                             }
-                            <button className="ModalEventDetail-actionButton" id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                            <ShareCalendar event={newEvent}/>
                             <button
                                 className="ModalEventDetail-actionButton"
                                 onClick={() => this.deleteEvent(event.parkId)}>Delete</button>

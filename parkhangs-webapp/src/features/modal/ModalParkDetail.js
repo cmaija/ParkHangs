@@ -70,7 +70,7 @@ class ModalParkDetail extends React.Component {
                 {this.getSavedParkIcon()}
 
                 <div className="Details">
-                    <div className="Section">
+                    <div className="Section Left">
                         <span className="SectionTitle">Park Details</span>
                         <div className="ParkLocationDetails">
                             <div>
@@ -82,8 +82,7 @@ class ModalParkDetail extends React.Component {
                             <div>
                                 Lon: {park.googleMapsLatLon[1]}
                             </div>
-                        </div>
-                        <div className="OtherDetails">
+
                             <div>
                                 Neighbourhood Name: {park.neighbourhoodName}
                             </div>
@@ -113,13 +112,17 @@ class ModalParkDetail extends React.Component {
                                 Number of Favorites: {park.favoritesCount || 0}
                             </div>
                         </div>
+
+                            
+                        
                     </div>
-                    <div className="Section EventTable">
+                    <div className="Section Right">
                         <span className="SectionTitle">Events</span>
-                        {
+                        <div className="EventTable">
+                             {
                             this.getEventsByPark().length > 0 ?
 
-                                <table>
+                                <table className = "Table">
                                     <thead>
                                     <tr>
                                         <td>
@@ -141,7 +144,7 @@ class ModalParkDetail extends React.Component {
                                             <b>Delete</b>
                                         </td>
                                         <td>
-                                            <b>Add To GCalendar</b>
+                                            <b>Add To Calendar</b>
                                         </td>
                                     </tr>
                                     </thead>
@@ -189,7 +192,7 @@ class ModalParkDetail extends React.Component {
                                                     </button>
                                                 </td>
                                                 <td>
-                                                   <button id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                                                  <ShareCalendar event={newEvent}/>
                                                 </td>
                                             </tr>
                                         })
@@ -203,6 +206,8 @@ class ModalParkDetail extends React.Component {
                                     There are no events for this park
                                 </div>
                         }
+                        </div>
+                       
                     </div>
                 </div>
             </div>
