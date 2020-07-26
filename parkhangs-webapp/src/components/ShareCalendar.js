@@ -15,10 +15,15 @@ class ShareCalendar extends React.Component {
  
   render() {
     let icon = { 'calendar-plus-o': 'left' };
-
+    let items = [
+      { apple: 'Apple' },
+      { google: 'Google' }
+   ];
     return <AddToCalendar 
                         event={this.props.event}
                         buttonTemplate={icon}
+                        listItems={items}
+                        buttonLabel=""
             />;
   };
 }

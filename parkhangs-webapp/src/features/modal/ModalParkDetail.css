@@ -90,12 +90,20 @@
 .Right {
     max-width:55%;
 }
-.a{
-    display:flex;
+.Table{
+    border-collapse: collapse;
+}
+.react-add-to-calendar{
+    min-width: 100%;
+    min-height: 100%;
 }
 td{
-    padding: 0.3em;
+    padding-bottom: 4.5em;
 }
-
+ul{
+   list-style-position: inside;
+   width: 100%;
+   padding-left:0;
+}
 
 

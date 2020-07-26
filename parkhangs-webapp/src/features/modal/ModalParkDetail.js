@@ -191,7 +191,7 @@ class ModalParkDetail extends React.Component {
                                                         <b>X</b>
                                                     </button>
                                                 </td>
-                                                <td>
+                                                <td className="ExportButton">
                                                   <ShareCalendar event={newEvent}/>
                                                 </td>
                                             </tr>
