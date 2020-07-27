@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
 import Marker from '../components/Marker.js'
-import { fetchParks } from 'features/parks/parksSlice'
 
 class SimpleMap extends Component {
 
@@ -34,15 +33,9 @@ class SimpleMap extends Component {
             </div>
         );
     }
-
-    componentDidMount = async () => {
-        this.props.getAllParks()
-    }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(fetchParks())
-})
+
 
 const mapStateToProps = (state) => { //name is by convention
     return {
@@ -50,4 +43,4 @@ const mapStateToProps = (state) => { //name is by convention
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SimpleMap);
+export default connect(mapStateToProps, null)(SimpleMap);
