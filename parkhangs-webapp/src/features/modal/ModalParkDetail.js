@@ -91,6 +91,19 @@ class ModalParkDetail extends React.Component {
       this.props.addRating(ratingToSend);
     }
 
+    handleDeleteComment = (comment, parkId) => {
+      const commentUser = comment.creatorID;
+      let deletingUser = 0;
+      if (this.props.user != null) {
+        deletingUser = this.props.user._id
+      }
+      if (commentUser === deletingUser || commentUser === 0) {
+        this.props.deleteCommentFromPark(comment._id, parkId)
+      } else {
+        alert("You cannot delete another user's comment!")
+      }
+    }
+
     render() {
         const park = this.props.parks.find(park => park._id === this.props.parkId)
         return (
@@ -111,10 +124,13 @@ class ModalParkDetail extends React.Component {
                           return <table>
                             <tbody>
                               <tr key={comment._id}>
-                                <td>{comment.comment}</td>
+                                <td>
+                                  <span>{comment.comment}</span> <br/>
+                                  <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                                </td>
                                 <td>
                                   <button onClick={() => {
-                                      this.props.deleteCommentFromPark(comment._id, this.props.park._id)
+                                      this.handleDeleteComment(comment, this.props.park._id)
                                     }}>
                                     <b>X</b>
                                   </button>
@@ -124,7 +140,7 @@ class ModalParkDetail extends React.Component {
                           </table>
                           })
                         }
-                        <CommentForm parkId={this.props.park._id} />
+                        <CommentForm parkId={this.props.park._id} user={this.props.user} />
                       </div>
                     </div>
                   </div>

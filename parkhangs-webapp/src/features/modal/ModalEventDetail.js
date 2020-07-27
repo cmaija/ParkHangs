@@ -128,6 +128,19 @@ class ModalEventDetail extends React.Component {
         }
       };
 
+      handleDeleteComment = (comment, eventId) => {
+        const commentUser = comment.creatorID;
+        let deletingUser = 0;
+        if (this.props.user != null) {
+          deletingUser = this.props.user._id
+        }
+        if (commentUser === deletingUser || commentUser === 0) {
+          this.props.deleteCommentFromEvent(comment._id, eventId)
+        } else {
+          alert("You cannot delete another user's comment!")
+        }
+      }
+
     commentsTab = (event) => {
         return (
             <div className="Section">
@@ -137,12 +150,15 @@ class ModalEventDetail extends React.Component {
                     return <table>
                       <tbody>
                         <tr key={comment._id}>
-                          <td>{comment.comment}</td>
+                          <td>
+                            <span>{comment.comment}</span> <br/>
+                            <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                          </td>
                           <td>
                             <button onClick={() => {
-                                this.props.deleteCommentFromEvent(comment._id, this.props.eventId)
-                              }}>
-                              <b>X</b>
+                              this.handleDeleteComment(comment, this.props.eventId)
+                            }}>
+                            <b>X</b>
                             </button>
                           </td>
                         </tr>

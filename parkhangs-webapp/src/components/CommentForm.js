@@ -35,21 +35,18 @@ class CommentForm extends React.Component {
             parkId: this.props.parkId,
             comment: commentText
           }
-          this.props.addParkComment(newComment)
-          this.setState({
-              comments: ''
-            })
-          } else if ("eventId" in this.props) {
-            const eventId = this.props.eventId;
-            const newComment = {
-              eventId: this.props.eventId,
-              comment: commentText
-            }
-            this.props.addEventComment(newComment)
-            this.setState({
-                comments: ''
-              })
+          this.props.addParkComment(newComment, this.props.user)
+        } else if ("eventId" in this.props) {
+          const eventId = this.props.eventId;
+          const newComment = {
+            eventId: this.props.eventId,
+            comment: commentText
           }
+            this.props.addEventComment(newComment, this.props.user)
+        }
+        this.setState({
+            comments: ''
+          })
         }
 
     render() {
@@ -76,9 +73,13 @@ class CommentForm extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    addParkComment: (newComment) => dispatch(addParkComment(newComment)),
-    addEventComment: (newComment) => dispatch(addEventComment(newComment))
+const mapStateToProps = (state) => ({
+    user: state.user.user
 })
 
-export default connect(null, mapDispatchToProps)(CommentForm);
+const mapDispatchToProps = (dispatch) => ({
+    addParkComment: (newComment, user) => dispatch(addParkComment(newComment, user)),
+    addEventComment: (newComment, user) => dispatch(addEventComment(newComment, user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentForm);

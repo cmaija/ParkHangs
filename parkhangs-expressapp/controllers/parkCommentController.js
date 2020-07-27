@@ -24,13 +24,12 @@ const getParkComments = async (req, res) => {
 
 // Adds a new park comment
 const addParkComment = async (req, res) => {
-    var {
-        parkId,
-        comment
-    } = req.body
+  const user = req.body.user;
+  const commentDetails = req.body.newComment;
+
     var newParkComment = {
-        parkId: parkId ? parkId : null,
-        comment: comment ? comment : null
+        parkId: commentDetails.parkId ? commentDetails.parkId : null,
+        comment: commentDetails.comment ? commentDetails.comment : null,
     }
 
     if (newParkComment.parkId === null || newParkComment.comment === null) {
@@ -39,8 +38,14 @@ const addParkComment = async (req, res) => {
 
     var now = moment(new Date(), 'hh:mm D MM YY').unix()
     newParkComment.createdDateTime = now;
-    newParkComment.creatorName = "user";
-    newParkComment.creatorID = 0;
+
+    if (user != null) {
+        newParkComment.creatorName = user.firstName + " " + user.lastName;
+        newParkComment.creatorID = user._id;
+    } else {
+        newParkComment.creatorName = "anonymous";
+        newParkComment.creatorID = 0;
+    }
 
     try {
         res.setHeader('Content-Type', 'application/json');

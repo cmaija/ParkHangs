@@ -24,13 +24,12 @@ const getEventComments = async (req, res) => {
 
 // Adds a new event comment
 const addEventComment = async (req, res) => {
-    var {
-        eventId,
-        comment
-    } = req.body
+    const user = req.body.user;
+    const commentDetails = req.body.newComment;
+
     var newEventComment = {
-        eventId: eventId ? eventId : null,
-        comment: comment ? comment : null
+        eventId: commentDetails.eventId ? commentDetails.eventId : null,
+        comment: commentDetails.comment ? commentDetails.comment : null,
     }
 
     if (newEventComment.eventId === null || newEventComment.comment === null) {
@@ -39,14 +38,19 @@ const addEventComment = async (req, res) => {
 
     var now = moment(new Date(), 'hh:mm D MM YY').unix()
     newEventComment.createdDateTime = now;
-    newEventComment.creatorName = "user";
-    newEventComment.creatorID = 0;
+
+    if (user != null) {
+        newEventComment.creatorName = user.firstName + " " + user.lastName;
+        newEventComment.creatorID = user._id;
+    } else {
+        newEventComment.creatorName = "anonymous";
+        newEventComment.creatorID = 0;
+    }
 
     try {
         res.setHeader('Content-Type', 'application/json');
         let inserted = await database.collection('eventComments').insertOne(newEventComment);
         assert.equal(1, inserted.insertedCount);
-        console.log('item inserted');
         return res.status(200).json({success: true, data: newEventComment})
     } catch (error) {
         return res.status(404).json({success: false, error: 'Could not add event comment'})

@@ -184,10 +184,10 @@ export const fetchParkComments = () => async dispatch => {
     }
 }
 
-export const addParkComment = (newComment) => async dispatch => {
+export const addParkComment = (newComment, user) => async dispatch => {
     try {
         dispatch(addParkCommentStart())
-        const successfulNewComment = await CommentService.addParkComment(newComment)
+        const successfulNewComment = await CommentService.addParkComment(newComment, user)
         dispatch(addParkCommentSuccessful(successfulNewComment))
     } catch (error) {
         dispatch(addParkCommentFailure(error.toString()))
@@ -204,10 +204,10 @@ export const fetchEventComments = () => async dispatch => {
     }
 }
 
-export const addEventComment = (newComment) => async dispatch => {
+export const addEventComment = (newComment, user) => async dispatch => {
     try {
         dispatch(addEventCommentStart())
-        const successfulNewComment = await CommentService.addEventComment(newComment)
+        const successfulNewComment = await CommentService.addEventComment(newComment, user)
         dispatch(addEventCommentSuccessful(successfulNewComment))
     } catch (error) {
         dispatch(addEventCommentFailure(error.toString()))
