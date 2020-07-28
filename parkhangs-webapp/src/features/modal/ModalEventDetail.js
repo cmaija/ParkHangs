@@ -6,6 +6,8 @@ import { deleteEvent } from 'features/events/eventsSlice'
 import { toggleSavedEvent } from 'features/users/userSlice'
 import { closeModal } from 'features/modal/modalSlice'
 import EventForm from 'components/EventForm'
+import CommentForm from 'components/CommentForm'
+import { deleteEventComment } from 'features/comments/commentSlice'
 import LoadingSpinner from 'components/LoadingSpinner'
 import ShareCalendar from 'components/ShareCalendar'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
@@ -116,9 +118,57 @@ class ModalEventDetail extends React.Component {
         )
     }
 
+    getCommentsByEvent = () => {
+      let res = this.props.comments[this.props.eventId]
+      if (res === undefined) {
+          //no comments for that park, return empty array
+          return [];
+        } else {
+          return res; //filtered array
+        }
+      };
+
+      handleDeleteComment = (comment, eventId) => {
+        const commentUser = comment.creatorID;
+        let deletingUser = 0;
+        if (this.props.user != null) {
+          deletingUser = this.props.user._id
+        }
+        if (commentUser === deletingUser || commentUser === 0) {
+          this.props.deleteCommentFromEvent(comment._id, eventId)
+        } else {
+          alert("You cannot delete another user's comment!")
+        }
+      }
+
     commentsTab = (event) => {
         return (
-            <div> comments </div>
+            <div className="Section">
+              <div className="EventComments">
+                  <span className="SectionTitle">Event Comments</span>
+                  { this.getCommentsByEvent().map((comment) => {
+                    return <table>
+                      <tbody>
+                        <tr key={comment._id}>
+                          <td>
+                            <span>{comment.comment}</span> <br/>
+                            <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                          </td>
+                          <td>
+                            <button onClick={() => {
+                              this.handleDeleteComment(comment, this.props.eventId)
+                            }}>
+                            <b>X</b>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    })
+                  }
+                  <CommentForm eventId={this.props.eventId}/>
+                </div>
+              </div>
         )
     }
 
@@ -190,6 +240,9 @@ class ModalEventDetail extends React.Component {
                                 `${this.state.currentTab === 'comments' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
                                 onClick={() => this.selectTab('comments')}>
                                 <span className="ModalEventDetail-tabName">Comments</span>
+                                <div>
+
+                                </div>
                             </div>
                             <div className={
                                 `${this.state.currentTab === 'edit' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
@@ -226,6 +279,7 @@ class ModalEventDetail extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
     deleteOneEvent: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
+    deleteCommentFromEvent: (eventCommentId, eventId) => dispatch(deleteEventComment(eventCommentId, eventId)),
     saveEvent: (user, eventId) => dispatch(toggleSavedEvent(user, eventId)),
     closeModal: () => dispatch(closeModal())
 })
@@ -234,6 +288,7 @@ const mapStateToProps = (state) => ({
     events: state.events.flattenedEvents,
     updatingEvent: state.events.updatingEvent,
     parks: state.parks.parks,
+    comments: state.comments.commentsByEventId,
     user: state.user.user
 })
 

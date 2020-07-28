@@ -13,7 +13,7 @@ router.use(express.json())
 
 //PLACE ROUTES HERE!
 router.get('/parks', parkController.getParks);
-router.get('/parks/:parkId', parkController.getParkById)
+router.get('/parks/:parkId', parkController.getParkById);
 
 router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);
@@ -27,10 +27,10 @@ router.post('/user', userController.addUser);
 
 router.get('/parkComments', parkCommentController.getParkComments);
 router.post('/parkComments', parkCommentController.addParkComment);
-router.delete('/parkComments', parkCommentController.deleteParkComment);
+router.delete('/parkComments/:parkCommentId', parkCommentController.deleteParkComment);
 router.get('/eventComments', eventCommentController.getEventComments);
 router.post('/eventComments', eventCommentController.addEventComment);
-router.delete('/eventComments', eventCommentController.deleteEventComment);
+router.delete('/eventComments/:eventCommentId', eventCommentController.deleteEventComment);
 
 
 module.exports = router;

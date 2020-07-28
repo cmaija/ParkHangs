@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import UserProfileView from "../views/UserProfileView";
 import { fetchParks } from 'features/parks/parksSlice'
 import { fetchEvents } from 'features/events/eventsSlice'
+import { fetchEventComments, fetchParkComments } from 'features/comments/commentSlice'
 
 class Routes extends Component {
     render() {
@@ -32,10 +33,12 @@ class Routes extends Component {
     }
 
     componentDidMount = async () => {
-        // fetch all events, parks here
-
+        // fetch all events, parks, comments here
         this.props.getAllParks()
         this.props.getAllEvents()
+        this.props.getAllEventComments()
+        this.props.getAllParkComments()
+
     }
 
 }
@@ -50,6 +53,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     getAllParks: () => dispatch(fetchParks()),
     getAllEvents: () => dispatch(fetchEvents()),
+    getAllEventComments:() => dispatch(fetchEventComments()),
+    getAllParkComments:() => dispatch(fetchParkComments())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routes)

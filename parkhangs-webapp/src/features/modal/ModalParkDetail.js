@@ -3,17 +3,41 @@ import {deleteEvent} from 'features/events/eventsSlice'
 import {connect} from 'react-redux'
 import 'features/modal/ModalParkDetail.css'
 import moment from 'moment'
+import CommentForm from 'components/CommentForm'
+import { deleteParkComment } from 'features/comments/commentSlice'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
-import ShareCalendar from 'components/ShareCalendar'
+import AddToCalendar from 'react-add-to-calendar';
+import { addRating } from 'features/parks/parksSlice';
+import ShareCalendar from 'components/ShareCalendar';
 
 
 class ModalParkDetail extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.toggleFavouritePark = this.toggleFavouritePark.bind(this);
+        this.getSavedParkIcon = this.getSavedParkIcon.bind(this);
+
+    }
+
     getEventsByPark = () => {
         let res= this.props.events[this.props.park._id]
         if (res === undefined) {
             //no events for that park, return empty array
+            return [];
+
+        } else {
+            return res; //filtered array
+        }
+    };
+
+    getCommentsByPark = () => {
+        let res = this.props.comments[this.props.park._id]
+        if (res === undefined) {
+            //no comments for that park, return empty array
             return [];
 
         } else {
@@ -59,6 +83,27 @@ class ModalParkDetail extends React.Component {
         return formattedDate.replace("+00:00", "Z");
     }
 
+    handleAddRating = (rating, parkId) => {
+      let ratingToSend = {};
+      // can add actual users here
+      ratingToSend.user = rating;
+      ratingToSend.parkId = parkId;
+      this.props.addRating(ratingToSend);
+    }
+
+    handleDeleteComment = (comment, parkId) => {
+      const commentUser = comment.creatorID;
+      let deletingUser = 0;
+      if (this.props.user != null) {
+        deletingUser = this.props.user._id
+      }
+      if (commentUser === deletingUser || commentUser === 0) {
+        this.props.deleteCommentFromPark(comment._id, parkId)
+      } else {
+        alert("You cannot delete another user's comment!")
+      }
+    }
+
     render() {
         const park = this.props.parks.find(park => park._id === this.props.parkId)
         return (
@@ -70,6 +115,35 @@ class ModalParkDetail extends React.Component {
                 {this.getSavedParkIcon()}
 
                 <div className="Details">
+
+                  <div className="Section">
+                    <div className="ParkComments">
+                      <div>
+                        <span className="SectionTitle">Park Comments</span>
+                        { this.getCommentsByPark().map((comment) => {
+                          return <table>
+                            <tbody>
+                              <tr key={comment._id}>
+                                <td>
+                                  <span>{comment.comment}</span> <br/>
+                                  <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                                </td>
+                                <td>
+                                  <button onClick={() => {
+                                      this.handleDeleteComment(comment, this.props.park._id)
+                                    }}>
+                                    <b>X</b>
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          })
+                        }
+                        <CommentForm parkId={this.props.park._id} user={this.props.user} />
+                      </div>
+                    </div>
+                  </div>
                     <div className="Section">
                         <span className="SectionTitle">Park Details</span>
                         <div className="ParkLocationDetails">
@@ -215,15 +289,16 @@ const mapStateToProps = (state) => {
         error: state.parks.error,
         events: state.events.eventsByParkId,
         user: state.user.user,
-        parks: state.parks.parks
+        parks: state.parks.parks,
+        comments: state.comments.commentsByParkId,
     }
 };
 
 const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
-    toggleSavedPark: (user, parkId) => {
-        dispatch(toggleSavedPark(user, parkId))
-    }
+    deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId)),
+    toggleSavedPark: (user, parkId) => dispatch(toggleSavedPark(user, parkId)),
+    addRating: (rating) => dispatch(addRating(rating))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalParkDetail);
