@@ -4,8 +4,6 @@ import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'components/ParksCalendar.css'
-import { fetchParks } from 'features/parks/parksSlice'
-import { fetchEvents } from 'features/events/eventsSlice'
 import { openModal } from "features/modal/modalSlice"
 
 import { cloneDeep } from 'lodash'
@@ -100,8 +98,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(fetchParks()),
-    getAllEvents: () => dispatch(fetchEvents()),
     openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 

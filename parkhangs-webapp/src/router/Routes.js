@@ -1,4 +1,4 @@
-import React, { Component  } from 'react'
+import React, { Component } from 'react'
 import NavBar from 'components/NavBar'
 import { Switch, Route } from 'react-router-dom'
 import MapView from 'views/MapView'
@@ -8,6 +8,8 @@ import Modal from 'features/modal/Modal'
 import 'App.css'
 import { connect } from "react-redux";
 import UserProfileView from "../views/UserProfileView";
+import { fetchParks } from 'features/parks/parksSlice'
+import { fetchEvents } from 'features/events/eventsSlice'
 
 class Routes extends Component {
     render() {
@@ -28,6 +30,14 @@ class Routes extends Component {
             </div>
         )
     }
+
+    componentDidMount = async () => {
+        // fetch all events, parks here
+
+        this.props.getAllParks()
+        this.props.getAllEvents()
+    }
+
 }
 
 const mapStateToProps = (state) => {
@@ -37,4 +47,9 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, null)(Routes)
+const mapDispatchToProps = (dispatch) => ({
+    getAllParks: () => dispatch(fetchParks()),
+    getAllEvents: () => dispatch(fetchEvents()),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routes)
