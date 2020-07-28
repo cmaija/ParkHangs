@@ -24,7 +24,7 @@ const getParks = async (req, res) => {
 
 }
 
-// Adds a new event
+// Adds a new rating
 const addRating = async (req, res) => {
   var parkId = req.body.parkId;
   var rating = req.body.rating;
