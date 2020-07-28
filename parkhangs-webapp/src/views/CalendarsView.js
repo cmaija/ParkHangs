@@ -3,7 +3,6 @@ import ParksCalendar from 'components/ParksCalendar'
 import Searchbar from 'components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
-import { fetchEventComments } from 'features/comments/commentSlice'
 
 class CalendarsView extends Component {
     constructor (props) {
@@ -11,10 +10,6 @@ class CalendarsView extends Component {
         this.state = {
             showAllParks: true,
         }
-    }
-
-    componentDidMount = async () => {
-        this.props.getAllComments()
     }
 
     onSearch = (showAllParks) => {
@@ -48,8 +43,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    getAllComments:() => dispatch(fetchEventComments())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);
+export default connect(mapStateToProps, null)(CalendarsView);

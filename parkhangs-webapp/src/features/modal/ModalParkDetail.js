@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import 'features/modal/ModalParkDetail.css'
 import moment from 'moment'
 import CommentForm from 'components/CommentForm'
-import { fetchParkComments, deleteParkComment } from 'features/comments/commentSlice'
+import { deleteParkComment } from 'features/comments/commentSlice'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
