@@ -49,7 +49,6 @@ const ParkService = {
           rating: rating
       }
       try {
-        console.log(object)
           const response = await ApiService.patch(url, object)
           return response.data.data
       } catch (error) {
