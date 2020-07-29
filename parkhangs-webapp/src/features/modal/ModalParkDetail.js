@@ -83,12 +83,16 @@ class ModalParkDetail extends React.Component {
         return formattedDate.replace("+00:00", "Z");
     }
 
-    handleAddRating = (rating, parkId) => {
-      let ratingToSend = {};
-      // can add actual users here
-      ratingToSend.user = rating;
-      ratingToSend.parkId = parkId;
-      this.props.addRating(ratingToSend);
+    handleAddRating = (rating) => {
+      let userToSend = 0;
+      if (this.props.user != null) {
+        userToSend = this.props.user._id
+      }
+      let ratingToSend = {
+        user: userToSend,
+        rating: rating
+      }
+      this.props.addRating(this.props.parkId, ratingToSend);
     }
 
     handleDeleteComment = (comment, parkId) => {
@@ -97,11 +101,23 @@ class ModalParkDetail extends React.Component {
       if (this.props.user != null) {
         deletingUser = this.props.user._id
       }
-      if (commentUser === deletingUser || commentUser === 0) {
+      if (commentUser === deletingUser) {
         this.props.deleteCommentFromPark(comment._id, parkId)
       } else {
         alert("You cannot delete another user's comment!")
       }
+    }
+
+    getAverageRating = () => {
+      const currentPark = this.props.parks.find(park => park._id === this.props.parkId)
+      const currentParkRatings = currentPark.ratings
+      let counter = 0;
+      let numerator = 0;
+      currentParkRatings.map((rating) => {
+        counter++;
+        numerator += rating.rating
+      })
+      return Math.floor(numerator/counter)
     }
 
     render() {
@@ -115,6 +131,27 @@ class ModalParkDetail extends React.Component {
                 {this.getSavedParkIcon()}
 
                 <div className="Details">
+                <div className="Section">
+                  <div className="Ratings">
+                    <span className="SectionTitle">Rating</span> <br/>
+                    <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
+                      <b>1</b>
+                    </button>
+                    <button id={"rating-1"} onClick={() => this.handleAddRating(2)}>
+                      <b>2</b>
+                    </button>
+                    <button id={"rating-1"} onClick={() => this.handleAddRating()}>
+                      <b>3</b>
+                    </button>
+                    <button id={"rating-1"} onClick={() => this.handleAddRating(4)}>
+                      <b>4</b>
+                    </button>
+                    <button id={"rating-1"} onClick={() => this.handleAddRating(5)}>
+                      <b>5</b>
+                    </button>
+                    <span>Average Rating by Users: { this.getAverageRating() }</span>
+                  </div>
+                </div>
 
                   <div className="Section">
                     <div className="ParkComments">
@@ -298,7 +335,7 @@ const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
     deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId)),
     toggleSavedPark: (user, parkId) => dispatch(toggleSavedPark(user, parkId)),
-    addRating: (rating) => dispatch(addRating(rating))
+    addRating: (parkId, rating) => dispatch(addRating(parkId, rating))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalParkDetail);

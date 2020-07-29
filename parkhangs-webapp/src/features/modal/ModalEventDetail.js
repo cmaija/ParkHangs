@@ -134,7 +134,7 @@ class ModalEventDetail extends React.Component {
         if (this.props.user != null) {
           deletingUser = this.props.user._id
         }
-        if (commentUser === deletingUser || commentUser === 0) {
+        if (commentUser === deletingUser) {
           this.props.deleteCommentFromEvent(comment._id, eventId)
         } else {
           alert("You cannot delete another user's comment!")

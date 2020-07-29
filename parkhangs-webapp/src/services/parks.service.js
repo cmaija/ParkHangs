@@ -45,10 +45,11 @@ const ParkService = {
     addRating: async function (parkId, rating) {
       const url = `/parks/${parkId}/`
       const object = {
-          user: parkId,
-          newEvent: rating
+          parkId: parkId,
+          rating: rating
       }
       try {
+        console.log(object)
           const response = await ApiService.patch(url, object)
           return response.data.data
       } catch (error) {

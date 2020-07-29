@@ -38,7 +38,6 @@ class Routes extends Component {
         this.props.getAllEvents()
         this.props.getAllEventComments()
         this.props.getAllParkComments()
-
     }
 
 }

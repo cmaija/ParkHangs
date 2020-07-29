@@ -28,6 +28,7 @@ const parksSlice = createSlice({
         addingRating: false,
         error : null
     },
+
     reducers: {
         fetchParksStart (state) {
             state.loadingParks = true
@@ -93,6 +94,26 @@ const parksSlice = createSlice({
         updateParkByIdFailure (state, action) {
             state.loadingParks = false
             state.error = action.payload
+        },
+
+        addRatingStart (state, action) {
+            state.addingRating = true
+            state.error = null
+        },
+
+        addRatingSuccessful (state, action) {
+            const updatedPark = action.payload
+            const parkId = updatedPark._Id
+            const updatedRatings = updatedPark.ratings
+            state.parks[parkId].ratings = updatedRatings
+
+            state.addingRating = false
+            state.error = null
+        },
+
+        addRatingFailure (state, action) {
+            state.addingRating = false
+            state.error = action.payload
         }
     },
 
@@ -157,11 +178,11 @@ export const fetchParks = () => async dispatch => {
     }
 }
 
-export const addRating = (parkIdAndRating) => async dispatch => {
+export const addRating = (parkId, rating) => async dispatch => {
     try {
         dispatch(addRatingStart())
-        const response = await ParkService.addRating(parkIdAndRating)
-        dispatch(addRatingSuccessful(parkIdAndRating))
+        const updatedPark = await ParkService.addRating(parkId, rating)
+        dispatch(addRatingSuccessful(updatedPark))
     } catch (error) {
         dispatch(addRatingFailure(error.toString()))
     }
