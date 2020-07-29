@@ -15,9 +15,9 @@
 .modal-container {
     z-index: 101;
     background-color: white;
-    width: 70%;
+    width: 80%;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-    border-radius: 0.1875rem;
+    /* border-radius: 0.1875rem; */
     padding: 0.5rem;
 }
 
@@ -77,10 +77,39 @@
 .AddEventForm {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
+    padding:0.5rem;
+    background-color:#E3F1DF;
 }
 
 .EventsList-populated{
     max-height: 31rem;
     overflow: scroll
+}
+
+@media only screen and (max-width:600px){
+    .modal-container {
+        padding-top: 0;
+        background-color: #E3F1DF;
+    }
+    
+    .modal-card {  
+        background-color: #E3F1DF;  
+        /* background-color: #d5ffca; */ /*delete once all styling is done for small device case*/
+        font-size: 0.9rem;
+        padding: 0;
+        
+    }
+}
+@media only screen and (min-width:600px){
+    .modal-container {
+        background-color: #E3F1DF;
+        padding-top: 0;
+        
+    }
+    
+    .modal-card {    
+        background-color:#E3F1DF;
+        padding: 0;
+    }
 }
