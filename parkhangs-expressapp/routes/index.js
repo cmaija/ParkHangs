@@ -6,7 +6,10 @@ const parkCommentController = require('../controllers/parkCommentController');
 const eventCommentController = require('../controllers/eventCommentController');
 var assert = require('assert');
 var mongoose = require("mongoose");
-const eventbyparkIdController = require('../controllers/getEventsByParkId');
+const eventbyparkIdController = require('../controllers/getEventsByParkId')
+const facilitiesController = require('../controllers/facilitiesController')
+const parkSpecialFeaturesController = require('../controllers/parkSpecialFeaturesController')
+
 
 var router = express.Router();
 router.use(express.json())
@@ -32,5 +35,7 @@ router.get('/eventComments', eventCommentController.getEventComments);
 router.post('/eventComments', eventCommentController.addEventComment);
 router.delete('/eventComments', eventCommentController.deleteEventComment);
 
+router.get('/facilityTypes', facilitiesController.getFacilityTypes)
 
+router.get('/parkSpecialFeatures', parkSpecialFeaturesController.getParkSpecialFeatures)
 module.exports = router;

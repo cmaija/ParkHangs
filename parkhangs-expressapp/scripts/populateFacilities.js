@@ -1,38 +1,51 @@
-const Request = require("request")
-const ParkFacility = require('../models/ParkModel')
+const axios = require("axios")
+const Facility = require('../models/FacilityModel')
+const Park = require('../models/ParkModel')
 
  // used to populate the park's facilities on the database.
  // Should not be called unless parks collection on database is removed
 
 const populateFacilities = async function() {
     try {
-        let res = await Request.get("https://opendata.vancouver.ca/api/records/1.0/search/?dataset=parks-facilities&q=&facet=facilitytype&q=&rows=250")
-        res = JSON.parse(res)
-
+        let res = await axios.get("https://opendata.vancouver.ca/api/records/1.0/search/?dataset=parks-facilities&q=&rows=700&facet=facilitytype")
+        res = res.data
         const facilitiesRecords = res.records
+        const facilityTypes = res.facet_groups[0].facets
+
+        for (let facilityType of facilityTypes) {
+            const newFacilityType = new Facility({
+                name: facilityType.name
+            })
+
+            await newFacilityType.save()
+        }
 
         for (let record of facilitiesRecords) {
             let facilityFields = record.fields
             let facilityObject = {
-                parkId: facilityFields.parkid,
                 facilityUrl: facilityFields.facilityurl,
                 facilityType: facilityFields.facilitytype,
                 facilityCount: facilityFields.facilitycount,
             }
 
-            let newFacility = new ParkFacility(facilityObject)
-            if (!newFacility) {
-                console.log(`could not create a facility with data: ${facilityObject}`)
+            try {
+                let parkToAddFacilityTo = await Park.findOne({parkId: facilityFields.parkid})
+                parkToAddFacilityTo.facilities = undefined
+                if (parkToAddFacilityTo.facilities === undefined) {
+                    parkToAddFacilityTo.facilities = []
+                }
+                parkToAddFacilityTo.facilities.push(facilityObject)
+                await parkToAddFacilityTo.save()
+            } catch (error) {
+                console.error(error)
                 break
             }
-            try {
-                await newFacility.save()
-            } catch (error) {
-                console.log(`could not save new facility to database with data: ${newFacility}`)
-            }
         }
+
+        console.log('facilities successfully populated!')
     } catch (error) {
         console.log('something went wrong with populating facilities')
+        console.log(error)
     }
 }
 

@@ -56,7 +56,13 @@ database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // this is used to populate the database with park facilities.
 // Do not uncomment unless we need to add the park facilities to the database again!
-const populateFacilities = require('./scripts/populateFacilities')
-populateFaceilities()
+// const populateFacilities = require('./scripts/populateFacilities')
+// populateFacilities()
+
+
+// this is used to populate the database with park special features.
+// Do not uncomment unless we need to add the park special features to the database again!
+// const populateParkSpecialFeatures = require('./scripts/populateSpecialFeatures')
+// populateParkSpecialFeatures()
 
 module.exports = app;
