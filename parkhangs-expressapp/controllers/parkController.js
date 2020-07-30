@@ -39,6 +39,13 @@ const getParkById = async (req, res) => {
     }
 }
 
+const queryParks = async (req, res) => {
+    const {
+        hasWashrooms,
+        haasFacilities,
+    }
+}
+
 module.exports = {
     getParks,
     getParkById,

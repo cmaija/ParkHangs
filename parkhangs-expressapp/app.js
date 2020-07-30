@@ -47,10 +47,16 @@ app.use(function (err, req, res, next) {
 //database:
 database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// this is used to populate the database. Do not uncomment unless we need to add the parks
-// to the database again!
+// this is used to populate the database with parks.
+// Do not uncomment unless we need to add the parks to the database again!
 
 // const populatePark = require("./scripts/populateParks");
 // populatePark();
+
+
+// this is used to populate the database with park facilities.
+// Do not uncomment unless we need to add the park facilities to the database again!
+const populateFacilities = require('./scripts/populateFacilities')
+populateFaceilities()
 
 module.exports = app;
