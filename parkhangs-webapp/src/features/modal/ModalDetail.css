@@ -14,22 +14,22 @@
 
 .modal-container {
     z-index: 101;
-    background-color: white;
-    width: 70%;
+    background-color: #E3F1DF;
+    width: 80%;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-    border-radius: 0.1875rem;
-    padding: 0.5rem;
+    padding: 0rem 0.5rem 0.5rem 0.5rem;
 }
 
 .modal-card {
     z-index: 102;
-    background-color: white;
+    background-color: #E3F1DF;  
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: black;
     width: 100%;
+    padding: 0;
 }
 
 .detailed-content {
@@ -77,10 +77,18 @@
 .AddEventForm {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
+    padding:0.5rem;
+    background-color:#E3F1DF;
 }
 
 .EventsList-populated{
     max-height: 31rem;
     overflow: scroll
+}
+
+@media only screen and (max-width:600px){
+    .modal-card {  
+        font-size: 0.9rem;
+    }
 }

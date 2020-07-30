@@ -104,13 +104,13 @@ class ModalEventDetail extends React.Component {
         return (
             <div className="ModalEventDetail-description">
                 <div className="ModalEventDetail-description-section">
-                    <span>{event.favoritesCount || 0} people have favorited this event</span>
+                    <span><b>Event Liked/Favorited:</b> {event.favoritesCount || 0} people have favorited this event</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
-                    <span>{`${formattedStart} to ${formattedEnd}`}</span>
+                    <span><b>Event Time:</b> {`${formattedStart} to ${formattedEnd}`}</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
-                    <span>{event.details}</span>
+                    <span><b>Event Details:</b> {event.details}</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
                 </div>
@@ -255,15 +255,15 @@ class ModalEventDetail extends React.Component {
                                 this.props.user != null &&
                                 <button
                                     onClick={() => this.favouriteEvent(event._id)}
-                                    className="ModalEventDetail-actionButton">
+                                    className="ModalEventDetail-actionButton FavouriteEvent">
                                     {
                                         favoritedEventIcon
                                     }
                                 </button>
                             }
-                            <button className="ModalEventDetail-actionButton" id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                                <ShareCalendar event={newEvent}/>
                             <button
-                                className="ModalEventDetail-actionButton"
+                                className="ModalEventDetail-actionButton deleteEvent"
                                 onClick={() => this.deleteEvent(event.parkId)}>Delete</button>
                         </div>
                     </div>

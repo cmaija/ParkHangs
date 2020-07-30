@@ -1,5 +1,4 @@
 import React from 'react'
-import 'features/modal/Modal.css'
 import ModalDetail from 'features/modal/ModalDetail'
 import ModalEventDetail from 'features/modal/ModalEventDetail'
 import ModalUserEdit from "./ModalUserEdit"

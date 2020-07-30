@@ -91,10 +91,13 @@ class ModalNewEvent extends React.Component {
     render () {
         const selectedDate = this.eventDate()
         return (
-            <div>
-                <div>
-                    <span>{`Add New Event on ${selectedDate}`}</span>
+            <div className="detailed-content-main modal-card">
+                <div className="ModalEventDetail-header">
+                     <div className= "ModalEventDetail-Title">
+                        <span className="ModalEventDetail-AddDate">{`Add New Event on ${selectedDate}`}</span>
+                    </div>
                 </div>
+               
                 <div className="AddEventForm">
                     <EventForm
                         eventDateTime={this.props.selectedSlot.start}
