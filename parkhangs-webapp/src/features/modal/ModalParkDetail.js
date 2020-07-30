@@ -117,7 +117,11 @@ class ModalParkDetail extends React.Component {
         counter++;
         numerator += rating.rating
       })
-      return Math.floor(numerator/counter)
+      let average = Math.floor(numerator/counter);
+      if (Number.isNaN(average)) {
+        average = 0;
+      }
+      return average;
     }
 
     render() {
