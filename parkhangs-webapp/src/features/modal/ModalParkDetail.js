@@ -111,21 +111,24 @@ class ModalParkDetail extends React.Component {
     getAverageRating = () => {
       const currentPark = this.props.parks.find(park => park._id === this.props.parkId)
       const currentParkRatings = currentPark.ratings
-      let counter = 0;
-      let numerator = 0;
-      currentParkRatings.map((rating) => {
-        counter++;
-        numerator += rating.rating
-      })
-      let average = Math.floor(numerator/counter);
+
+      const totalScore = currentParkRatings.reduce((acc, rating) =>  {
+        return acc += rating.rating
+      }, 0)
+
+      let average = totalScore/currentParkRatings.length
+
       if (Number.isNaN(average)) {
         average = 0;
       }
       return average;
+
     }
 
     render() {
         const park = this.props.parks.find(park => park._id === this.props.parkId)
+        const averageRating = this.getAverageRating()
+        const comments = this.getCommentsByPark()
         return (
             <div className="MarkerDetails">
                 <div className="Title">
@@ -141,19 +144,19 @@ class ModalParkDetail extends React.Component {
                     <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
                       <b>1</b>
                     </button>
-                    <button id={"rating-1"} onClick={() => this.handleAddRating(2)}>
+                    <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
                       <b>2</b>
                     </button>
-                    <button id={"rating-1"} onClick={() => this.handleAddRating()}>
+                    <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
                       <b>3</b>
                     </button>
-                    <button id={"rating-1"} onClick={() => this.handleAddRating(4)}>
+                    <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
                       <b>4</b>
                     </button>
-                    <button id={"rating-1"} onClick={() => this.handleAddRating(5)}>
+                    <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
                       <b>5</b>
                     </button>
-                    <span>Average Rating by Users: { this.getAverageRating() }</span>
+                    <span>Average Rating by Users: { averageRating }</span>
                   </div>
                 </div>
 
@@ -161,7 +164,7 @@ class ModalParkDetail extends React.Component {
                     <div className="ParkComments">
                       <div>
                         <span className="SectionTitle">Park Comments</span>
-                        { this.getCommentsByPark().map((comment) => {
+                        { comments.map((comment) => {
                           return <table>
                             <tbody>
                               <tr key={comment._id}>

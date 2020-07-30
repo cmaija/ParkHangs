@@ -28,7 +28,7 @@ const getParks = async (req, res) => {
 // Adds a new rating
 const addRating = async (req, res) => {
   var parkId = req.body.parkId;
-  var rating = req.body.rating;
+  var ratingUserPair = req.body.rating;
 
   let parkToUpdate = {}
 
@@ -38,7 +38,7 @@ const addRating = async (req, res) => {
     return res.status(404).json({success: false,error: `Could not find the park with that id`})
   }
   try {
-    parkToUpdate.ratings.push(rating)
+    parkToUpdate.ratings.push(ratingUserPair)
   } catch (error) {
     return res.status(404).json({success: false,error: `Could not add rating to park`})
   }
