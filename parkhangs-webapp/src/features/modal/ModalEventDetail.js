@@ -104,7 +104,7 @@ class ModalEventDetail extends React.Component {
         return (
             <div className="ModalEventDetail-description">
                 <div className="ModalEventDetail-description-section">
-                    <span><b>Event Favorites:</b> {event.favoritesCount || 0} people have favorited this event</span>
+                    <span><b>Event Liked/Favorited:</b> {event.favoritesCount || 0} people have favorited this event</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span><b>Event Time:</b> {`${formattedStart} to ${formattedEnd}`}</span>
@@ -255,7 +255,7 @@ class ModalEventDetail extends React.Component {
                                 this.props.user != null &&
                                 <button
                                     onClick={() => this.favouriteEvent(event._id)}
-                                    className="ModalEventDetail-actionButton faveEvent">
+                                    className="ModalEventDetail-actionButton FavouriteEvent">
                                     {
                                         favoritedEventIcon
                                     }
