@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
 import Marker from '../components/Marker.js'
-import { fetchParks } from 'features/parks/parksSlice'
 
 class SimpleMap extends Component {
 
@@ -17,11 +16,13 @@ class SimpleMap extends Component {
     render() {
         return (
             // Important! Always set the container height explicitly
-            <div style={{height: '500px', width: '75%', margin: 'auto'}}>
+            <div style={{height: '600px', width: '90%', margin: 'auto'}}>
                 <GoogleMapReact bootstrapURLKeys={{key: process.env.REACT_APP_MAP_API_KEY}}
                                 defaultCenter={this.props.center}
                                 defaultZoom={this.props.zoom}>
-                    {this.props.parks.map((park) => {
+                    {
+                        this.props.parks && this.props.parks.length > 0 &&
+                        this.props.parks.map((park) => {
                             return <Marker key={park._id} park={park}
                                            lat={park.googleMapsLatLon[0]}
                                            lng={park.googleMapsLatLon[1]}/>
@@ -32,15 +33,9 @@ class SimpleMap extends Component {
             </div>
         );
     }
-
-    componentDidMount = async () => {
-        this.props.getAllParks()
-    }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(fetchParks())
-})
+
 
 const mapStateToProps = (state) => { //name is by convention
     return {
@@ -48,4 +43,4 @@ const mapStateToProps = (state) => { //name is by convention
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SimpleMap);
+export default connect(mapStateToProps, null)(SimpleMap);

@@ -5,6 +5,7 @@ const eventSlice = createSlice({
     name: 'events',
     initialState: {
         eventsByParkId: {},
+        flattenedEvents: [],
         loadingEvents: true,
         updatingEvent: false,
         deletingEvent: false,
@@ -19,6 +20,7 @@ const eventSlice = createSlice({
 
         fetchEventsSuccessful (state, action) {
             const events = action.payload
+            state.flattenedEvents = action.payload
             const parsedEvents = events.reduce(function (acc, event) {
                 const parkId = event.parkId.toString()
                 const hasSeenParkSoFar = !!acc[parkId]
@@ -47,10 +49,18 @@ const eventSlice = createSlice({
         addEventSuccessful (state, action) {
             const newEvent = action.payload
             const parkId = newEvent.parkId
-            const currentEvents = state.eventsByParkId[parkId]
+            let currentEvents = state.eventsByParkId[parkId]
+            if (!currentEvents) {
+                state.eventsByParkId[parkId] = []
+                currentEvents = state.eventsByParkId[parkId]
+            }
             currentEvents.push(newEvent)
-
             state.eventsByParkId[parkId] = currentEvents
+
+            const flattenedEvents = state.flattenedEvents
+            flattenedEvents.push(newEvent)
+            state.flattenedEvents = flattenedEvents
+
             state.addingEvent = false
             state.error = null
         },
@@ -72,12 +82,45 @@ const eventSlice = createSlice({
             const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== eventId)
             newEventArray.push(updatedEvent)
             state.eventsByParkId[parkId] = newEventArray
+
+            const newFlattenedEventArray = state.flattenedEvents.filter(event => event._id !== eventId)
+            newFlattenedEventArray.push(updatedEvent)
+            state.flattenedEvents = newFlattenedEventArray
+
+
             state.updatingEvent = false
             state.error = null
         },
 
         updateEventFailure (state, action) {
             state.updatingEvent = true
+            state.error = action.payload
+        },
+
+        updateEventByIdStart (state, action) {
+            state.updatingEvent = true
+            state.error = null
+        },
+
+        updateEventByIdSuccessful (state, action) {
+            const updatedEvent = action.payload
+            const parkId = updatedEvent.parkId
+            const eventId = updatedEvent._id
+
+            const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== eventId)
+            newEventArray.push(updatedEvent)
+            state.eventsByParkId[parkId] = newEventArray
+
+            const newFlattenedEventArray = state.flattenedEvents.filter(event => event._id !== eventId)
+            newFlattenedEventArray.push(updatedEvent)
+            state.flattenedEvents = newFlattenedEventArray
+
+            state.updatingEvent = false
+            state.error = null
+        },
+
+        updateEventByIdFailure (state, action) {
+            state.updatingEvent = false
             state.error = action.payload
         },
 
@@ -88,8 +131,13 @@ const eventSlice = createSlice({
 
         deleteEventSuccessful (state, action) {
             const { _id, parkId } = action.payload
+
             const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== _id)
             state.eventsByParkId[parkId] = newEventArray
+
+            const newFlattenedEventArray = state.flattenedEvents.filter(event => event._id !== _id)
+            state.flattenedEvents = newFlattenedEventArray
+
             state.updatingEvent = false
             state.error = null
         },
@@ -97,7 +145,7 @@ const eventSlice = createSlice({
         deleteEventFailure (state, action) {
             state.deletingEvent = true
             state.error = action.payload
-        }
+        },
     }
 })
 
@@ -111,6 +159,9 @@ export const {
     updateEventStart,
     updateEventSuccessful,
     updateEventFailure,
+    updateEventByIdStart,
+    updateEventByIdSuccessful,
+    updateEventByIdFailure,
     deleteEventStart,
     deleteEventSuccessful,
     deleteEventFailure,
@@ -128,10 +179,10 @@ export const fetchEvents = () => async dispatch => {
     }
 }
 
-export const addEvent = (newEvent) => async dispatch => {
+export const addEvent = (user, newEvent) => async dispatch => {
     try {
         dispatch(addEventStart())
-        const successfulNewEvent = await EventService.addEvent(newEvent)
+        const successfulNewEvent = await EventService.addEvent(user, newEvent)
         dispatch(addEventSuccessful(successfulNewEvent))
     } catch (error) {
         dispatch(addEventFailure(error.toString()))
@@ -145,6 +196,16 @@ export const updateEvent = (updatedEvent) => async dispatch => {
         dispatch(updateEventSuccessful(successfulUpdatedEvent))
     } catch (error) {
         dispatch(updateEventFailure(error.toString()))
+    }
+}
+
+export const updateEventById = (eventId) => async dispatch => {
+    try {
+        dispatch(updateEventByIdStart())
+        const event = await EventService.getEventById(eventId)
+        dispatch(updateEventByIdSuccessful(event))
+    } catch (error) {
+        dispatch(updateEventByIdFailure(error.toString()))
     }
 }
 

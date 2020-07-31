@@ -7,25 +7,39 @@ import NoMatch from 'views/NoMatch'
 import Modal from 'features/modal/Modal'
 import 'App.css'
 import { connect } from "react-redux";
+import UserProfileView from "../views/UserProfileView";
+import { fetchParks } from 'features/parks/parksSlice'
+import { fetchEvents } from 'features/events/eventsSlice'
+import { fetchEventComments, fetchParkComments } from 'features/comments/commentSlice'
 
 class Routes extends Component {
-    render () {
+    render() {
         return (
             <div className="App">
-                <NavBar />
+                <NavBar/>
                 <div className="App-main">
                     <Switch>
-                        <Route exact path="/" component={MapView} />
-                        <Route exact path="/park-events" component={CalendarsView} />
-                        <Route component={NoMatch} />
+                        <Route exact path="/" component={MapView}/>
+                        <Route exact path="/park-events" component={CalendarsView}/>
+                        <Route exact path="/user" component={UserProfileView}/>
+                        <Route component={NoMatch}/>
                     </Switch>
                 </div>
                 {this.props.modalOpen &&
-                     <Modal {...this.props.modalProps}/>
-                 }
+                <Modal {...this.props.modalProps}/>
+                }
             </div>
         )
     }
+
+    componentDidMount = async () => {
+        // fetch all events, parks, comments here
+        this.props.getAllParks()
+        this.props.getAllEvents()
+        this.props.getAllEventComments()
+        this.props.getAllParkComments()
+    }
+
 }
 
 const mapStateToProps = (state) => {
@@ -35,4 +49,11 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, null)(Routes)
+const mapDispatchToProps = (dispatch) => ({
+    getAllParks: () => dispatch(fetchParks()),
+    getAllEvents: () => dispatch(fetchEvents()),
+    getAllEventComments:() => dispatch(fetchEventComments()),
+    getAllParkComments:() => dispatch(fetchParkComments())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Routes)

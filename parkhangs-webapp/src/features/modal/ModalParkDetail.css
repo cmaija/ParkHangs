@@ -26,6 +26,7 @@
     font-size: 16px;
     font-weight: 500;
     padding-bottom: 0.75rem;
+    padding-right: 20px;
 }
 
 .Section {
@@ -56,7 +57,33 @@
     justify-content: space-between;
 }
 
-.EventTable {
-    max-height: 300px;
+.EventTable{
+    max-height: 19rem;
     overflow: scroll
+}
+
+.FilledHeartIcon {
+    position: absolute;
+    align-self: flex-end;
+    height: 1.875rem;
+    width: 1.875rem;
+    padding: 0.625rem;
+    fill: red
+}
+
+.NotFillHeartIcon {
+    position: absolute;
+    align-self: flex-end;
+    height: 1.875rem;
+    width: 1.875rem;
+    padding: 0.625rem;
+}
+
+#ShareCalendar * {
+    list-style: none;
+    margin: 0;
+    text-align: initial;
+    font-weight: lighter;
+    text-decoration: none;
+    padding: 0.1rem;
 }

@@ -1,13 +1,15 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import {
     addEvent,
-    updateEvent } from 'features/events/eventsSlice'
+    updateEvent
+} from 'features/events/eventsSlice'
 import TimePicker from 'react-time-picker'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
+import {closeModal} from 'features/modal/modalSlice';
 
 class EventForm extends React.Component {
 
@@ -19,6 +21,7 @@ class EventForm extends React.Component {
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
             eventDate: this.eventDate(),
+            parkId: this.props.parkId || null
         }
     }
 
@@ -36,14 +39,13 @@ class EventForm extends React.Component {
 
     eventStartTime = () => {
         const date = this.convertToMoment(this.props.eventDateTime)
-        return this.props.eventDateTime ? date.format("HH:m") : null
+        return this.props.eventDateTime ? date.format("HH:mm") : null
     }
 
     eventEndTime = () => {
-
         if (this.props.eventEndDateTime != null) {
             const date = this.convertToMoment(this.props.eventEndDateTime)
-            return this.props.eventEndDateTime ? date.format("HH:m") : null
+            return this.props.eventEndDateTime ? date.format("HH:mm") : null
         } else {
             return null;
         }
@@ -64,7 +66,7 @@ class EventForm extends React.Component {
     }
 
     eventDate = () => {
-        if (this.props.eventDatetime) {
+        if (this.props.eventDateTime) {
             return this.convertToMoment(this.props.eventDateTime)
         }
         return this.convertToMoment(this.props.currentDate)
@@ -111,29 +113,43 @@ class EventForm extends React.Component {
             eventEndDateTime = moment(`${this.parsedEventEndTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
         }
 
-        const detail =  this.state.eventDetail || this.eventDetail()
+        const detail = this.state.eventDetail || this.eventDetail()
         const eventDateTime = eventStartTimestamp
 
         if (!this.props.eventId) {
-            const newEvent = {
-                parkId: this.props.parkId,
-                details: detail,
-                eventDateTime,
-                eventEndDateTime,
-            }
-            this.props.addOneEvent(newEvent)
-        }
 
-        else {
+            const newEvent = {
+                parkId: this.state.parkId,
+                details: detail,
+                eventDateTime: eventDateTime,
+                eventEndDateTime: eventEndDateTime,
+            }
+
+            this.props.addOneEvent(this.props.user, newEvent)
+        } else {
             const updatedEvent = {
                 eventId: this.props.eventId,
-                parkId: this.props.parkId,
                 details: detail,
-                eventDateTime,
+                eventDateTime: eventDateTime,
+                eventEndDateTime: eventEndDateTime,
             }
             this.props.updateEvent(updatedEvent)
-            this.props.eventChanged(this.props.eventId, detail, eventDateTime, eventEndDateTime)
+
         }
+
+        this.props.closeModal();
+    }
+
+    handleUpdateSelectedPark = (event) => {
+
+        this.setState({
+            parkId: event.target.value
+        });
+
+    }
+
+    sortParkNamesAlphabetically = () => {
+        return this.props.parks.slice().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
     }
 
     render() {
@@ -147,7 +163,6 @@ class EventForm extends React.Component {
 
         return (
             <div className="EventForm">
-                <span>{this.isNewEvent ? 'Add New Event' : 'Edit Event'}</span>
                 <form className="EventForm">
                     {
                         showCalendar && <div className="formsection date">
@@ -161,7 +176,8 @@ class EventForm extends React.Component {
                             onChange={this.handleEventStartTimeChange}
                             id="eventStartTime"
                             disableClock={true}
-                            value={eventStartTime}/>
+                            value={eventStartTime}
+                            clearIcon={null}/>
                     </div>
                     <div className="formsection time">
                         <label htmlFor="eventTime">Event End Time: (optional)</label>
@@ -169,7 +185,8 @@ class EventForm extends React.Component {
                             onChange={this.handleEventEndTimeChange}
                             id="eventEndTime"
                             disableClock={true}
-                            value={eventEndTime}/>
+                            value={eventEndTime}
+                            clearIcon={null}/>
                     </div>
                     <div className="formsection details">
                         <label htmlFor="eventDetail">Details: </label>
@@ -178,6 +195,21 @@ class EventForm extends React.Component {
                             id="eventDetail"
                             defaultValue={eventDetail}/>
                     </div>
+                    {
+                        this.props.showParkPicker &&
+                        <div className="formsection park">
+                            <label htmlFor="eventPark">Select Park</label>
+                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
+                                {
+                                    this.sortParkNamesAlphabetically().map((park) => {
+                                        return <option
+                                            key={park._id}
+                                            value={park._id}>{park.name}</option>
+                                    })
+                                }
+                            </select>
+                        </div>
+                    }
                 </form>
                 <button className={"submit-message-button leftButton"}
                         onClick={this.handleAddEvent}>
@@ -189,8 +221,14 @@ class EventForm extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addOneEvent: (newEvent) => dispatch(addEvent(newEvent)),
-    updateEvent: (updatedEvent) => dispatch(updateEvent(updatedEvent))
+    addOneEvent: (user, newEvent) => dispatch(addEvent(user, newEvent)),
+    updateEvent: (updatedEvent) => dispatch(updateEvent(updatedEvent)),
+    closeModal: () => dispatch(closeModal(false)),
 })
 
-export default connect(null, mapDispatchToProps)(EventForm);
+const mapStateToProps = (state) => ({
+    parks: state.parks.parks,
+    user: state.user.user
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventForm);

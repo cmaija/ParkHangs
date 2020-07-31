@@ -25,8 +25,10 @@ const parksSlice = createSlice({
         parks: [],
         filteredParks: [],
         loadingParks: true,
+        addingRating: false,
         error : null
     },
+
     reducers: {
         fetchParksStart (state) {
             state.loadingParks = true
@@ -51,13 +53,74 @@ const parksSlice = createSlice({
                 return park.name.toLowerCase().includes(query.toLowerCase())
             })
         },
+        addRatingStart (state) {
+            state.addingRating = true
+            state.error = null
+        },
+
+        addRatingSuccessful (state, action) {
+            const parkId = action.payload.parkId
+            const rating = action.payload.rating
+            const newParkArray = state.parks.map((park) => {
+              if (park.Id === parkId) {
+                park.ratings.push(rating)
+              }
+            })
+            state.parks = newParkArray
+            state.addingRating = false
+            state.error = null
+        },
+
+        addRatingFailure (state, action) {
+            state.addingRating = false
+            state.error = action.payload
+        },
+
+        updateParkByIdStart (state, action) {
+            state.loadingParks = true
+            state.error = null
+        },
+
+        updateParkByIdSuccessful (state, action) {
+            const newPark = action.payload
+            let newParksList = state.parks.filter(park => park._id !== newPark._id)
+
+            newParksList.push(newPark)
+            state.parks = newParksList
+            state.loadingParks = false
+            state.error = null
+        },
+
+        updateParkByIdFailure (state, action) {
+            state.loadingParks = false
+            state.error = action.payload
+        },
+
+        addRatingStart (state, action) {
+            state.addingRating = true
+            state.error = null
+        },
+
+        addRatingSuccessful (state, action) {
+            const updatedPark = action.payload
+            const updatedRatings = updatedPark.ratings
+            let newParksList = state.parks.filter(park => park._id !== updatedPark._id)
+            newParksList.push(updatedPark)
+            state.parks = newParksList
+
+            state.addingRating = false
+            state.error = null
+        },
+
+        addRatingFailure (state, action) {
+            state.addingRating = false
+            state.error = action.payload
+        }
     },
 
     extraReducers: {
         [fetchEventsById.fulfilled]: (state, action) => {
             //action should return endpoint's call's events
-
-            const { requestId } = action.meta
             //In the case of no Events; no errors thrown but want to empty array
             state.eventsById = [];
 
@@ -86,9 +149,25 @@ export const {
     fetchParksSuccessful,
     fetchParksFailure,
     filterParks,
+    updateParkByIdStart,
+    updateParkByIdSuccessful,
+    updateParkByIdFailure,
+    addRatingStart,
+    addRatingSuccessful,
+    addRatingFailure
 } = parksSlice.actions
 
 export default parksSlice.reducer
+
+export const updateParkById = (parkId) => async dispatch => {
+    try {
+        dispatch(updateParkByIdStart())
+        const park = await ParkService.getParkById(parkId)
+        dispatch(updateParkByIdSuccessful(park))
+    } catch (error) {
+        dispatch(updateParkByIdFailure(error.toString()))
+    }
+}
 
 export const fetchParks = () => async dispatch => {
     try {
@@ -97,5 +176,15 @@ export const fetchParks = () => async dispatch => {
         dispatch(fetchParksSuccessful(parks))
     } catch (error) {
         dispatch(fetchParksFailure(error.toString()))
+    }
+}
+
+export const addRating = (parkId, rating) => async dispatch => {
+    try {
+        dispatch(addRatingStart())
+        const updatedPark = await ParkService.addRating(parkId, rating)
+        dispatch(addRatingSuccessful(updatedPark))
+    } catch (error) {
+        dispatch(addRatingFailure(error.toString()))
     }
 }

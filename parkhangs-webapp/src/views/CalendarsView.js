@@ -1,24 +1,15 @@
 import React, {Component} from 'react';
-import CalendarWrapper from '../components/CalendarWrapper';
-import Searchbar from '../components/Searchbar'
+import ParksCalendar from 'components/ParksCalendar'
+import Searchbar from 'components/Searchbar'
 import { connect } from 'react-redux'
 import './CalendarsView.css'
-import { fetchParks } from 'features/parks/parksSlice'
-import { fetchEvents } from 'features/events/eventsSlice'
 
 class CalendarsView extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            showAllParks: false,
+            showAllParks: true,
         }
-    }
-
-    componentDidMount = async () => {
-        if (this.props.parks.length === 0) {
-            this.props.getAllParks()
-        }
-        this.props.getAllEvents()
     }
 
     onSearch = (showAllParks) => {
@@ -37,14 +28,7 @@ class CalendarsView extends Component {
                 <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search for a park"/>
                 <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
                 <div className="CalendarList">
-                { this.state.showAllParks
-                    ? this.props.parks.map((park) => {
-                        return <CalendarWrapper key={park._id} park={park}/>
-                    })
-                    : this.props.filteredParks.map((park) => {
-                        return <CalendarWrapper key={park._id} park={park}/>
-                    })
-                }
+                <ParksCalendar showAllParks={this.state.showAllParks}/>
                 </div>
             </div>
         );
@@ -59,9 +43,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    getAllParks: () => dispatch(fetchParks()),
-    getAllEvents: () => dispatch(fetchEvents()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CalendarsView);
+export default connect(mapStateToProps, null)(CalendarsView);

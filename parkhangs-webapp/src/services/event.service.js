@@ -11,10 +11,16 @@ const EventService = {
         }
     },
 
-    addEvent: async function (newEvent) {
+    addEvent: async function (user, newEvent) {
         const url = `/events`
+
+        const object = {
+            user: user,
+            newEvent: newEvent
+        }
+
         try {
-            const response = await ApiService.post(url, newEvent)
+            const response = await ApiService.post(url, object)
             return response.data.data
         } catch (error) {
             throw new Error(error.response)
@@ -26,6 +32,16 @@ const EventService = {
         const url = `/events/${eventId}`
         try {
             const response = await ApiService.patch(url, updatedEvent)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
+
+    getEventById: async function (eventId) {
+        const url = `/events/${eventId}`
+        try {
+            const response = await ApiService.get(url)
             return response.data.data
         } catch (error) {
             throw new Error(error.response)
