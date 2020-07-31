@@ -50,7 +50,7 @@ database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // this is used to populate the database. Do not uncomment unless we need to add the parks
 // to the database again!
 
-const populatePark = require("./scripts/populateParks");
-populatePark();
+// const populatePark = require("./scripts/populateParks");
+// populatePark();
 
 module.exports = app;
