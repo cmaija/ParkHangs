@@ -146,7 +146,10 @@ class EventForm extends React.Component {
         this.setState({
             parkId: event.target.value
         });
+    }
 
+    sortParkNamesAlphabetically = () => {
+        return this.props.parks.slice().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
     }
 
     render() {
@@ -182,7 +185,8 @@ class EventForm extends React.Component {
                             onChange={this.handleEventStartTimeChange}
                             id="eventStartTime"
                             disableClock={true}
-                            value={eventStartTime}/>
+                            value={eventStartTime}
+                            clearIcon={null}/>
                     </div>
                     <div className="formsection time">
                         <label htmlFor="eventTime">Event End Time: (optional)</label>
@@ -190,7 +194,8 @@ class EventForm extends React.Component {
                             onChange={this.handleEventEndTimeChange}
                             id="eventEndTime"
                             disableClock={true}
-                            value={eventEndTime}/>
+                            value={eventEndTime}
+                            clearIcon={null}/>
                     </div>
                     <div className="formsection details">
                         <label htmlFor="eventDetail">Details: </label>
@@ -205,7 +210,8 @@ class EventForm extends React.Component {
                             <label htmlFor="eventPark">Select Park</label>
                             <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
                                 {
-                                    parks.map((park) => {
+
+                                    this.sortParkNamesAlphabetically().map((park) => {
                                         return <option
                                             key={park._id}
                                             value={park._id}>{park.name}</option>

@@ -21,6 +21,17 @@ const ParkService = {
         }
     },
 
+    getParksSimple: async function () {
+        const url = `/parksSimple`
+        try {
+            const response = await ApiService.get(url)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
+
+
     getParkById: async function (id) {
         const url = `/parks/${id}/`
         try {
@@ -31,15 +42,19 @@ const ParkService = {
         }
     },
 
-    getParksSimple: async function () {
-        const url = `/parksSimple`
-        try {
-            const response = await ApiService.get(url)
-            return response.data.data
-        } catch (error) {
-            throw new Error(error.response)
-        }
-    },
+    addRating: async function (parkId, rating) {
+      const url = `/parks/${parkId}/`
+      const object = {
+          parkId: parkId,
+          rating: rating
+      }
+      try {
+          const response = await ApiService.patch(url, object)
+          return response.data.data
+      } catch (error) {
+          throw new Error(error.response)
+      }
+    }
 }
 
 export default ParkService

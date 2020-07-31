@@ -41,8 +41,10 @@ class Marker extends Component {
     };
 }
 
+
+
 const mapDispatchToProps = (dispatch) => ({
-    selectPark: (parkId) => dispatch(selectPark(parkId))
+    selectPark: (parkId) => dispatch(selectPark(parkId)),
     openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 

@@ -19,6 +19,7 @@ router.get('/parks', parkController.getParks)
 router.get('/parks/:parkId', parkController.getParkById)
 router.get('/queryParks', parkController.queryParks)
 router.get('/parksSimple', parkController.getParksSimple)
+router.patch('/parks/:parkId', parkController.addRating);
 
 router.patch('/events/:eventId', eventController.updateEvent);
 router.delete('/events/:eventId', eventController.deleteEvent);
@@ -32,12 +33,11 @@ router.post('/user', userController.addUser);
 
 router.get('/parkComments', parkCommentController.getParkComments);
 router.post('/parkComments', parkCommentController.addParkComment);
-router.delete('/parkComments', parkCommentController.deleteParkComment);
+router.delete('/parkComments/:parkCommentId', parkCommentController.deleteParkComment);
 router.get('/eventComments', eventCommentController.getEventComments);
 router.post('/eventComments', eventCommentController.addEventComment);
-router.delete('/eventComments', eventCommentController.deleteEventComment);
+router.delete('/eventComments/:eventCommentId', eventCommentController.deleteEventComment);
 
 router.get('/facilityTypes', facilitiesController.getFacilityTypes)
-
 router.get('/parkSpecialFeatures', parkSpecialFeaturesController.getParkSpecialFeatures)
 module.exports = router;

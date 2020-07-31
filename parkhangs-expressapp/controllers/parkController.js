@@ -1,5 +1,6 @@
-const Park = require('../models/ParkModel')
-const express = require('express')
+const Park = require('../models/ParkModel');
+const express = require('express');
+var mongoose = require('mongoose');
 
 const getParks = async (req, res) => {
 
@@ -38,6 +39,36 @@ const getParksSimple = async (req, res) => {
         console.log(error)
         return res.status(400).json({success: false, error: error})
     }
+}
+
+// Adds a new rating
+const addRating = async (req, res) => {
+  var parkId = req.body.parkId;
+  var ratingUserPair = req.body.rating;
+
+  let parkToUpdate = {}
+
+  try {
+      parkToUpdate = await Park.findById(mongoose.Types.ObjectId(parkId))
+  } catch (error) {
+    return res.status(404).json({success: false,error: `Could not find the park with that id`})
+  }
+  try {
+    parkToUpdate.ratings.push(ratingUserPair)
+  } catch (error) {
+    return res.status(404).json({success: false,error: `Could not add rating to park`})
+  }
+
+  try {
+    res.setHeader('Content-Type', 'application/json');
+    const updatedPark = await parkToUpdate.save()
+    if (!updatedPark) {
+        return res.status(404).json({success: false,error: 'Could not update the park with the rating'})
+    }
+    return res.status(200).json({success: true, data: updatedPark})
+  } catch (error) {
+      return res.status(404).json({success: false, error: 'Could not add updated park to db'})
+  }
 }
 
 const getParkById = async (req, res) => {
@@ -197,6 +228,7 @@ function parseSpecialFeaturesFromQuery (featuresQuery) {
 }
 module.exports = {
     getParks,
+    addRating,
     getParkById,
     queryParks,
     getParksSimple,
