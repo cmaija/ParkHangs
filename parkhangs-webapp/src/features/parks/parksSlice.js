@@ -53,28 +53,6 @@ const parksSlice = createSlice({
                 return park.name.toLowerCase().includes(query.toLowerCase())
             })
         },
-        addRatingStart (state) {
-            state.addingRating = true
-            state.error = null
-        },
-
-        addRatingSuccessful (state, action) {
-            const parkId = action.payload.parkId
-            const rating = action.payload.rating
-            const newParkArray = state.parks.map((park) => {
-              if (park.Id === parkId) {
-                park.ratings.push(rating)
-              }
-            })
-            state.parks = newParkArray
-            state.addingRating = false
-            state.error = null
-        },
-
-        addRatingFailure (state, action) {
-            state.addingRating = false
-            state.error = action.payload
-        },
 
         updateParkByIdStart (state, action) {
             state.loadingParks = true
