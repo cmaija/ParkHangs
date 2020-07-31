@@ -30,14 +30,13 @@ const populateParks = async function() {
                     streetNumber: parkObjectFields.streetnumber,
                     streetName: parkObjectFields.streetname,
                     hectares: parkObjectFields.hectare,
-
-                    rating: 5, // initially it's a full score
-
                     hasWashrooms: parkObjectFields.washrooms === "Y",
                     hasFacilities: parkObjectFields.facilities === "Y",
                     hasAdvisories: parkObjectFields.advisories === "Y",
                     hasSpecialFeatures: parkObjectFields.specialfeatures === "Y",
-                    googleMapsLatLon: [lat, lon]
+                    googleMapsLatLon: [lat, lon],
+                    ratings: [],
+                    favoritesCount: 0
                 };
 
                 let newPark = new Park(
