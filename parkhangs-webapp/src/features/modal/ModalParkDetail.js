@@ -120,8 +120,10 @@ class ModalParkDetail extends React.Component {
 
       if (Number.isNaN(average)) {
         average = 0;
+        return average;
+      } else {
+        return Math.round(average * 10) / 10
       }
-      return average;
 
     }
 
