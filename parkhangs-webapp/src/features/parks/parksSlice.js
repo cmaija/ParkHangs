@@ -103,9 +103,10 @@ const parksSlice = createSlice({
 
         addRatingSuccessful (state, action) {
             const updatedPark = action.payload
-            const parkId = updatedPark._Id
             const updatedRatings = updatedPark.ratings
-            state.parks[parkId].ratings = updatedRatings
+            let newParksList = state.parks.filter(park => park._id !== updatedPark._id)
+            newParksList.push(updatedPark)
+            state.parks = newParksList
 
             state.addingRating = false
             state.error = null
