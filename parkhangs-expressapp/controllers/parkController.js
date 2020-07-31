@@ -22,6 +22,23 @@ const getParks = async (req, res) => {
 
 }
 
+const getParksSimple = async (req, res) => {
+    try {
+        let parks = await Park.find({})
+        parks = parks.map((park) => {
+            return {
+                name: park.name,
+                parkId: park.parkId,
+                _id: park._id,
+            }
+        })
+        return res.status(200).json({success: true, data: parks})
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({success: false, error: error})
+    }
+}
+
 const getParkById = async (req, res) => {
     const parkId = req.params.parkId
     try {
@@ -181,4 +198,5 @@ module.exports = {
     getParks,
     getParkById,
     queryParks,
+    getParksSimple,
 }
