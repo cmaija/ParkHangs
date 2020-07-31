@@ -29,7 +29,17 @@ const ParkService = {
         } catch (error) {
             throw new Error(error.response)
         }
-    }
+    },
+
+    getParksSimple: async function () {
+        const url = `/parksSimple`
+        try {
+            const response = await ApiService.get(url)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
 }
 
 export default ParkService

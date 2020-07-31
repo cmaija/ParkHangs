@@ -215,7 +215,8 @@ const mapStateToProps = (state) => {
         error: state.parks.error,
         events: state.events.eventsByParkId,
         user: state.user.user,
-        parks: state.parks.parks
+        parks: state.parks.parks,
+        selectedPark: state.parks.selectedPark
     }
 };
 

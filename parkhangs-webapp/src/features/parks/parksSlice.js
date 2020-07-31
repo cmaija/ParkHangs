@@ -25,9 +25,27 @@ const parksSlice = createSlice({
         parks: [],
         filteredParks: [],
         loadingParks: true,
-        error : null
+        error : null,
+        selectedPark: {},
+        loadingParkDetails: false,
     },
     reducers: {
+        selectParkStart (state) {
+            state.loadingParkDetails = true
+            state.error = null
+        },
+
+        selectParkSuccessful (state, action) {
+            state.selectedPark = action.payload
+            state.loadingParkDetails = false
+            state.error = null
+        },
+
+        selectParkFailure (state, action) {
+            state.loadingParkDetails = false
+            state.error = action.payload
+        },
+
         fetchParksStart (state) {
             state.loadingParks = true
             state.error = null
@@ -107,6 +125,9 @@ export const {
     updateParkByIdStart,
     updateParkByIdSuccessful,
     updateParkByIdFailure,
+    selectParkStart,
+    selectParkSuccessful,
+    selectParkFailure,
 } = parksSlice.actions
 
 export default parksSlice.reducer
@@ -124,9 +145,19 @@ export const updateParkById = (parkId) => async dispatch => {
 export const fetchParks = () => async dispatch => {
     try {
         dispatch(fetchParksStart())
-        const parks = await ParkService.getParks()
+        const parks = await ParkService.getParksSimple()
         dispatch(fetchParksSuccessful(parks))
     } catch (error) {
         dispatch(fetchParksFailure(error.toString()))
+    }
+}
+
+export const selectPark = (parkId) => async dispatch => {
+    try {
+        dispatch(selectParkStart())
+        const park = await ParkService.getParkById(parkId)
+        dispatch(selectParkSuccessful(park))
+    } catch (error) {
+        dispatch(selectParkFailure(error.toString()))
     }
 }

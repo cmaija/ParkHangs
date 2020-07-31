@@ -30,6 +30,7 @@ const getParksSimple = async (req, res) => {
                 name: park.name,
                 parkId: park.parkId,
                 _id: park._id,
+                googleMapsLatLon: park.googleMapsLatLon,
             }
         })
         return res.status(200).json({success: true, data: parks})
