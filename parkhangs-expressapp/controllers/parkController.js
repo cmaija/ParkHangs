@@ -55,16 +55,14 @@ const queryParks = async (req, res) => {
                 .json({success: false, error: `Park with name ${query.name} not found`})
         }
     }
-
+    // otherwise, construct a complex query with all the provided parameters.
     let incomingQuery = {
-        size: queryHasSizeFilters(query) !== undefined ? parseSizeFromQuery(query) : undefined,
-        rating: queryHasRatingFilters(query) !== undefined ? parseRatingFromQuery(query) : undefined,
+        size: queryHasSizeFilters(query) ? parseSizeFromQuery(query) : undefined,
+        rating: queryHasRatingFilters(query) ? parseRatingFromQuery(query) : undefined,
         hasWashrooms: query.hasWashrooms !== undefined ? query.hasWashrooms : undefined,
-        facilities: query.facilitites !== undefined ? parseFacilitiesFromQuery(query.facilities) : undefined,
+        facilities: query.facilities !== undefined ? parseFacilitiesFromQuery(query.facilities) : undefined,
         specialFeatures: query.specialFeatures !== undefined ? parseSpecialFeaturesFromQuery(query.specialFeatures) : undefined,
     }
-
-    console.log(incomingQuery)
 
     let queryObject = {
         hectares: incomingQuery.size,
@@ -73,16 +71,11 @@ const queryParks = async (req, res) => {
         facilities: incomingQuery.facilities,
         specialFeatures: incomingQuery.specialFeatures,
     }
-
-
     for (let query of Object.keys(queryObject)) {
         if (queryObject[query] === undefined) {
             delete queryObject[query]
         }
     }
-
-    console.log('this is the query object I would like to send to mongoose')
-    console.log(queryObject)
     try {
         const foundParks = await Park.find(queryObject)
         return res.status(200).json({
@@ -98,7 +91,6 @@ const queryParks = async (req, res) => {
 }
 
 function queryHasSizeFilters (query) {
-    console.log('has size filters??')
     const hasGreaterThan = query.sizeGte !== undefined
     const hasLessThan = query.sizeLte !== undefined
     const hasEqual = query.sizeEq !== undefined
@@ -107,8 +99,6 @@ function queryHasSizeFilters (query) {
 }
 
 function queryHasRatingFilters (query) {
-    console.log('has rating filters??')
-    console.log(query)
     const hasGreaterThan = query.ratingGte !== undefined
     const hasLessThan = query.ratingLte !== undefined
     const hasEqual = query.ratingEq !== undefined
@@ -126,10 +116,10 @@ function parseSizeFromQuery (query) {
         return query.sizeEq
     }
     if (hasGreaterThan) {
-        query['$gte'] = query.sizeGte
+        parsedQuery['$gte'] = query.sizeGte
     }
     if (hasLessThan) {
-        query['$lte'] = query.sizeLte
+        parsedQuery['$lte'] = query.sizeLte
     }
 
     return parsedQuery
@@ -145,27 +135,47 @@ function parseRatingFromQuery (query) {
         return query.ratingEq
     }
     if (hasGreaterThan) {
-        query['$gte'] = query.ratingGte
+        parsedQuery['$gte'] = query.ratingGte
     }
     if (hasLessThan) {
-        query['$lte'] = query.ratingLte
+        parsedQuery['$lte'] = query.ratingLte
     }
 
     return parsedQuery
 }
 
 function parseFacilitiesFromQuery (facilitiesQuery) {
-    console.log(facilitiesQuery)
-    return {
-        $all: [...facilitiesQuery]
+    let parsedQuery = facilitiesQuery
+    try {
+         parsedQuery = JSON.parse(parsedQuery)
+    } catch (error) {
+        console.error(error)
+        console.log('failed to parse JSON')
     }
+
+    parsedQuery = parsedQuery.map((facilityType) => {
+        return {
+            '$elemMatch': { facilityType: facilityType }
+        }
+    })
+    return { $all: parsedQuery }
 }
 
 function parseSpecialFeaturesFromQuery (featuresQuery) {
-    console.log(featuresQuery)
-    return {
-        $all: [...featuresQuery]
+    let parsedQuery = featuresQuery
+    try {
+         parsedQuery = JSON.parse(parsedQuery)
+    } catch (error) {
+        console.error(error)
+        console.log('failed to parse JSON')
     }
+
+    parsedQuery = parsedQuery.map((featureType) => {
+        return {
+            '$elemMatch': { feature: featureType }
+        }
+    })
+    return { $all: parsedQuery }
 }
 module.exports = {
     getParks,

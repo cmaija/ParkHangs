@@ -7,6 +7,11 @@ const Park = require('../models/ParkModel')
 
 const populateFacilities = async function() {
     try {
+        const parks = await Park.update({}, {"unset": {"facilities": ""}},  {"multi": true})
+    } catch (error) {
+        console.log('could not reset all park facilities')
+    }
+    try {
         let res = await axios.get("https://opendata.vancouver.ca/api/records/1.0/search/?dataset=parks-facilities&q=&rows=700&facet=facilitytype")
         res = res.data
         const facilitiesRecords = res.records
@@ -17,7 +22,11 @@ const populateFacilities = async function() {
                 name: facilityType.name
             })
 
-            await newFacilityType.save()
+            const featureAlreadyExists = await Facility.find({name: facilityType.name})
+
+            if (featureAlreadyExists.length < 1) {
+                await newFacilityType.save()
+            }
         }
 
         for (let record of facilitiesRecords) {
@@ -30,8 +39,7 @@ const populateFacilities = async function() {
 
             try {
                 let parkToAddFacilityTo = await Park.findOne({parkId: facilityFields.parkid})
-                parkToAddFacilityTo.facilities = undefined
-                if (parkToAddFacilityTo.facilities === undefined) {
+                if (parkToAddFacilityTo.facilities === undefined || parkToAddFacilityTo.facilities === null) {
                     parkToAddFacilityTo.facilities = []
                 }
                 parkToAddFacilityTo.facilities.push(facilityObject)

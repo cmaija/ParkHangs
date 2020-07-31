@@ -7,6 +7,11 @@ const Park = require('../models/ParkModel')
 
 const populateParkSpecialFeatures = async function() {
     try {
+        const parks = await Park.update({}, {"unset": {"specialFeatures": ""}},  {"multi": true})
+    } catch (error) {
+        console.log('could not reset all park special features')
+    }
+    try {
         let res = await axios.get("https://opendata.vancouver.ca/api/records/1.0/search/?dataset=parks-special-features&q=&rows=300&facet=specialfeature&facet=name")
         res = res.data
         const specialFeatureRecords = res.records
@@ -32,8 +37,7 @@ const populateParkSpecialFeatures = async function() {
 
             try {
                 let parkToAddFeatureTo = await Park.findOne({parkId: specialFeatureFields.parkid})
-                parkToAddFeatureTo.specialFeatures = undefined
-                if (parkToAddFeatureTo.specialFeatures === undefined) {
+                if (parkToAddFeatureTo.specialFeatures === undefined || parkToAddFeatureTo.specialFeatures === null) {
                     parkToAddFeatureTo.specialFeatures = []
                 }
                 parkToAddFeatureTo.specialFeatures.push(specialFeatureObject)
