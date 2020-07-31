@@ -40,6 +40,20 @@ const ParkService = {
         } catch (error) {
             throw new Error(error.response)
         }
+    },
+
+    addRating: async function (parkId, rating) {
+      const url = `/parks/${parkId}/`
+      const object = {
+          parkId: parkId,
+          rating: rating
+      }
+      try {
+          const response = await ApiService.patch(url, object)
+          return response.data.data
+      } catch (error) {
+          throw new Error(error.response)
+      }
     }
 }
 

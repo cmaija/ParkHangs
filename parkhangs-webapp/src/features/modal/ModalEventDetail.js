@@ -134,19 +134,19 @@ class ModalEventDetail extends React.Component {
         if (this.props.user != null) {
           deletingUser = this.props.user._id
         }
-        if (commentUser === deletingUser || commentUser === 0) {
+        if (commentUser === deletingUser) {
           this.props.deleteCommentFromEvent(comment._id, eventId)
         } else {
           alert("You cannot delete another user's comment!")
         }
       }
 
-    commentsTab = (event) => {
+    commentsTab = (event, comments) => {
         return (
             <div className="Section">
               <div className="EventComments">
                   <span className="SectionTitle">Event Comments</span>
-                  { this.getCommentsByEvent().map((comment) => {
+                  { comments.map((comment) => {
                     return <table>
                       <tbody>
                         <tr key={comment._id}>
@@ -200,6 +200,7 @@ class ModalEventDetail extends React.Component {
         const parkStrNum = this.props.parks.find(park => park._id === event.parkId).streetNumber
         const parkStrName = this.props.parks.find(park => park._id === event.parkId).streetName
         const isFavorited = this.isFavorited(event)
+        const comments = this.getCommentsByEvent()
 
         let newEvent = {
             title: event.details,
@@ -216,7 +217,7 @@ class ModalEventDetail extends React.Component {
         if (this.state.currentTab === 'edit') {
             currentTab = this.editTab(event)
         } else if (this.state.currentTab === 'comments') {
-            currentTab = this.commentsTab(event)
+            currentTab = this.commentsTab(event, comments)
         } else {
             currentTab = this.descriptionTab(event, eventStart, formattedEnd)
         }

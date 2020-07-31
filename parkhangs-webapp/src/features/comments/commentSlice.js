@@ -7,7 +7,7 @@ const commentSlice = createSlice({
         commentsByParkId: {},
         commentsByEventId: {},
         flattenedParkComments: [],
-        flatennedEventsComments: [],
+        flattenedEventsComments: [],
         loadingParkComments: true,
         loadingEventComments: false,
         deletingParkComment: false,
@@ -51,8 +51,17 @@ const commentSlice = createSlice({
         addParkCommentSuccessful (state, action) {
             const newComment = action.payload
             const parkId = newComment.parkId
-            const currentComments = state.commentsByParkId[parkId]
+
+            let currentComments = state.commentsByParkId[parkId]
+            if (!currentComments) {
+                state.commentsByParkId[parkId] = []
+                currentComments = state.commentsByParkId[parkId]
+            }
             currentComments.push(newComment)
+
+            const flattenedParkComments = state.flattenedParkComments
+            flattenedParkComments.push(newComment)
+            state.flattenedParkComments = flattenedParkComments
 
             state.commentsByParkId[parkId] = currentComments
             state.addingComment = false
@@ -99,10 +108,18 @@ const commentSlice = createSlice({
         addEventCommentSuccessful (state, action) {
             const newComment = action.payload
             const eventId = newComment.eventId
-            const currentComments = state.commentsByEventId[eventId]
+            let currentComments = state.commentsByEventId[eventId]
+            if (!currentComments) {
+                state.commentsByEventId[eventId] = []
+                currentComments = state.commentsByEventId[eventId]
+            }
             currentComments.push(newComment)
-
             state.commentsByEventId[eventId] = currentComments
+
+            const flattenedEventsComments = state.flattenedEventsComments
+            flattenedEventsComments.push(newComment)
+            state.flattenedEventsComments = flattenedEventsComments
+
             state.addingComment = false
             state.error = null
         },
