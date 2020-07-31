@@ -10,7 +10,6 @@ import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
 import { closeModal } from 'features/modal/modalSlice';
-import { cloneDeep } from 'lodash'
 
 class EventForm extends React.Component {
 
@@ -160,15 +159,6 @@ class EventForm extends React.Component {
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
-        const parks = cloneDeep(this.props.parks).sort((a,b) => {
-            if (a.name > b.name) {
-                return -1;
-            }
-            if (b.name > a.name) {
-                return 1;
-            }
-            return 0;
-        })
 
         return (
             <div className="EventForm">
@@ -210,7 +200,6 @@ class EventForm extends React.Component {
                             <label htmlFor="eventPark">Select Park</label>
                             <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
                                 {
-
                                     this.sortParkNamesAlphabetically().map((park) => {
                                         return <option
                                             key={park._id}
