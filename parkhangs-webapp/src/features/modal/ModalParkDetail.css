@@ -156,8 +156,27 @@
     width: 90%;
     display: flex;
 }
+.Ratings{
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+.Ratings > button {
+    font-size:100%;
+    font-family:inherit;
+    border:0;
+    background: none;
+    outline: none;
+}
 
+.Ratings > button:hover,
+.Ratings > button:hover ~ button{
+    font-size: 2rem;
+    color: gold
+}
 
+.star{
+    font-size: 2rem;
+}
 @media only screen and (max-width:600px){
     .ModalParkDetail-leftToolbar {
         padding-left: 0.2rem;

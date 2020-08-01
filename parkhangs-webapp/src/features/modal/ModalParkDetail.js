@@ -430,20 +430,20 @@ class ModalParkDetail extends React.Component {
             
             <div className="ModalParkDetail-ratings">
                 <div className="Ratings">
-                <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
-                    <b>1</b>
-                </button>
-                <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
-                    <b>2</b>
+                <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
+                    <span  className="star">☆</span>
+                </button> 
+                <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
+                    <span  className="star">☆</span> 
                 </button>
                 <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
-                    <b>3</b>
+                    <span  className="star">☆</span> 
                 </button>
-                <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
-                    <b>4</b>
+                <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
+                    <span className="star">☆</span>
                 </button>
-                <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
-                    <b>5</b>
+                <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
+                    <span className="star">☆</span>
                 </button>
                 </div>
                 <div className="AverageRating">
