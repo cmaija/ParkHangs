@@ -10,6 +10,8 @@ import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
 import {closeModal} from 'features/modal/modalSlice';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class EventForm extends React.Component {
 
@@ -21,8 +23,17 @@ class EventForm extends React.Component {
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
             eventDate: this.eventDate(),
-            parkId: this.props.parkId || null
+            parkId: this.props.parkId || null,
+            startDate: new Date()
         }
+        this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
+    }
+
+    handleDatePickerChange(date) {
+        this.setState({
+            startDate: date
+        })
+        this.handleUpdateDate(date);
     }
 
     eventDetail = () => {
@@ -80,6 +91,9 @@ class EventForm extends React.Component {
         return this.props.showDayPicker
     }
 
+    showDatePicker = () => {
+        return this.props.showDatePicker
+    }
     isNewEvent = () => {
         return !this.props.eventId
     }
@@ -104,7 +118,6 @@ class EventForm extends React.Component {
 
     handleAddEvent = (event) => {
         event.preventDefault()
-
         const eventStartTimestamp = moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
 
         let eventEndDateTime
@@ -124,6 +137,7 @@ class EventForm extends React.Component {
                 eventDateTime: eventDateTime,
                 eventEndDateTime: eventEndDateTime,
             }
+           
 
             this.props.addOneEvent(this.props.user, newEvent)
         } else {
@@ -160,14 +174,21 @@ class EventForm extends React.Component {
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
+        const showDatePicker = this.showDatePicker()
 
         return (
             <div className="EventForm">
                 <form className="EventForm">
                     {
-                        showCalendar && <div className="formsection date">
+                        showCalendar && <div className="formsection date"> 
                             <label htmlFor="eventDate">Date:</label>
                             <Calendar id="eventDate" value={eventDate} onChange={this.handleUpdateDate}/>
+                        </div>
+                    }
+                    {
+                        showDatePicker && <div className="formsection date"> 
+                            <label htmlFor="eventDate">Date:</label>
+                            <DatePicker selected={this.state.startDate}  onChange={this.handleDatePickerChange}/> 
                         </div>
                     }
                     <div className="formsection time">
@@ -180,7 +201,7 @@ class EventForm extends React.Component {
                             clearIcon={null}/>
                     </div>
                     <div className="formsection time">
-                        <label htmlFor="eventTime">Event End Time: (optional)</label>
+                        <label htmlFor="eventTime">Event End Time:</label>
                         <TimePicker
                             onChange={this.handleEventEndTimeChange}
                             id="eventEndTime"
@@ -228,7 +249,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
     parks: state.parks.parks,
-    user: state.user.user
+    user: state.user.user,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventForm);

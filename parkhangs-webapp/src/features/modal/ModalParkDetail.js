@@ -10,6 +10,8 @@ import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
 import { addRating } from 'features/parks/parksSlice';
 import ShareCalendar from 'components/ShareCalendar';
+import LoadingSpinner from 'components/LoadingSpinner';
+import EventForm from 'components/EventForm';
 
 
 class ModalParkDetail extends React.Component {
@@ -54,7 +56,7 @@ class ModalParkDetail extends React.Component {
 
     getEventTime = (date) => {
         if (date != null) {
-            return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+            return moment.unix(date).format("YYYY/MM/DD hh:mm a");
         } else {
             return "";
         }
@@ -88,6 +90,20 @@ class ModalParkDetail extends React.Component {
     getExportedTime = (date) => {
         let formattedDate = moment.unix(date).format("YYYYMMDDTHHmmssZ");
         return formattedDate.replace("+00:00", "Z");
+    }
+
+    eventStartTime = (timestamp) => {
+        const date = this.convertToMoment(timestamp)
+        return timestamp ? date.format("MMMM Do YYYY hh:mma") : null
+    }
+
+    eventEndTime = (timestamp) => {
+        if (timestamp != null) {
+            const date = this.convertToMoment(timestamp)
+            return timestamp ? date.format("hh:mma") : null
+        } else {
+            return null;
+        }
     }
 
     handleAddRating = (rating) => {
@@ -188,7 +204,7 @@ class ModalParkDetail extends React.Component {
                 <div className="ModalParkDetail-FacilitiesTable TableContainer">
                     {
                         park.hasFacilities ?
-                        <div className ="FacilitiesTable Column">
+                        <div className="FacilitiesTable Column">
                             <table>
                                 <thead>
                                     <tr>
@@ -228,7 +244,7 @@ class ModalParkDetail extends React.Component {
                 <div className="ModalParkDetail-FeaturesTable TableContainer">
                     {
                         park.hasSpecialFeatures ?
-                        <div className ="FeaturesTable Column">
+                        <div className="FeaturesTable Column">
                             <table>
                                 <thead>
                                     <tr>
@@ -258,7 +274,7 @@ class ModalParkDetail extends React.Component {
             
         )
     }
-    eventsTab = (park) => {
+    eventsTab = (park, parkId) => {
         return (
             <div className="ModalParkDetail-events">
                 <div className="Section EventTable">
@@ -349,12 +365,31 @@ class ModalParkDetail extends React.Component {
                     There are no events for this park
                 </div>
             }
+          
+            <div className="AddEventForm"> 
+            {
+            this.props.updatingEvent 
+            ? 
+                <div className="ModalEventDetail-updatingEvent">
+                    <LoadingSpinner />
+                </div> 
+            :
+                <EventForm
+                event={null}
+                eventDetails={event.details}
+                eventId={null}
+                showParkPicker={false}
+                parkId={parkId}
+                showDatePicker={true}
+                />
+            }
+            </div>          
+
         </div>
     </div>
        
         )
     }
-
     commentsTab = (parkId, comments, user) => {
         return (
             <div className="ModalParkDetail-comments">
@@ -426,6 +461,8 @@ class ModalParkDetail extends React.Component {
         const parkId = this.props.parkId
         const facilities = park.facilities
         const features = park.specialFeatures
+        
+      
 
         let currentTab
 
@@ -434,7 +471,7 @@ class ModalParkDetail extends React.Component {
         } else if (this.state.currentTab === 'comments') {
             currentTab = this.commentsTab(parkId, comments, user)
         } else if (this.state.currentTab === 'events') {
-            currentTab = this.eventsTab(park)
+            currentTab = this.eventsTab(park, parkId)
         } else if (this.state.currentTab === 'facilities-and-features') {
             currentTab = this.facilitiesAndFeaturesTab(park, facilities, features)
         } else {
@@ -451,27 +488,27 @@ class ModalParkDetail extends React.Component {
                     <div className="ModalParkDetail-divider"></div>
                     <div className="ModalParkDetail-toolbar">
                         <div className="ModalParkDetail-leftToolbar">
-                            <div className ={
+                            <div className={
                             `${this.state.currentTab === 'description' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
                             onClick={() => this.selectTab('description')}>
                             <span className="ModalParkDetail-tabName">Description</span>
                             </div>
-                            <div className ={
+                            <div className={
                             `${this.state.currentTab === 'facilities-and-features' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
                             onClick={() => this.selectTab('facilities-and-features')}>
                             <span className="ModalParkDetail-tabName">Facilities {`&`} Features</span>
                             </div>
-                            <div className ={
+                            <div className={
                             `${this.state.currentTab === 'events' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
                             onClick={() => this.selectTab('events')}>
                             <span className="ModalParkDetail-tabName">Events</span>
                             </div>
-                            <div className ={
+                            <div className={
                             `${this.state.currentTab === 'comments' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
                             onClick={() => this.selectTab('comments')}>
                             <span className="ModalParkDetail-tabName">Comments</span>
                             </div>
-                            <div className ={
+                            <div className={
                             `${this.state.currentTab === 'ratings' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
                             onClick={() => this.selectTab('ratings')}>
                             <span className="ModalParkDetail-tabName">Ratings</span>
@@ -501,6 +538,7 @@ const mapStateToProps = (state) => {
         user: state.user.user,
         parks: state.parks.parks,
         comments: state.comments.commentsByParkId,
+        updatingEvent: state.events.updatingEvent,
     }
 };
 
@@ -508,7 +546,7 @@ const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
     deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId)),
     toggleSavedPark: (user, parkId) => dispatch(toggleSavedPark(user, parkId)),
-    addRating: (parkId, rating) => dispatch(addRating(parkId, rating))
+    addRating: (parkId, rating) => dispatch(addRating(parkId, rating)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalParkDetail);

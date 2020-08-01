@@ -189,7 +189,8 @@ class ModalEventDetail extends React.Component {
                     eventEndDateTime={event.eventEndDateTime}
                     eventDetails={event.details}
                     eventId={event._id}
-                    showDayPicker={false} />
+                    showDayPicker={false}
+                    showDatePicker={false} />
             </div>
         )
         return this.props.updatingEvent ? loadingState : eventForm
