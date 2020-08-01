@@ -11,3 +11,6 @@
     align-items: flex-start;
     width: 100%;
 }
+.submit-message-button{
+    align-self: center;
+}

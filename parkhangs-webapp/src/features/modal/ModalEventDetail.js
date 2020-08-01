@@ -143,9 +143,9 @@ class ModalEventDetail extends React.Component {
 
     commentsTab = (event, comments) => {
         return (
-            <div className="Section">
-              <div className="EventComments">
-                  <span className="SectionTitle">Event Comments</span>
+            <div className="EventComments">
+              <div className="EventCommentsHistory Column">
+                  <span className="SectionTitle"><b>Event Comments</b></span>
                   { comments.map((comment) => {
                     return <table>
                       <tbody>
@@ -165,9 +165,12 @@ class ModalEventDetail extends React.Component {
                       </tbody>
                     </table>
                     })
-                  }
-                  <CommentForm eventId={this.props.eventId}/>
-                </div>
+                  } 
+                  </div>
+                   <div className="EventCommentForm Column">
+                       <CommentForm eventId={this.props.eventId}/>
+                   </div>
+               
               </div>
         )
     }
