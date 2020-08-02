@@ -7,7 +7,7 @@ const Park = require('../models/ParkModel')
 
 const populateParkSpecialFeatures = async function() {
     try {
-        const parks = await Park.update({}, {"unset": {"specialFeatures": ""}},  {"multi": true})
+        const parks = await Park.updateMany({}, {"$unset": {"specialFeatures": ""}})
     } catch (error) {
         console.log('could not reset all park special features')
     }

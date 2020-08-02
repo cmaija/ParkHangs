@@ -24,11 +24,16 @@ const parksSlice = createSlice({
     initialState: {
         parks: [],
         filteredParks: [],
+        queriedParks: [],
         loadingParks: true,
         addingRating: false,
         error : null,
         selectedPark: {},
         loadingParkDetails: false,
+        loadingFacilities: false,
+        loadingSpecialFeatures: false,
+        facilities: [],
+        specialFeatures: [],
     },
 
     reducers: {
@@ -62,6 +67,55 @@ const parksSlice = createSlice({
 
         fetchParksFailure (state, action) {
             state.loadingParks = false
+            state.error = action.payload
+        },
+
+        queryParksStart (state) {
+            state.loadingParks = true
+            state.error = null
+        },
+
+        queryParksSuccessful (state, action) {
+            const parks = action.payload
+            state.parks = parks
+            state.loadingParks = false
+            state.error = null
+        },
+
+        queryParksFailure (state, action) {
+            state.loadingParks = false
+            state.error = action.payload
+        },
+
+        getFacilityTypesStart (state) {
+            state.loadingFacilities = true
+            state.error = null
+        },
+
+        getFacilityTypesSuccessful (state, action) {
+            state.facilities = action.payload
+            state.loadingFacilities = false
+            state.error = null
+        },
+
+        getFacilityTypesFailure (state, action) {
+            state.loadingFacilities = false
+            state.error = action.payload
+        },
+
+        getSpecialFeaturesStart (state) {
+            state.loadingSpecialFeatures = true
+            state.error = null
+        },
+
+        getSpecialFeaturesSuccessful (state, action) {
+            state.specialFeatures = action.payload
+            state.loadingSpecialFeatures = false
+            state.error = null
+        },
+
+        getSpecialFeaturesFailure (state, action) {
+            state.loadingSpecialFeatures = false
             state.error = action.payload
         },
 
@@ -144,6 +198,9 @@ export const {
     fetchParksStart,
     fetchParksSuccessful,
     fetchParksFailure,
+    queryParksStart,
+    queryParksSuccessful,
+    queryParksFailure,
     filterParks,
     updateParkByIdStart,
     updateParkByIdSuccessful,
@@ -153,7 +210,13 @@ export const {
     selectParkFailure,
     addRatingStart,
     addRatingSuccessful,
-    addRatingFailure
+    addRatingFailure,
+    getFacilityTypesStart,
+    getFacilityTypesSuccessful,
+    getFacilityTypesFailure,
+    getSpecialFeaturesStart,
+    getSpecialFeaturesSuccessful,
+    getSpecialFeaturesFailure,
 } = parksSlice.actions
 
 export default parksSlice.reducer
@@ -175,6 +238,36 @@ export const fetchParks = () => async dispatch => {
         dispatch(fetchParksSuccessful(parks))
     } catch (error) {
         dispatch(fetchParksFailure(error.toString()))
+    }
+}
+
+export const queryParks = (queryParams) => async dispatch => {
+    try {
+        dispatch(queryParksStart())
+        const parks = await ParkService.queryParks(queryParams)
+        dispatch(queryParksSuccessful(parks))
+    } catch (error) {
+        dispatch(queryParksFailure(error.toString()))
+    }
+}
+
+export const fetchFacilityTypes = () => async dispatch => {
+    try {
+        dispatch(getFacilityTypesStart())
+        const facilities = await ParkService.getFacilityTypes()
+        dispatch(getFacilityTypesSuccessful(facilities))
+    } catch (error) {
+        dispatch(getFacilityTypesFailure(error.toString()))
+    }
+}
+
+export const fetchSpecialFeatures = () => async dispatch => {
+    try {
+        dispatch(getSpecialFeaturesStart())
+        const specialFeatures = await ParkService.getSpecialFeatures()
+        dispatch(getSpecialFeaturesSuccessful(specialFeatures))
+    } catch (error) {
+        dispatch(getSpecialFeaturesFailure(error.toString()))
     }
 }
 

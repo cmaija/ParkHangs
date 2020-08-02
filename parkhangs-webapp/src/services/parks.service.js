@@ -21,6 +21,16 @@ const ParkService = {
         }
     },
 
+    queryParks: async function (params) {
+        const url = `/queryParks`
+        try {
+            const response = await ApiService.get(url, { params })
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
+
     getParksSimple: async function () {
         const url = `/parksSimple`
         try {
@@ -54,7 +64,27 @@ const ParkService = {
       } catch (error) {
           throw new Error(error.response)
       }
-    }
+  },
+
+  getFacilityTypes: async function () {
+      const url = `/facilityTypes`
+      try {
+          const response = await ApiService.get(url)
+          return response.data.data
+      } catch (error) {
+          throw new Error(error.response)
+      }
+  },
+
+  getSpecialFeatures: async function () {
+      const url = `/parkSpecialFeatures`
+      try {
+          const response = await ApiService.get(url)
+          return response.data.data
+      } catch (error) {
+          throw new Error(error.response)
+      }
+  },
 }
 
 export default ParkService

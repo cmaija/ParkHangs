@@ -127,6 +127,14 @@ const queryParks = async (req, res) => {
     }
     try {
         const foundParks = await Park.find(queryObject)
+        foundParks = foundParks.map((park) => {
+            return {
+                name: park.name,
+                parkId: park.parkId,
+                _id: park._id,
+                googleMapsLatLon: park.googleMapsLatLon,
+            }
+        })
         return res.status(200).json({
                 success: true,
                 data: foundParks,

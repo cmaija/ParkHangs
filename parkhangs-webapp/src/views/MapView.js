@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import Map from '../components/Map.js';
-import './MapView.css';
+import React, { Component } from 'react'
+import Map from '../components/Map'
+import ParkFilterToolbar from 'components/ParkFilterToolbar'
+import './MapView.css'
 import { connect } from 'react-redux'
 
 
@@ -9,6 +10,7 @@ class MapView extends Component {
     render() {
         return (
             <div className="MapView">
+                <ParkFilterToolbar />
                 <Map/>
             </div>
         );

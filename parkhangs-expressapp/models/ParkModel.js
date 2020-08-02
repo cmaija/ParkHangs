@@ -10,7 +10,6 @@ const Park = new Schema(
         streetNumber: {type: Number, required: true},
         streetName: {type: String, required: true},
         hectares: {type: Number, required: true},
-        rating: {type: Number, required: true},
         hasWashrooms: {type: Boolean, required: true},
         hasFacilities: {type: Boolean, required: true},
         hasAdvisories: {type: Boolean, required: true},
