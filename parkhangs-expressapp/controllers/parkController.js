@@ -1,6 +1,7 @@
 const Park = require('../models/ParkModel');
 const express = require('express');
 var mongoose = require('mongoose');
+const querystring = require('querystring')
 
 const getParks = async (req, res) => {
 
@@ -43,32 +44,46 @@ const getParksSimple = async (req, res) => {
 
 // Adds a new rating
 const addRating = async (req, res) => {
-  var parkId = req.body.parkId;
-  var ratingUserPair = req.body.rating;
+    var parkId = req.body.parkId;
+    var ratingUserPair = req.body.rating;
 
-  let parkToUpdate = {}
+    let parkToUpdate = {}
 
-  try {
-      parkToUpdate = await Park.findById(mongoose.Types.ObjectId(parkId))
-  } catch (error) {
-    return res.status(404).json({success: false,error: `Could not find the park with that id`})
-  }
-  try {
-    parkToUpdate.ratings.push(ratingUserPair)
-  } catch (error) {
-    return res.status(404).json({success: false,error: `Could not add rating to park`})
-  }
-
-  try {
-    res.setHeader('Content-Type', 'application/json');
-    const updatedPark = await parkToUpdate.save()
-    if (!updatedPark) {
-        return res.status(404).json({success: false,error: 'Could not update the park with the rating'})
+    try {
+        parkToUpdate = await Park.findById(mongoose.Types.ObjectId(parkId))
+    } catch (error) {
+        return res.status(404).json({success: false,error: `Could not find the park with that id`})
     }
-    return res.status(200).json({success: true, data: updatedPark})
-  } catch (error) {
-      return res.status(404).json({success: false, error: 'Could not add updated park to db'})
-  }
+    try {
+        parkToUpdate.ratings.push(ratingUserPair)
+        const ratings = parkToUpdate.ratings
+        let ratingSum = ratings.reduce((acc, rating) =>  {
+          return acc += rating.rating
+        }, 0)
+
+        let averageRating = ratingSum/ratings.length
+        if (Number.isNaN(averageRating)) {
+            averageRating = 0
+        } else {
+            averageRating = Math.round(averageRating * 10) / 10
+        }
+
+        parkToUpdate.averageRating = averageRating
+    } catch (error) {
+        console.error(error)
+        return res.status(404).json({success: false,error: `Could not add rating to park`})
+    }
+
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const updatedPark = await parkToUpdate.save()
+        if (!updatedPark) {
+            return res.status(404).json({success: false,error: 'Could not update the park with the rating'})
+        }
+        return res.status(200).json({success: true, data: updatedPark})
+    } catch (error) {
+        return res.status(404).json({success: false, error: 'Could not add updated park to db'})
+    }
 }
 
 const getParkById = async (req, res) => {
@@ -108,25 +123,27 @@ const queryParks = async (req, res) => {
     let incomingQuery = {
         size: queryHasSizeFilters(query) ? parseSizeFromQuery(query) : undefined,
         rating: queryHasRatingFilters(query) ? parseRatingFromQuery(query) : undefined,
-        hasWashrooms: query.hasWashrooms !== undefined ? query.hasWashrooms : undefined,
+        hasWashrooms: query.hasWashrooms !== undefined ? parseWashroomQuery(query.hasWashrooms) : undefined,
         facilities: query.facilities !== undefined ? parseFacilitiesFromQuery(query.facilities) : undefined,
         specialFeatures: query.specialFeatures !== undefined ? parseSpecialFeaturesFromQuery(query.specialFeatures) : undefined,
     }
 
     let queryObject = {
         hectares: incomingQuery.size,
-        rating: incomingQuery.rating,
+        averageRating: incomingQuery.rating,
         hasWashrooms: incomingQuery.hasWashrooms,
         facilities: incomingQuery.facilities,
         specialFeatures: incomingQuery.specialFeatures,
     }
+
     for (let query of Object.keys(queryObject)) {
         if (queryObject[query] === undefined) {
             delete queryObject[query]
         }
     }
+
     try {
-        const foundParks = await Park.find(queryObject)
+        let foundParks = await Park.find(queryObject)
         foundParks = foundParks.map((park) => {
             return {
                 name: park.name,
@@ -143,8 +160,15 @@ const queryParks = async (req, res) => {
         console.error(error)
         return res
             .status(404)
-            .json({success: false, error: `Park with name ${query.name} not found`})
+            .json({success: false, error: `Query: ${query.toString()} was unsuccessful`})
     }
+}
+
+function parseWashroomQuery (query) {
+    if (typeof query === 'string') {
+        return JSON.parse(query)
+    }
+    return query
 }
 
 function queryHasSizeFilters (query) {
@@ -203,11 +227,13 @@ function parseRatingFromQuery (query) {
 
 function parseFacilitiesFromQuery (facilitiesQuery) {
     let parsedQuery = facilitiesQuery
-    try {
-         parsedQuery = JSON.parse(parsedQuery)
-    } catch (error) {
-        console.error(error)
-        console.log('failed to parse JSON')
+    if (typeof parsedQuery === 'string') {
+        try {
+             parsedQuery = JSON.parse(parsedQuery)
+        } catch (error) {
+            console.error(error)
+            throw new Error(error)
+        }
     }
 
     parsedQuery = parsedQuery.map((facilityType) => {
@@ -220,11 +246,13 @@ function parseFacilitiesFromQuery (facilitiesQuery) {
 
 function parseSpecialFeaturesFromQuery (featuresQuery) {
     let parsedQuery = featuresQuery
-    try {
-         parsedQuery = JSON.parse(parsedQuery)
-    } catch (error) {
-        console.error(error)
-        console.log('failed to parse JSON')
+    if (typeof parsedQuery === 'string') {
+        try {
+             parsedQuery = JSON.parse(parsedQuery)
+        } catch (error) {
+            console.error(error)
+            throw new Error(error)
+        }
     }
 
     parsedQuery = parsedQuery.map((featureType) => {

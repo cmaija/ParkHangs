@@ -1,4 +1,5 @@
 import ApiService from 'services/api.service'
+import qs from 'qs'
 
 const ParkService = {
     getParks: async function () {
@@ -22,9 +23,18 @@ const ParkService = {
     },
 
     queryParks: async function (params) {
+        console.log(params)
+        const config = {
+            params: params,
+            paramsSerializer: function(params) {
+                return qs.stringify(params)
+            },
+        }
+
+        console.log(config)
         const url = `/queryParks`
         try {
-            const response = await ApiService.get(url, { params })
+            const response = await ApiService.get(url, config)
             return response.data.data
         } catch (error) {
             throw new Error(error.response)

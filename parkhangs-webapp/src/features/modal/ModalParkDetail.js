@@ -35,8 +35,8 @@ class ModalParkDetail extends React.Component {
         }
     };
 
-    getCommentsByPark = () => {
-        let res = this.props.comments[this.props.park._id]
+    getCommentsByPark = (park) => {
+        let res = this.props.comments[park._id]
         if (res === undefined) {
             //no comments for that park, return empty array
             return [];
@@ -109,29 +109,14 @@ class ModalParkDetail extends React.Component {
       }
     }
 
-    getAverageRating = () => {
-      const currentPark = this.props.parks.find(park => park._id === this.props.parkId)
-      const currentParkRatings = currentPark.ratings || []
-
-      const totalScore = currentParkRatings.reduce((acc, rating) =>  {
-        return acc += rating.rating
-      }, 0)
-
-      let average = totalScore/currentParkRatings.length
-
-      if (Number.isNaN(average)) {
-        average = 0;
-        return average;
-      } else {
-        return Math.round(average * 10) / 10
-      }
-
+    getAverageRating = (park) => {
+        return park.averageRating ? park.averageRating : 0
     }
 
     render() {
         const park = this.props.selectedPark
-        const averageRating = this.getAverageRating()
-        const comments = this.getCommentsByPark()
+        const averageRating = this.getAverageRating(park)
+        const comments = this.getCommentsByPark(park)
         if (!this.props.loadingParkDetails) {
             return (
                 <div className="MarkerDetails">
