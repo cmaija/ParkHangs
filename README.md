@@ -1,6 +1,6 @@
 # ParkHangs
 
-ParkHangs is an application that allows users to view details for all official Vancouver Parks. Users can get detailed information about a specific park, save favourite parks (if they are logged in), create and integrate events to their own calendar application, as well as write comments about parks and events.
+ParkHangs is an all-in-one platform that allows users interact with all official Vancouver, British Columbia Parks. Users can get detailed information about a specific park, save favourite parks (if they are logged in), create and integrate events to their own calendar application, as well as write comments about parks and events.
 
 **CPSC 436i Group Project**
 
@@ -14,7 +14,7 @@ This platform will allow users to organize meetups at Vancouver parks, write com
 
 **What type of data will it store?**
 
-All 216 Vancouver parks and their information, user-generated events, park and event comments. We also store user information (through OAuth-based Google Sign-in) such as their first/last name, email.
+All 216 Vancouver parks and their information, user-generated events, park and event comments. We also store user information (through OAuth-based Google Sign-in) such as their name and email.
 
 **What will users be able to do with this data?**
 
