@@ -13,8 +13,12 @@
 }
 .submit-message-button{
     align-self: center;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .react-time-picker {
     background-color: white;
+}
+textarea{
+    font-family: 'Ubuntu', sans-serif;
 }
