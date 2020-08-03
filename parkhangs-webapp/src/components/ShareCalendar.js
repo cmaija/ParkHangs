@@ -25,7 +25,7 @@ class ShareCalendar extends React.Component {
     return <AddToCalendar 
                         event={this.props.event}
                         buttonTemplate={icon}
-                        buttonLabel= ""
+                        buttonLabel=""
                         listItems={items}
             />;
   };
