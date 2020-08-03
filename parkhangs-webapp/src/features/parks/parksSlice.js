@@ -25,6 +25,7 @@ const parksSlice = createSlice({
         parks: [],
         filteredParks: [],
         queriedParks: [],
+        parksHaveBeenQueried: false,
         loadingParks: true,
         addingRating: false,
         error : null,
@@ -77,7 +78,8 @@ const parksSlice = createSlice({
 
         queryParksSuccessful (state, action) {
             const parks = action.payload
-            state.parks = parks
+            state.queriedParks = parks
+            state.parksHaveBeenQueried = true
             state.loadingParks = false
             state.error = null
         },
@@ -121,9 +123,14 @@ const parksSlice = createSlice({
 
         filterParks (state, action) {
             const query = action.payload
-            state.filteredParks = state.parks.filter((park) => {
-                return park.name.toLowerCase().includes(query.toLowerCase())
-            })
+            let filteredParks = []
+            for (let parkName of query) {
+                filteredParks.push(state.parks.filter((park) => {
+                    return park.name.toLowerCase().includes(parkName.toLowerCase())
+                }))
+            }
+
+            state.filteredParks = filteredParks
         },
 
         updateParkByIdStart (state, action) {
@@ -165,7 +172,11 @@ const parksSlice = createSlice({
         addRatingFailure (state, action) {
             state.addingRating = false
             state.error = action.payload
-        }
+        },
+
+        resetQuery (state, action) {
+            state.parksHaveBeenQueried = false
+        },
     },
 
     extraReducers: {
@@ -217,6 +228,7 @@ export const {
     getSpecialFeaturesStart,
     getSpecialFeaturesSuccessful,
     getSpecialFeaturesFailure,
+    resetQuery,
 } = parksSlice.actions
 
 export default parksSlice.reducer

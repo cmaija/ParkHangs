@@ -12,7 +12,7 @@ import AddToCalendar from 'react-add-to-calendar';
 import { addRating } from 'features/parks/parksSlice';
 import ShareCalendar from 'components/ShareCalendar';
 import LoadingSpinner from 'components/LoadingSpinner'
-
+import { CSSTransition } from 'react-transition-group'
 
 class ModalParkDetail extends React.Component {
 
@@ -117,204 +117,214 @@ class ModalParkDetail extends React.Component {
         const park = this.props.selectedPark
         const averageRating = this.getAverageRating(park)
         const comments = this.getCommentsByPark(park)
-        if (!this.props.loadingParkDetails) {
+
+        if (this.props.loading) {
             return (
-                <div className="MarkerDetails">
-                    <div className="Title">
-                        {park.name}
-                    </div>
-
-                    {this.getSavedParkIcon()}
-
-                    <div className="Details">
-                    <div className="Section">
-                      <div className="Ratings">
-                        <span className="SectionTitle">Rating</span> <br/>
-                        <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
-                          <b>1</b>
-                        </button>
-                        <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
-                          <b>2</b>
-                        </button>
-                        <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
-                          <b>3</b>
-                        </button>
-                        <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
-                          <b>4</b>
-                        </button>
-                        <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
-                          <b>5</b>
-                        </button>
-                        <span>Average Rating by Users: { averageRating }</span>
-                      </div>
-                    </div>
-
-                      <div className="Section">
-                        <div className="ParkComments">
-                          <div>
-                            <span className="SectionTitle">Park Comments</span>
-                            { comments.map((comment) => {
-                              return <table key={comment._id}>
-                                <tbody>
-                                  <tr key={comment._id}>
-                                    <td>
-                                      <span>{comment.comment}</span> <br/>
-                                      <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
-                                    </td>
-                                    <td>
-                                      <button onClick={() => {
-                                          this.handleDeleteComment(comment, this.props.park._id)
-                                        }}>
-                                        <b>X</b>
-                                      </button>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              })
-                            }
-                            <CommentForm parkId={this.props.park._id} user={this.props.user} />
-                          </div>
-                        </div>
-                      </div>
-                        <div className="Section">
-                            <span className="SectionTitle">Park Details</span>
-                            <div className="ParkLocationDetails">
-                                <div>
-                                    Address: {park.streetNumber + " " + park.streetName}
-                                </div>
-                                <div>
-                                    Lat: {park.googleMapsLatLon[0]}
-                                </div>
-                                <div>
-                                    Lon: {park.googleMapsLatLon[1]}
-                                </div>
-                            </div>
-                            <div className="OtherDetails">
-                                <div>
-                                    Neighbourhood Name: {park.neighbourhoodName}
-                                </div>
-                                <div>
-                                    Neighbourhood website:
-                                </div>
-                                <a href={park.neighbourhoodURL}>{park.neighbourhoodURL}</a>
-                                <div>
-                                    Size (in hectares): {park.hectares}
-                                </div>
-                                <div>
-                                    Washrooms available?: {park.hasWashrooms ? "yes" : "no"}
-                                </div>
-                                <div>
-                                    Facilities available?: {park.hasFacilities ? "yes" : "no"}
-                                </div>
-                                <div>
-                                    Park advisories?: {park.hasAdvisories ? "yes" : "no"}
-                                </div>
-                                <div>
-                                    Special Features?: {park.hasSpecialFeatures ? "yes" : "no"}
-                                </div>
-                                <div>
-                                    Rating: {park.rating}
-                                </div>
-                                <div>
-                                    Number of Favorites: {park.favoritesCount || 0}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="Section EventTable">
-                            <span className="SectionTitle">Events</span>
-                            {
-                                this.getEventsByPark().length > 0 ?
-
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <td>
-                                                <b>Created At:</b>
-                                            </td>
-                                            <td>
-                                                <b>Created by:</b>
-                                            </td>
-                                            <td>
-                                                <b>Details:</b>
-                                            </td>
-                                            <td>
-                                                <b>Starts at:</b>
-                                            </td>
-                                            <td>
-                                                <b>Ends at:</b>
-                                            </td>
-                                            <td>
-                                                <b>Delete</b>
-                                            </td>
-                                            <td>
-                                                <b>Add To GCalendar</b>
-                                            </td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {
-
-                                            this.getEventsByPark().map((event) => {
-
-                                                let newEvent = {
-                                                    title: event.details,
-                                                    description: event.details,
-                                                    location: park.streetNumber + " " + park.streetName + " BC, Canada",
-                                                    startTime: this.getExportedTime(event.eventDateTime),
-                                                    endTime:  this.getExportedTime(event.eventEndDateTime)
-                                                }
-                                                return <tr key={event._id}>
-                                                    <td>
-                                                        {this.getCreatedTime(event.createdDateTime)}
-                                                    </td>
-                                                    <td>
-                                                        {event.creatorName}
-                                                    </td>
-                                                    <td>
-                                                        {event.details}
-                                                    </td>
-                                                    <td>
-                                                        {this.getEventTime(event.eventDateTime)}
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            this.getEventTime(event.eventEndDateTime) != null ?
-
-                                                                <div className="event-datetime">
-                                                                    {this.getEventTime(event.eventEndDateTime)}
-                                                                </div>
-                                                                :
-                                                                null
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        <button onClick={() => {
-                                                            this.props.deleteEventFromPark(event._id, park._id)
-                                                        }}>
-                                                            <b>X</b>
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                       <button id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
-                                                    </td>
-                                                </tr>
-                                            })
-
-                                        }
-                                        </tbody>
-
-                                    </table>
-                                    :
-                                    <div>
-                                        There are no events for this park
-                                    </div>
-                            }
-                        </div>
-                    </div>
+                <div className="LoadingState">
+                    <CSSTransition
+                        in={this.props.loading} timeout={300} classNames="loading">
+                        <LoadingSpinner key="loadingModal"/>
+                    </CSSTransition>
                 </div>
             )
         }
+        return (
+            <div
+                key="populatedModal"
+                className="MarkerDetails">
+                <div className="Title">
+                    {park.name}
+                </div>
+                {this.getSavedParkIcon()}
+
+                <div className="Details">
+                <div className="Section">
+                  <div className="Ratings">
+                    <span className="SectionTitle">Rating</span> <br/>
+                    <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
+                      <b>1</b>
+                    </button>
+                    <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
+                      <b>2</b>
+                    </button>
+                    <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
+                      <b>3</b>
+                    </button>
+                    <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
+                      <b>4</b>
+                    </button>
+                    <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
+                      <b>5</b>
+                    </button>
+                    <span>Average Rating by Users: { averageRating }</span>
+                  </div>
+                </div>
+
+                  <div className="Section">
+                    <div className="ParkComments">
+                      <div>
+                        <span className="SectionTitle">Park Comments</span>
+                        { comments.map((comment) => {
+                          return <table key={comment._id}>
+                            <tbody>
+                              <tr key={comment._id}>
+                                <td>
+                                  <span>{comment.comment}</span> <br/>
+                                  <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                                </td>
+                                <td>
+                                  <button onClick={() => {
+                                      this.handleDeleteComment(comment, this.props.park._id)
+                                    }}>
+                                    <b>X</b>
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          })
+                        }
+                        <CommentForm parkId={this.props.park._id} user={this.props.user} />
+                      </div>
+                    </div>
+                  </div>
+                    <div className="Section">
+                        <span className="SectionTitle">Park Details</span>
+                        <div className="ParkLocationDetails">
+                            <div>
+                                Address: {park.streetNumber + " " + park.streetName}
+                            </div>
+                            <div>
+                                Lat: {park.googleMapsLatLon[0]}
+                            </div>
+                            <div>
+                                Lon: {park.googleMapsLatLon[1]}
+                            </div>
+                        </div>
+                        <div className="OtherDetails">
+                            <div>
+                                Neighbourhood Name: {park.neighbourhoodName}
+                            </div>
+                            <div>
+                                Neighbourhood website:
+                            </div>
+                            <a href={park.neighbourhoodURL}>{park.neighbourhoodURL}</a>
+                            <div>
+                                Size (in hectares): {park.hectares}
+                            </div>
+                            <div>
+                                Washrooms available?: {park.hasWashrooms ? "yes" : "no"}
+                            </div>
+                            <div>
+                                Facilities available?: {park.hasFacilities ? "yes" : "no"}
+                            </div>
+                            <div>
+                                Park advisories?: {park.hasAdvisories ? "yes" : "no"}
+                            </div>
+                            <div>
+                                Special Features?: {park.hasSpecialFeatures ? "yes" : "no"}
+                            </div>
+                            <div>
+                                Rating: {park.rating}
+                            </div>
+                            <div>
+                                Number of Favorites: {park.favoritesCount || 0}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="Section EventTable">
+                        <span className="SectionTitle">Events</span>
+                        {
+                            this.getEventsByPark().length > 0 ?
+
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <td>
+                                            <b>Created At:</b>
+                                        </td>
+                                        <td>
+                                            <b>Created by:</b>
+                                        </td>
+                                        <td>
+                                            <b>Details:</b>
+                                        </td>
+                                        <td>
+                                            <b>Starts at:</b>
+                                        </td>
+                                        <td>
+                                            <b>Ends at:</b>
+                                        </td>
+                                        <td>
+                                            <b>Delete</b>
+                                        </td>
+                                        <td>
+                                            <b>Add To GCalendar</b>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+
+                                        this.getEventsByPark().map((event) => {
+
+                                            let newEvent = {
+                                                title: event.details,
+                                                description: event.details,
+                                                location: park.streetNumber + " " + park.streetName + " BC, Canada",
+                                                startTime: this.getExportedTime(event.eventDateTime),
+                                                endTime:  this.getExportedTime(event.eventEndDateTime)
+                                            }
+                                            return <tr key={event._id}>
+                                                <td>
+                                                    {this.getCreatedTime(event.createdDateTime)}
+                                                </td>
+                                                <td>
+                                                    {event.creatorName}
+                                                </td>
+                                                <td>
+                                                    {event.details}
+                                                </td>
+                                                <td>
+                                                    {this.getEventTime(event.eventDateTime)}
+                                                </td>
+                                                <td>
+                                                    {
+                                                        this.getEventTime(event.eventEndDateTime) != null ?
+
+                                                            <div className="event-datetime">
+                                                                {this.getEventTime(event.eventEndDateTime)}
+                                                            </div>
+                                                            :
+                                                            null
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <button onClick={() => {
+                                                        this.props.deleteEventFromPark(event._id, park._id)
+                                                    }}>
+                                                        <b>X</b>
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                   <button id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                                                </td>
+                                            </tr>
+                                        })
+
+                                    }
+                                    </tbody>
+
+                                </table>
+                                :
+                                <div>
+                                    There are no events for this park
+                                </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        )
         return LoadingSpinner
     }
 }

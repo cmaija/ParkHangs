@@ -1,123 +1,52 @@
 import React from "react";
 import { connect } from "react-redux";
 import { filterParks } from 'features/parks/parksSlice'
+import Select from 'react-select'
 
 class Searchbar extends React.Component {
 
     constructor(props) {
-
-        super(props);
+        super(props)
 
         this.state = {
-            searchQuery: "",
-            invalidSearch: false,
-            searchResult: null,
-        };
-
-        this.handleSearchInput = this.handleSearchInput.bind(this);
-        this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
-        this.clearSearchText = this.clearSearchText.bind(this);
-        this.searchForAPark = this.searchForAPark.bind(this);
+            selectedParks: []
+        }
     }
 
+    getParksOptions = () => {
+        return this.props.parks.map(((park) => {
+            return {
+                value: park.name,
+                label: park.name,
+            }
+        }))
+    }
 
-    handleSearchInput(event) {
-        this.setState({
-            searchQuery: event.target.value
-        })
+    handleSelectedPark = selectedParks => {
+        this.setState({selectedParks: selectedParks.map(park => park.value)})
+    }
 
-    };
-
-    handleSearchSubmit(event) {
-
-        event.preventDefault();
-
-        if (this.state.searchQuery === "") {
-            // TODO: add error message
-            this.setState({
-                invalidSearch: true
-            });
-        } else {
-            this.searchForAPark(this.state.searchQuery);
-
-            //TODO: call whatever method we pass in and use this.state.searchQuery as the parameter
-            this.setState({
-                invalidSearch: false
-            })
-
-            this.clearSearchText();
-        }
-    };
-
-    searchForAPark = (parkName) =>  {
-        this.props.setFilter(parkName)
+    handleSearchSubmit = () => {
+        this.props.setFilter(this.state.selectedParks)
         this.props.onSearch(false)
     }
 
-    clearSearchText() {
-        this.setState({
-            searchQuery: ""
-        })
-    }
-
     render() {
-
-        return <form onSubmit={this.handleSearchSubmit}>
-            <input placeholder={this.props.placeholder}
-                   onChange={this.handleSearchInput}
-                   value={this.state.searchQuery}
-                   name="search"/>
-            <button type="submit" onClick={this.handleSearchSubmit}>
-                <i className="fa fa-search"/>
-            </button>
-            {
-                this.state.invalidSearch ?
-                    <div>
-                        There is something wrong with your search. Try again!
-                    </div>
-                    : null
-            }
-            {
-                this.state.searchResult != null ?
-                    <div>
-                        <div>
-                            Name: {this.state.searchResult.parkName}
-                        </div>
-                        <div>
-                            Lat: {this.state.searchResult.lat}
-                        </div>
-                        <div>
-                            Lon: {this.state.searchResult.lng}
-                        </div>
-                        Events:
-                        {
-                            this.state.searchResult.events.map((event) => {
-                                return <div key={event.eventTime}>
-                                    <div>
-                                        {event.parkName}
-                                    </div>
-                                    <div>
-                                        {event.eventTime}
-                                    </div>
-                                </div>;
-                            })
-                        }
-
-                    </div>
-                    :
-                    null
-            }
-            {
-                this.state.searchResult === undefined ?
-
-                    <div>
-                        There are no results
-                    </div>
-                    :
-                    null
-            }
-        </form>
-
+        const parksOptions = this.getParksOptions()
+        return (
+            <div className="searchbar">
+                <Select
+                    id="parkSearch"
+                    isMulti={true}
+                    isClearable={true}
+                    options={parksOptions}
+                    className="multi-select"
+                    onChange={this.handleSelectedPark} />
+                <button type="submit" onClick={this.handleSearchSubmit}>
+                    <i className="fa fa-search"/>
+                </button>
+            </div>
+        )
     }
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -125,7 +54,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
-    filteredParks: state.parks.filteredParks
+    parks: state.parks.parks
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Searchbar);

@@ -2,6 +2,34 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    min-height: 22rem;
+}
+
+.loading-enter {
+  opacity: 0.01;
+}
+
+.loading-enter.loading-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.loading-leave {
+  opacity: 1;
+}
+
+.loading-leave.example-loading-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.LoadingState {
+    width: 100%;
+    height: 22rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .Title {

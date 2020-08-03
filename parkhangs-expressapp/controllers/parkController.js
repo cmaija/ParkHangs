@@ -1,7 +1,6 @@
 const Park = require('../models/ParkModel');
 const express = require('express');
 var mongoose = require('mongoose');
-const querystring = require('querystring')
 
 const getParks = async (req, res) => {
 
