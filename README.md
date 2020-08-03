@@ -6,7 +6,7 @@ ParkHangs is an all-in-one platform that allows users interact with all official
 
 **Who is it for?**
 
-Our web application is intended for people who want to enjoy the Vancouver public park system. For people who want to organize a pickup game of basketball, check what facilities are available so they can plan before they go, see which parks are rating the best, and see what other users have to say about the park. Our application is available to both signed-in and non signed-in users.
+Our web application is intended for people who want to enjoy the Vancouver public park system. For people who want to organize a pickup game of basketball, check what facilities are available so they can plan before they go, see which parks are rated the best, and see what other users have to say about the park. Our application is available to both signed-in and non signed-in users.
 
 **What will it do?** (What "human activity" will it support?)
 
