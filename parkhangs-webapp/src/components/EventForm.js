@@ -10,8 +10,7 @@ import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
 import {closeModal} from 'features/modal/modalSlice';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
 
 class EventForm extends React.Component {
 
@@ -22,20 +21,10 @@ class EventForm extends React.Component {
             eventDetail: this.props.eventDetails || null,
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
-            eventDate: this.eventDate(),
+            eventDate: this.dayPickerDateFormat(),
             parkId: this.props.parkId || null,
-            startDate: new Date()
         }
-        this.handleDatePickerChange = this.handleDatePickerChange.bind(this);
     }
-
-    handleDatePickerChange(date) {
-        this.setState({
-            startDate: date
-        })
-        this.handleUpdateDate(date);
-    }
-
     eventDetail = () => {
         return this.props.eventDetails || ''
     }
@@ -94,6 +83,13 @@ class EventForm extends React.Component {
     showDatePicker = () => {
         return this.props.showDatePicker
     }
+    dayPickerDateFormat = () => {
+        if (this.props.eventDateTime) {
+            return new Date(this.props.eventDateTime)
+        }
+        return null
+    }
+
     isNewEvent = () => {
         return !this.props.eventId
     }
@@ -167,14 +163,13 @@ class EventForm extends React.Component {
     }
 
     render() {
-        const eventDate = this.eventDate()
+        const eventDate = this.dayPickerDateFormat()
         const eventStartTime = this.eventStartTime()
         const eventEndTime = this.eventEndTime()
 
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
-        const showDatePicker = this.showDatePicker()
 
         return (
             <div className="EventForm">
@@ -183,12 +178,6 @@ class EventForm extends React.Component {
                         showCalendar && <div className="formsection date"> 
                             <label htmlFor="eventDate">Date:</label>
                             <Calendar id="eventDate" value={eventDate} onChange={this.handleUpdateDate}/>
-                        </div>
-                    }
-                    {
-                        showDatePicker && <div className="formsection date"> 
-                            <label htmlFor="eventDate">Date:</label>
-                            <DatePicker selected={this.state.startDate}  onChange={this.handleDatePickerChange}/> 
                         </div>
                     }
                     <div className="formsection time">

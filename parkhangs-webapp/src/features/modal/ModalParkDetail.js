@@ -380,7 +380,8 @@ class ModalParkDetail extends React.Component {
                 eventId={null}
                 showParkPicker={false}
                 parkId={parkId}
-                showDatePicker={true}
+                showCalendar={true}
+                showDayPicker={true}
                 />
             }
             </div>          
