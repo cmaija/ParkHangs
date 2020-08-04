@@ -119,6 +119,10 @@ and the editing and deleting of events
 
 Philippe Chapdelaine
 
+- Worked on front-end and all the endpoints(fetch, add delete) for comments and ratings
+- Fetch and add endpoints for events 
+- Set up the Google maps npm package and well as create Google/MongoDB accounts
+
 **Sketches of Main Functionality**
 **Map Page With Menu**
 ![Map Page With Menu](https://github.com/cmaija/ParkHangs/blob/master/sketch1.png?raw=true)
