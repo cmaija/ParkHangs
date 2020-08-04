@@ -231,7 +231,8 @@ class EventForm extends React.Component {
                         this.props.showParkPicker &&
                         <div className="formsection park">
                             <label htmlFor="eventPark">Select Park</label>
-                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
+                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark" defaultValue="">
+                            <option disabled={true} value="">Select a Park</option>
                                 {
                                     this.props.parks.map((park) => {
                                         return <option
