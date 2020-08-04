@@ -27,6 +27,7 @@ class ShareCalendar extends React.Component {
                         buttonTemplate={icon}
                         buttonLabel=""
                         listItems={items}
+                        dropdownClass="dropdown"
             />;
   };
 }

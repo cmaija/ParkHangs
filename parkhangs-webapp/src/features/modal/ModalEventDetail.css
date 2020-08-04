@@ -117,8 +117,7 @@
     flex-direction: column;
     padding-left: 0;
     font-size: 0.7rem;
-        
-        
+    list-style: none;    
 }
 .AddEventForm {
     width: 80%;
@@ -137,6 +136,42 @@
     border-radius: 3px;
     color: #000;
 }
+.react-add-to-calendar__button--light{
+
+}
+.dropdown{
+    position: absolute;
+    margin-top: 0.65rem;
+    margin-left: -17px;
+    padding-top: 1rem;
+    padding-right: 0.8rem;
+    padding: 0.5rem;
+    background-color: #f9f9f9;
+    border: 1px solid #aab9d4;
+    border-radius: 3px;
+    color: #000; 
+
+
+}
+.dropdown > ul {
+    display: inline-block;
+    
+    
+}
+.dropdown > ul > li {
+    position: relative;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 2px solid #aab9d4;
+    border-radius: 3px;
+}
+.FavouriteEvent{
+    border: none;
+    background: none;
+    outline: none;
+}
+
+
 
 @media only screen and (max-width:636px){
     .ModalEventDetail-leftToolbar {
