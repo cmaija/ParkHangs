@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addParkComment, addEventComment } from 'features/comments/commentSlice'
-import moment from 'moment'
 import './CommentForm.css'
 
 class CommentForm extends React.Component {
@@ -32,14 +31,14 @@ class CommentForm extends React.Component {
         if ("parkId" in this.props) {
           const parkId = this.props.parkId;
           const newComment = {
-            parkId: this.props.parkId,
+            parkId: parkId,
             comment: commentText
           }
           this.props.addParkComment(newComment, this.props.user)
         } else if ("eventId" in this.props) {
           const eventId = this.props.eventId;
           const newComment = {
-            eventId: this.props.eventId,
+            eventId: eventId,
             comment: commentText
           }
             this.props.addEventComment(newComment, this.props.user)

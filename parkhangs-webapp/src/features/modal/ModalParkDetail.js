@@ -8,20 +8,27 @@ import { deleteParkComment } from 'features/comments/commentSlice'
 import NoFilledHeartIcon from 'assets/icons/heart-no-fill.svg'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
-import AddToCalendar from 'react-add-to-calendar';
 import { addRating } from 'features/parks/parksSlice';
 import ShareCalendar from 'components/ShareCalendar';
 import LoadingSpinner from 'components/LoadingSpinner'
-import { CSSTransition } from 'react-transition-group'
+import EventForm from 'components/EventForm'
 
 class ModalParkDetail extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            parkToEdit: null,
+            currentTab: 'description'
+        }
 
         this.toggleFavouritePark = this.toggleFavouritePark.bind(this);
         this.getSavedParkIcon = this.getSavedParkIcon.bind(this);
 
+    }
+
+    selectTab = (tab) => {
+        this.setState({currentTab: tab})
     }
 
     getEventsByPark = () => {
@@ -48,7 +55,7 @@ class ModalParkDetail extends React.Component {
 
     getEventTime = (date) => {
         if (date != null) {
-            return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+            return moment.unix(date).format("YYYY/MM/DD hh:mm a");
         } else {
             return "";
         }
@@ -84,6 +91,20 @@ class ModalParkDetail extends React.Component {
         return formattedDate.replace("+00:00", "Z");
     }
 
+    eventStartTime = (timestamp) => {
+        const date = this.convertToMoment(timestamp)
+        return timestamp ? date.format("MMMM Do YYYY hh:mma") : null
+    }
+
+    eventEndTime = (timestamp) => {
+        if (timestamp != null) {
+            const date = this.convertToMoment(timestamp)
+            return timestamp ? date.format("hh:mma") : null
+        } else {
+            return null;
+        }
+    }
+
     handleAddRating = (rating) => {
       let userToSend = 0;
       if (this.props.user != null) {
@@ -113,83 +134,9 @@ class ModalParkDetail extends React.Component {
         return park.averageRating ? park.averageRating : 0
     }
 
-    render() {
-        const park = this.props.selectedPark
-        const averageRating = this.getAverageRating(park)
-        const comments = this.getCommentsByPark(park)
-
-        if (this.props.loading) {
-            return (
-                <div className="LoadingState">
-                    <CSSTransition
-                        in={this.props.loading} timeout={300} classNames="loading">
-                        <LoadingSpinner key="loadingModal"/>
-                    </CSSTransition>
-                </div>
-            )
-        }
+    descriptionTab = (park) => {
         return (
-            <div
-                key="populatedModal"
-                className="MarkerDetails">
-                <div className="Title">
-                    {park.name}
-                </div>
-                {this.getSavedParkIcon()}
-
-                <div className="Details">
-                <div className="Section">
-                  <div className="Ratings">
-                    <span className="SectionTitle">Rating</span> <br/>
-                    <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
-                      <b>1</b>
-                    </button>
-                    <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
-                      <b>2</b>
-                    </button>
-                    <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
-                      <b>3</b>
-                    </button>
-                    <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
-                      <b>4</b>
-                    </button>
-                    <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
-                      <b>5</b>
-                    </button>
-                    <span>Average Rating by Users: { averageRating }</span>
-                  </div>
-                </div>
-
-                  <div className="Section">
-                    <div className="ParkComments">
-                      <div>
-                        <span className="SectionTitle">Park Comments</span>
-                        { comments.map((comment) => {
-                          return <table key={comment._id}>
-                            <tbody>
-                              <tr key={comment._id}>
-                                <td>
-                                  <span>{comment.comment}</span> <br/>
-                                  <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
-                                </td>
-                                <td>
-                                  <button onClick={() => {
-                                      this.handleDeleteComment(comment, this.props.park._id)
-                                    }}>
-                                    <b>X</b>
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          })
-                        }
-                        <CommentForm parkId={this.props.park._id} user={this.props.user} />
-                      </div>
-                    </div>
-                  </div>
-                    <div className="Section">
-                        <span className="SectionTitle">Park Details</span>
+            <div className="ModalParkDetail-description">
                         <div className="ParkLocationDetails">
                             <div>
                                 Address: {park.streetNumber + " " + park.streetName}
@@ -232,97 +179,345 @@ class ModalParkDetail extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <div className="Section EventTable">
-                        <span className="SectionTitle">Events</span>
-                        {
-                            this.getEventsByPark().length > 0 ?
+        )
+    }
+    facilitiesAndFeaturesTab = (park, facilities, features) => {
 
-                                <table>
-                                    <thead>
+        return (
+            <div className="ModalParkDetail-facilities-and-features">
+                <div className="ModalParkDetail-FacilitiesTable TableContainer">
+                    {
+                        park.hasFacilities ?
+                        <div className="FacilitiesTable Column">
+                            <table>
+                                <thead>
                                     <tr>
+                                    <td>
+                                        <b>Facility Type:</b>
+                                    </td>
+                                    <td>
+                                        <b>Facility URL: </b>
+                                    </td>
+                                    <td>
+                                        <b>Facility Count: </b>
+                                    </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {facilities.map((facility)=> {
+                                    return <tr>
                                         <td>
-                                            <b>Created At:</b>
+                                            {facility.facilityType}
                                         </td>
                                         <td>
-                                            <b>Created by:</b>
+                                            {facility.facilityUrl}
                                         </td>
                                         <td>
-                                            <b>Details:</b>
-                                        </td>
-                                        <td>
-                                            <b>Starts at:</b>
-                                        </td>
-                                        <td>
-                                            <b>Ends at:</b>
-                                        </td>
-                                        <td>
-                                            <b>Delete</b>
-                                        </td>
-                                        <td>
-                                            <b>Add To GCalendar</b>
+                                            {facility.facilityCount}
                                         </td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-
-                                        this.getEventsByPark().map((event) => {
-
-                                            let newEvent = {
-                                                title: event.details,
-                                                description: event.details,
-                                                location: park.streetNumber + " " + park.streetName + " BC, Canada",
-                                                startTime: this.getExportedTime(event.eventDateTime),
-                                                endTime:  this.getExportedTime(event.eventEndDateTime)
-                                            }
-                                            return <tr key={event._id}>
-                                                <td>
-                                                    {this.getCreatedTime(event.createdDateTime)}
-                                                </td>
-                                                <td>
-                                                    {event.creatorName}
-                                                </td>
-                                                <td>
-                                                    {event.details}
-                                                </td>
-                                                <td>
-                                                    {this.getEventTime(event.eventDateTime)}
-                                                </td>
-                                                <td>
-                                                    {
-                                                        this.getEventTime(event.eventEndDateTime) != null ?
-
-                                                            <div className="event-datetime">
-                                                                {this.getEventTime(event.eventEndDateTime)}
-                                                            </div>
-                                                            :
-                                                            null
-                                                    }
-                                                </td>
-                                                <td>
-                                                    <button onClick={() => {
-                                                        this.props.deleteEventFromPark(event._id, park._id)
-                                                    }}>
-                                                        <b>X</b>
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                   <button id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
-                                                </td>
-                                            </tr>
-                                        })
-
+                                })
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        :
+                        <div className="Column">There are no facilities at this park.</div>
+                    }
+                </div>
+                <div className="ModalParkDetail-FeaturesTable TableContainer">
+                    {
+                        park.hasSpecialFeatures ?
+                        <div className="FeaturesTable Column">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td>
+                                            <b>Feature Type: </b>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {features.map((feature)=> {
+                                    return <tr>
+                                        <td>
+                                            {feature.feature}
+                                        </td>
+                                    </tr>
+                                    })
                                     }
-                                    </tbody>
+                                </tbody>
+                            </table>
+                        </div>
 
-                                </table>
-                                :
-                                <div>
-                                    There are no events for this park
-                                </div>
+                    :
+                    <div className="Column">There are no features at this park.</div>
+                    }
+                </div>
+            </div>
+
+        )
+    }
+    eventsTab = (park, parkId) => {
+        return (
+            <div className="ModalParkDetail-events">
+                <div className="Section EventTable">
+                    {
+                    this.getEventsByPark().length > 0 ?
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <b>Created At:</b>
+                                    </td>
+                                    <td>
+                                        <b>Created by:</b>
+                                    </td>
+                                    <td>
+                                        <b>Details:</b>
+                                    </td>
+                                    <td>
+                                        <b>Starts at:</b>
+                                    </td>
+                                    <td>
+                                        <b>Ends at:</b>
+                                    </td>
+                                    <td>
+                                        <b>Delete</b>
+                                    </td>
+                                    <td>
+                                        <b>Add To Calendar</b>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+
+                                this.getEventsByPark().map((event) => {
+
+                                    let newEvent = {
+                                        title: event.details,
+                                        description: event.details,
+                                        location: park.streetNumber + " " + park.streetName + " BC, Canada",
+                                        startTime: this.getExportedTime(event.eventDateTime),
+                                        endTime:  this.getExportedTime(event.eventEndDateTime)
+                                    }
+                                    return <tr key={event._id}>
+                                        <td>
+                                            {this.getCreatedTime(event.createdDateTime)}
+                                        </td>
+                                        <td>
+                                            {event.creatorName}
+                                        </td>
+                                        <td>
+                                            {event.details}
+                                        </td>
+                                        <td>
+                                            {this.getEventTime(event.eventDateTime)}
+                                        </td>
+                                        <td>
+                                            {
+                                                this.getEventTime(event.eventEndDateTime) != null ?
+
+                                                    <div className="event-datetime">
+                                                        {this.getEventTime(event.eventEndDateTime)}
+                                                    </div>
+                                                    :
+                                                    null
+                                            }
+                                        </td>
+                                        <td>
+                                            <button onClick={() => {
+                                                this.props.deleteEventFromPark(event._id, park._id)
+                                            }}>
+                                                <b>X</b>
+                                            </button>
+                                        </td>
+                                        <td>
+                                        <button id="ShareCalendar"><ShareCalendar event={newEvent}/></button>
+                                        </td>
+                                    </tr>
+                                })
+
                         }
+                    </tbody>
+
+                </table>
+                :
+                <div>
+                    There are no events for this park
+                </div>
+            }
+
+            <div className="AddEventForm">
+            {
+            this.props.updatingEvent
+            ?
+                <div className="ModalEventDetail-updatingEvent">
+                    <LoadingSpinner />
+                </div>
+            :
+                <EventForm
+                event={null}
+                eventDetails={event.details}
+                eventId={null}
+                showParkPicker={false}
+                parkId={parkId}
+                showCalendar={true}
+                showDayPicker={true}
+                />
+            }
+            </div>
+
+        </div>
+    </div>
+
+        )
+    }
+    commentsTab = (parkId, comments, user) => {
+        return (
+            <div className="ModalParkDetail-comments">
+                <div className="ParkComments">
+                    <div className="ParkCommentHistory Column">
+                    { comments.map((comment) => {
+                        return <table>
+                        <tbody>
+                            <tr key={comment._id}>
+                            <td>
+                                <span>{comment.comment}</span> <br/>
+                                <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                            </td>
+                            <td>
+                                <button onClick={() => {
+                                    this.handleDeleteComment(comment, parkId)
+                                }}>
+                                <b>X</b>
+                                </button>
+                            </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                        })
+                    }
+                    </div>
+                    <div className="ParkCommentForm Column">
+                         <CommentForm parkId={parkId} user={user} />
+                     </div>
+
+
+                </div>
+            </div>
+        )
+    }
+    ratingsTab = (averageRating) => {
+        return(
+
+            <div className="ModalParkDetail-ratings">
+                <div className="Ratings">
+                <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
+                    <span  className="star">☆</span>
+                </button>
+                <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
+                    <span  className="star">☆</span>
+                </button>
+                <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
+                    <span  className="star">☆</span>
+                </button>
+                <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
+                    <span className="star">☆</span>
+                </button>
+                <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
+                    <span className="star">☆</span>
+                </button>
+                </div>
+                <div className="AverageRating">
+                    <span>Average Rating by Users: { averageRating }</span>
+                </div>
+            </div>
+        )
+    }
+
+    render() {
+        if (this.props.loading) {
+            return (
+                <div className="LoadingState">
+                    <LoadingSpinner key="loadingModal"/>
+                </div>
+            )
+        }
+
+        const park = this.props.selectedPark
+        const averageRating = this.getAverageRating(park)
+        const comments = this.getCommentsByPark(park)
+        const user = this.props.user
+        const parkId = this.props.parkId
+        const facilities = park.facilities
+        const features = park.specialFeatures
+
+
+
+        let currentTab
+
+        if (this.state.currentTab === 'ratings') {
+            currentTab = this.ratingsTab(averageRating)
+        } else if (this.state.currentTab === 'comments') {
+            currentTab = this.commentsTab(parkId, comments, user)
+        } else if (this.state.currentTab === 'events') {
+            currentTab = this.eventsTab(park, parkId)
+        } else if (this.state.currentTab === 'facilities-and-features') {
+            currentTab = this.facilitiesAndFeaturesTab(park, facilities, features)
+        } else {
+            currentTab = this.descriptionTab(park)
+        }
+
+        return (
+            <div className="detailed-content-main modal-card">
+                <div className="ModalParkDetail-header">
+                    <div className="ModalParkDetail-Title titleItem">
+                    {park.name}
+                    </div>
+                    <div className="ModalParkDetail-divider"></div>
+                    <div className="ModalParkDetail-toolbar">
+                        <div className="ModalParkDetail-leftToolbar">
+                            <div className={
+                            `${this.state.currentTab === 'description' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
+                            onClick={() => this.selectTab('description')}>
+                            <span className="ModalParkDetail-tabName">Description</span>
+                            </div>
+                            <div className={
+                            `${this.state.currentTab === 'facilities-and-features' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
+                            onClick={() => this.selectTab('facilities-and-features')}>
+                            <span className="ModalParkDetail-tabName">Facilities {`&`} Features</span>
+                            </div>
+                            <div className={
+                            `${this.state.currentTab === 'events' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
+                            onClick={() => this.selectTab('events')}>
+                            <span className="ModalParkDetail-tabName">Events</span>
+                            </div>
+                            <div className={
+                            `${this.state.currentTab === 'comments' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
+                            onClick={() => this.selectTab('comments')}>
+                            <span className="ModalParkDetail-tabName">Comments</span>
+                            </div>
+                            <div className={
+                            `${this.state.currentTab === 'ratings' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
+                            onClick={() => this.selectTab('ratings')}>
+                            <span className="ModalParkDetail-tabName">Ratings</span>
+                            </div>
+                        </div>
+
+                        <div className="ModalParkDetail-rightToolbar">
+                                {this.getSavedParkIcon()}
+                        </div>
+
                     </div>
                 </div>
+                <div className="ModalParkDetail-divider"></div>
+                <div className="ModalParkDetail-Body">
+                    {currentTab}
+                </div>
+
             </div>
         )
         return LoadingSpinner
@@ -338,6 +533,7 @@ const mapStateToProps = (state) => {
         comments: state.comments.commentsByParkId,
         selectedPark: state.parks.selectedPark,
         loading: state.parks.loadingParkDetails,
+        updatingEvent: state.events.updatingEvent,
     }
 };
 
@@ -345,7 +541,7 @@ const mapDispatchToProps = (dispatch) => ({
     deleteEventFromPark: (eventId, parkId) => dispatch(deleteEvent(eventId, parkId)),
     deleteCommentFromPark: (commentId, parkId) => dispatch(deleteParkComment(commentId, parkId)),
     toggleSavedPark: (user, parkId) => dispatch(toggleSavedPark(user, parkId)),
-    addRating: (parkId, rating) => dispatch(addRating(parkId, rating))
+    addRating: (parkId, rating) => dispatch(addRating(parkId, rating)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ModalParkDetail);

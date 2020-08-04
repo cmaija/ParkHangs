@@ -120,6 +120,16 @@
 
 
 }
+.AddEventForm {
+    width: 80%;
+    height:100%;
+}
+.EventComments{
+    max-height: 19rem;
+    overflow: scroll;
+    width: 90%;
+    display: flex;
+}
 
 @media only screen and (max-width:600px){
     .ModalEventDetail-leftToolbar {
@@ -128,5 +138,11 @@
     }
     .ModalEventDetail-tabName {
         font-size: 0.7rem;
+    }
+    .ModalEventDetail-actionButton {
+       font: 0.5rem;
+    }
+    .FavouriteEvent{
+        margin-left: 0;
     }
 }
