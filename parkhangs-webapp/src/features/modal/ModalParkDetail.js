@@ -172,10 +172,10 @@ class ModalParkDetail extends React.Component {
                                 <b>Special Features?:</b> {park.hasSpecialFeatures ? "yes" : "no"}
                             </div>
                             <div>
-                                <b>Rating:</b> {!!averageRating ? averageRating: "N/A"}
+                                <b>Rating:</b> {!!averageRating ? averageRating: "This park hasn't been rated yet"}
                             </div>
                             <div>
-                                <b>Number of Favorites:</b> {park.favoritesCount || 0}
+                                <b>Number of Favourites:</b> {park.favoritesCount || 0}
                             </div>
                         </div>
                     </div>
