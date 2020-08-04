@@ -133,7 +133,7 @@ class EventForm extends React.Component {
                 eventDateTime: eventDateTime,
                 eventEndDateTime: eventEndDateTime,
             }
-           
+
 
             this.props.addOneEvent(this.props.user, newEvent)
         } else {
@@ -175,7 +175,7 @@ class EventForm extends React.Component {
             <div className="EventForm">
                 <form className="EventForm">
                     {
-                        showCalendar && <div className="formsection date"> 
+                        showCalendar && <div className="formsection date">
                             <label htmlFor="eventDate">Date:</label>
                             <Calendar id="eventDate" value={eventDate} onChange={this.handleUpdateDate}/>
                         </div>
@@ -209,7 +209,8 @@ class EventForm extends React.Component {
                         this.props.showParkPicker &&
                         <div className="formsection park">
                             <label htmlFor="eventPark">Select Park</label>
-                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
+                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark" defaultValue="">
+                            <option disabled={true} value="">Select a Park</option>
                                 {
                                     this.sortParkNamesAlphabetically().map((park) => {
                                         return <option

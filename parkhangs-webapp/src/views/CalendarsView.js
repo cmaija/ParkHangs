@@ -30,6 +30,9 @@ class CalendarsView extends Component {
                 <div className="CalendarList">
                 <ParksCalendar showAllParks={this.state.showAllParks}/>
                 </div>
+                <div id="AddEventMessage">
+                To Add an Event, Click on the Date of the Event
+                </div>
             </div>
         );
     }

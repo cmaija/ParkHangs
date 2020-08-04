@@ -9,12 +9,8 @@ class CommentForm extends React.Component {
         super(props)
 
         this.state = {
-            comments: this.comment()
+            comments: ''
         }
-    }
-
-    comment = () => {
-        return this.props.comment || ''
     }
 
     handleUpdateComment = (event) => {
@@ -26,7 +22,7 @@ class CommentForm extends React.Component {
     handleAddComment = (comment) => {
         event.preventDefault()
 
-        const commentText =  this.state.comment || this.comment()
+        const commentText =  this.state.comment
 
         if ("parkId" in this.props) {
           const parkId = this.props.parkId;
@@ -49,7 +45,6 @@ class CommentForm extends React.Component {
         }
 
     render() {
-        const comment = this.comment();
 
         return (
             <div className="CommentForm">
@@ -57,10 +52,13 @@ class CommentForm extends React.Component {
                 <form className="CommentForm">
                     <div className="formsection comment">
                         <label htmlFor="comment">Comment: </label>
-                        <textarea
-                            onChange={this.handleUpdateComment}
-                            id="comment"
-                            defaultValue={comment}/>
+                        <input
+                           id="comment_input"
+                           type="text"
+                           placeholder="Enter Comment"
+                           onChange={e => this.setState({ comments : e.target.value })}
+                           value={this.state.comments}
+                       />
                     </div>
                 </form>
                 <button className={"submit-message-button leftButton"}
