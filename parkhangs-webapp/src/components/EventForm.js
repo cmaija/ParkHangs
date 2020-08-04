@@ -22,7 +22,7 @@ class EventForm extends React.Component {
             eventDetail: this.props.eventDetails || null,
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
-            eventDate: this.dayPickerDateFormat(),
+            eventDate: this.eventDate(),
             parkId: this.props.parkId || null,
         }
     }
@@ -91,14 +91,9 @@ class EventForm extends React.Component {
     }
 
     dayPickerDateFormat = () => {
-
         if (this.props.eventDateTime) {
-            let date = new Date(this.props.eventDateTime)
-            //TODO: here!!!
-            console.log("moment:" + moment.unix(this.props.eventDateTime).format("YYYYMMDDTHHmmssZ"));
-            return date
+            return new Date(this.props.eventDateTime)
         }
-
         return null
     }
 
@@ -166,9 +161,6 @@ class EventForm extends React.Component {
                 eventDateTime: eventStartTimestamp,
                 eventEndDateTime: eventEndDateTime,
             }
-
-            //TODO:
-            //console.log(moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY'));
 
             this.props.updateEvent(updatedEvent)
 

@@ -74,8 +74,6 @@ class ParksCalendar extends React.Component {
             return transformedEvent
         })
 
-        //console.log(eventsArray);
-
         return (
             <div className="eventsCalendar">
                 <Calendar

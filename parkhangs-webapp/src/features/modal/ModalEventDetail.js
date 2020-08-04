@@ -180,8 +180,6 @@ class ModalEventDetail extends React.Component {
             </div>
         )
 
-        console.log(new Date(event.eventDateTime).toLocaleDateString());
-
         const eventForm = (
             <div className="AddEventForm">
                 <EventForm

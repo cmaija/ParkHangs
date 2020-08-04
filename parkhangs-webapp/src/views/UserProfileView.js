@@ -2,8 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {openModal} from "../features/modal/modalSlice";
 import "views/UserProfileView.css";
-import { toggleSavedPark, toggleSavedEvent } from "../features/users/userSlice";
-import { cloneDeep } from 'lodash'
+import {toggleSavedPark, toggleSavedEvent} from "../features/users/userSlice";
+import {cloneDeep} from 'lodash'
 import moment from 'moment'
 
 
@@ -98,25 +98,7 @@ class UserProfileView extends React.Component {
         return savedEvents
     }
 
-    getAverageRating = () => {
-        const currentPark = this.props.parks.find(park => park._id === this.props.parkId)
-        const currentParkRatings = currentPark.ratings
-
-        const totalScore = currentParkRatings.reduce((acc, rating) =>  {
-            return acc += rating.rating
-        }, 0)
-
-        let average = totalScore/currentParkRatings.length
-
-        if (Number.isNaN(average)) {
-            average = 0;
-            return average;
-        } else {
-            return Math.round(average * 10) / 10
-        }
-    }
-
-    renderSavedParks () {
+    renderSavedParks() {
         const savedParks = this.savedParks()
         const savedEvents = this.savedEvents()
 
@@ -128,31 +110,25 @@ class UserProfileView extends React.Component {
                 {
                     savedParks.length ?
                         <table className="Favourite-Parks-Table">
-                        <thead>
-                        <tr>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Park name: </b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Address:</b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Average Rating:</b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Remove from Favourites</b>
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
+                            <thead>
+                            <tr>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Park name: </b>
+                                </td>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Average Rating:</b>
+                                </td>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Remove from Favourites</b>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
                             {
                                 savedParks.map((park) =>
                                     <tr key={park._id}>
                                         <td>
                                             {park.name}
-                                        </td>
-                                        <td>
-                                            {park.streetNumber + " " + park.streetName}
                                         </td>
                                         <td>
                                             {park.averageRating || 'This park has no ratings yet!'}
@@ -166,10 +142,10 @@ class UserProfileView extends React.Component {
                                         </td>
                                     </tr>)
                             }
-                        </tbody>
+                            </tbody>
 
-                    </table>
-                    : savedParks
+                        </table>
+                        : savedParks
                 }
                 <h3 className="Favourite-Parks-Title">
                     Favourite Events:
