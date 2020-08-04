@@ -14,6 +14,7 @@ class SimpleMap extends Component {
     };
 
     render() {
+        const parks = this.props.parksHaveBeenQueried ? this.props.queriedParks : this.props.parks
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '600px', width: '90%', margin: 'auto'}}>
@@ -21,8 +22,8 @@ class SimpleMap extends Component {
                                 defaultCenter={this.props.center}
                                 defaultZoom={this.props.zoom}>
                     {
-                        this.props.parks && this.props.parks.length > 0 &&
-                        this.props.parks.map((park) => {
+                        parks && parks.length > 0 &&
+                        parks.map((park) => {
                             return <Marker key={park._id} park={park}
                                            lat={park.googleMapsLatLon[0]}
                                            lng={park.googleMapsLatLon[1]}/>
@@ -39,7 +40,9 @@ class SimpleMap extends Component {
 
 const mapStateToProps = (state) => { //name is by convention
     return {
-        parks: state.parks.parks
+        parks: state.parks.parks,
+        queriedParks: state.parks.queriedParks,
+        parksHaveBeenQueried: state.parks.parksHaveBeenQueried
     }
 }
 

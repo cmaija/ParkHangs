@@ -10,9 +10,8 @@ import FilledHeartIcon from 'assets/icons/heart-filled.svg'
 import { toggleSavedPark } from "features/users/userSlice";
 import { addRating } from 'features/parks/parksSlice';
 import ShareCalendar from 'components/ShareCalendar';
-import LoadingSpinner from 'components/LoadingSpinner';
-import EventForm from 'components/EventForm';
-
+import LoadingSpinner from 'components/LoadingSpinner'
+import EventForm from 'components/EventForm'
 
 class ModalParkDetail extends React.Component {
 
@@ -43,8 +42,8 @@ class ModalParkDetail extends React.Component {
         }
     };
 
-    getCommentsByPark = () => {
-        let res = this.props.comments[this.props.park._id]
+    getCommentsByPark = (park) => {
+        let res = this.props.comments[park._id]
         if (res === undefined) {
             //no comments for that park, return empty array
             return [];
@@ -73,13 +72,13 @@ class ModalParkDetail extends React.Component {
     getSavedParkIcon = () => {
         if (this.props.user != null) {
             if (this.props.user.savedParks.includes(this.props.park._id)) {
-                return <img 
+                return <img
                             alt="filled heart"
                             className="FilledHeartIcon"
                             src={FilledHeartIcon}
                             onClick={this.toggleFavouritePark}/>
             } else {
-                return <img 
+                return <img
                             alt="unfilled heart"
                             className="NotFillHeartIcon" src={NoFilledHeartIcon}
                             onClick={this.toggleFavouritePark}/>
@@ -131,23 +130,8 @@ class ModalParkDetail extends React.Component {
       }
     }
 
-    getAverageRating = () => {
-      const currentPark = this.props.parks.find(park => park._id === this.props.parkId)
-      const currentParkRatings = currentPark.ratings
-
-      const totalScore = currentParkRatings.reduce((acc, rating) =>  {
-        return acc += rating.rating
-      }, 0)
-
-      let average = totalScore/currentParkRatings.length
-
-      if (Number.isNaN(average)) {
-        average = 0;
-        return average;
-      } else {
-        return Math.round(average * 10) / 10
-      }
-
+    getAverageRating = (park) => {
+        return park.averageRating ? park.averageRating : 0
     }
 
     descriptionTab = (park, averageRating) => {
@@ -198,7 +182,7 @@ class ModalParkDetail extends React.Component {
         )
     }
     facilitiesAndFeaturesTab = (park, facilities, features) => {
-        
+
         return (
             <div className="ModalParkDetail-facilities-and-features">
                 <div className="ModalParkDetail-FacilitiesTable TableContainer">
@@ -220,6 +204,7 @@ class ModalParkDetail extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
+          
                                 {facilities.map((facility, index)=> {  
                                     return <tr key={index}>
                                         <td>
@@ -228,16 +213,16 @@ class ModalParkDetail extends React.Component {
                                         <td>
                                             {facility.facilityUrl}
                                         </td>
-                                        <td>                                               
+                                        <td>
                                             {facility.facilityCount}
                                         </td>
                                     </tr>
                                 })
-                                } 
+                                }
                                 </tbody>
                             </table>
                         </div>
-                        : 
+                        :
                         <div className="Column">There are no facilities at this park.</div>
                     }
                 </div>
@@ -264,14 +249,14 @@ class ModalParkDetail extends React.Component {
                                     }
                                 </tbody>
                             </table>
-                        </div>    
-                    
-                    : 
+                        </div>
+
+                    :
                     <div className="Column">There are no features at this park.</div>
                     }
                 </div>
             </div>
-            
+
         )
     }
     eventsTab = (park, parkId) => {
@@ -365,14 +350,14 @@ class ModalParkDetail extends React.Component {
                     There are no events for this park.
                 </div>
             }
-          
-            <div className="AddEventForm"> 
+
+            <div className="AddEventForm">
             {
-            this.props.updatingEvent 
-            ? 
+            this.props.updatingEvent
+            ?
                 <div className="ModalEventDetail-updatingEvent">
                     <LoadingSpinner />
-                </div> 
+                </div>
             :
                 <EventForm
                 event={null}
@@ -384,11 +369,11 @@ class ModalParkDetail extends React.Component {
                 showDayPicker={true}
                 />
             }
-            </div>          
+            </div>
 
         </div>
     </div>
-       
+
         )
     }
     commentsTab = (parkId, comments, user) => {
@@ -453,25 +438,25 @@ class ModalParkDetail extends React.Component {
                     <div className="ParkCommentForm Column">
                          <CommentForm parkId={parkId} user={user} />
                      </div>
-                    
-                   
+
+
                 </div>
             </div>
         )
     }
     ratingsTab = (averageRating) => {
         return(
-            
+
             <div className="ModalParkDetail-ratings">
                 <div className="Ratings">
                 <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
                     <span  className="star">☆</span>
-                </button> 
+                </button>
                 <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
-                    <span  className="star">☆</span> 
+                    <span  className="star">☆</span>
                 </button>
                 <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
-                    <span  className="star">☆</span> 
+                    <span  className="star">☆</span>
                 </button>
                 <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
                     <span className="star">☆</span>
@@ -482,21 +467,29 @@ class ModalParkDetail extends React.Component {
                 </div>
                 <div className="AverageRating">
                     <span>Average Rating by Users: { averageRating }</span>
-                </div>               
-            </div>  
-        )  
+                </div>
+            </div>
+        )
     }
 
     render() {
-        const park = this.props.parks.find(park => park._id === this.props.parkId)
-        const averageRating = this.getAverageRating()
-        const comments = this.getCommentsByPark()
+        if (this.props.loading) {
+            return (
+                <div className="LoadingState">
+                    <LoadingSpinner key="loadingModal"/>
+                </div>
+            )
+        }
+
+        const park = this.props.selectedPark
+        const averageRating = this.getAverageRating(park)
+        const comments = this.getCommentsByPark(park)
         const user = this.props.user
         const parkId = this.props.parkId
         const facilities = park.facilities
         const features = park.specialFeatures
-        
-      
+
+
 
         let currentTab
 
@@ -511,7 +504,6 @@ class ModalParkDetail extends React.Component {
         } else {
             currentTab = this.descriptionTab(park, averageRating)
         }
-
 
         return (
             <div className="detailed-content-main modal-card">
@@ -546,14 +538,14 @@ class ModalParkDetail extends React.Component {
                             `${this.state.currentTab === 'ratings' ? 'tab-selected' :''} ${'ModalParkDetail-tabSelector'}`}
                             onClick={() => this.selectTab('ratings')}>
                             <span className="ModalParkDetail-tabName">Ratings</span>
-                            </div>        
+                            </div>
                         </div>
 
                         <div className="ModalParkDetail-rightToolbar">
                                 {this.getSavedParkIcon()}
                         </div>
-    
-                    </div>    
+
+                    </div>
                 </div>
                 <div className="ModalParkDetail-divider"></div>
                 <div className="ModalParkDetail-Body">
@@ -562,6 +554,7 @@ class ModalParkDetail extends React.Component {
 
             </div>
         )
+        return LoadingSpinner
     }
 }
 
@@ -572,6 +565,8 @@ const mapStateToProps = (state) => {
         user: state.user.user,
         parks: state.parks.parks,
         comments: state.comments.commentsByParkId,
+        selectedPark: state.parks.selectedPark,
+        loading: state.parks.loadingParkDetails,
         updatingEvent: state.events.updatingEvent,
     }
 };

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {openModal} from 'features/modal/modalSlice.js'
 import MarkerIcon from 'assets/icons/marker.png'
 import {connect} from "react-redux"
+import { selectPark } from 'features/parks/parksSlice'
 
 class Marker extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class Marker extends Component {
     }
 
     handleSelect = (park) => {
+        this.props.selectPark(park._id)
         const modalProps = {
             component: 'ModalParkDetail',
             componentParams: {
@@ -42,6 +44,7 @@ class Marker extends Component {
 
 
 const mapDispatchToProps = (dispatch) => ({
+    selectPark: (parkId) => dispatch(selectPark(parkId)),
     openModal: (modalProps) => dispatch(openModal(modalProps))
 });
 

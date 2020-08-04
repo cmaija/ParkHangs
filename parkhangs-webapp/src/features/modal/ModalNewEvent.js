@@ -97,7 +97,7 @@ class ModalNewEvent extends React.Component {
                         <span className="ModalEventDetail-AddDate">{`Add New Event on ${selectedDate}`}</span>
                     </div>
                 </div>
-               
+
                 <div className="AddEventForm">
                     <EventForm
                         eventDateTime={this.props.selectedSlot.start}

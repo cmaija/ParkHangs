@@ -25,8 +25,9 @@ class CalendarsView extends Component {
     render() {
         return (
             <div className="CalendarsView">
-                <Searchbar onSearch={this.toggleShowAllParks} placeholder="Search for a park"/>
-                <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
+                <div className="search">
+                    <Searchbar onShowAll={this.toggleShowAllParks} onSearch={this.toggleShowAllParks}/>
+                </div>
                 <div className="CalendarList">
                 <ParksCalendar showAllParks={this.state.showAllParks}/>
                 </div>
