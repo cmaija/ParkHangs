@@ -1,6 +1,5 @@
 const EventComment = require('../models/EventCommentModel');
 const express = require('express');
-const Request = require("request");
 var assert = require('assert');
 var mongoose = require('mongoose');
 const database = require('../database/index');
@@ -19,6 +18,7 @@ const getEventComments = async (req, res) => {
             return res.status(404).json({success: false, error: `event comments not found`})
         }
         return res.status(200).json({success: true, data: eventComments})
+
     }).catch(err => console.log(err))
 };
 

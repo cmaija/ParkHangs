@@ -98,6 +98,24 @@ class UserProfileView extends React.Component {
         return savedEvents
     }
 
+    getAverageRating = () => {
+        const currentPark = this.props.parks.find(park => park._id === this.props.parkId)
+        const currentParkRatings = currentPark.ratings
+
+        const totalScore = currentParkRatings.reduce((acc, rating) =>  {
+            return acc += rating.rating
+        }, 0)
+
+        let average = totalScore/currentParkRatings.length
+
+        if (Number.isNaN(average)) {
+            average = 0;
+            return average;
+        } else {
+            return Math.round(average * 10) / 10
+        }
+    }
+
     renderSavedParks () {
         const savedParks = this.savedParks()
         const savedEvents = this.savedEvents()
@@ -119,7 +137,7 @@ class UserProfileView extends React.Component {
                                 <b>Address:</b>
                             </td>
                             <td className="Favourite-Parks-Table-Rows">
-                                <b>Rating:</b>
+                                <b>Average Rating:</b>
                             </td>
                             <td className="Favourite-Parks-Table-Rows">
                                 <b>Remove from Favourites</b>
@@ -137,7 +155,7 @@ class UserProfileView extends React.Component {
                                             {park.streetNumber + " " + park.streetName}
                                         </td>
                                         <td>
-                                            {park.rating}
+                                            {this.getAverageRating(park)}
                                         </td>
                                         <td>
                                             <button onClick={() => {

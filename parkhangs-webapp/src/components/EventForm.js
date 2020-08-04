@@ -18,6 +18,7 @@ class EventForm extends React.Component {
         super(props)
 
         this.state = {
+            eventTitle: this.props.eventTitle || null,
             eventDetail: this.props.eventDetails || null,
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
@@ -25,6 +26,11 @@ class EventForm extends React.Component {
             parkId: this.props.parkId || null,
         }
     }
+
+    eventTitle = () => {
+        return this.props.eventTitle || ''
+    }
+
     eventDetail = () => {
         return this.props.eventDetails || ''
     }
@@ -83,10 +89,15 @@ class EventForm extends React.Component {
     showDatePicker = () => {
         return this.props.showDatePicker
     }
+
     dayPickerDateFormat = () => {
+
         if (this.props.eventDateTime) {
-            return new Date(this.props.eventDateTime)
+            let date = new Date(this.props.eventDateTime)
+            console.log("moment:" + moment.unix(this.props.eventDateTime).format("YYYYMMDDTHHmmssZ");
+            return date
         }
+
         return null
     }
 
@@ -102,6 +113,13 @@ class EventForm extends React.Component {
         this.setState({eventEndTime: time})
     }
 
+
+    handleUpdateTitle = (event) => {
+        this.setState({
+            eventTitle: event.target.value
+        })
+    }
+
     handleUpdateDetails = (event) => {
         this.setState({
             eventDetail: event.target.value
@@ -113,6 +131,7 @@ class EventForm extends React.Component {
     }
 
     handleAddEvent = (event) => {
+
         event.preventDefault()
         const eventStartTimestamp = moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
 
@@ -122,27 +141,33 @@ class EventForm extends React.Component {
             eventEndDateTime = moment(`${this.parsedEventEndTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
         }
 
+        const title = this.state.eventTitle || this.eventTitle
         const detail = this.state.eventDetail || this.eventDetail()
-        const eventDateTime = eventStartTimestamp
 
         if (!this.props.eventId) {
 
             const newEvent = {
                 parkId: this.state.parkId,
+                title: title,
                 details: detail,
-                eventDateTime: eventDateTime,
+                eventDateTime: eventStartTimestamp,
                 eventEndDateTime: eventEndDateTime,
             }
-           
 
             this.props.addOneEvent(this.props.user, newEvent)
+
         } else {
+
             const updatedEvent = {
                 eventId: this.props.eventId,
+                title: title,
                 details: detail,
-                eventDateTime: eventDateTime,
+                eventDateTime: eventStartTimestamp,
                 eventEndDateTime: eventEndDateTime,
             }
+
+            //console.log(moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY'));
+
             this.props.updateEvent(updatedEvent)
 
         }
@@ -167,6 +192,7 @@ class EventForm extends React.Component {
         const eventStartTime = this.eventStartTime()
         const eventEndTime = this.eventEndTime()
 
+        const eventTitle = this.eventTitle()
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
@@ -175,7 +201,7 @@ class EventForm extends React.Component {
             <div className="EventForm">
                 <form className="EventForm">
                     {
-                        showCalendar && <div className="formsection date"> 
+                        showCalendar && <div className="formsection date">
                             <label htmlFor="eventDate">Date:</label>
                             <Calendar id="eventDate" value={eventDate} onChange={this.handleUpdateDate}/>
                         </div>
@@ -197,6 +223,13 @@ class EventForm extends React.Component {
                             disableClock={true}
                             value={eventEndTime}
                             clearIcon={null}/>
+                    </div>
+                    <div className="formsection details">
+                        <label htmlFor="eventDetail">Title: </label>
+                        <textarea
+                            onChange={this.handleUpdateTitle}
+                            id="eventTitle"
+                            defaultValue={eventTitle}/>
                     </div>
                     <div className="formsection details">
                         <label htmlFor="eventDetail">Details: </label>

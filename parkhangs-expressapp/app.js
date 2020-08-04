@@ -8,7 +8,6 @@ var indexRouter = require('./routes/index');
 const database = require('./database/index');
 
 var app = express();
-var uuid = require('uuidv4');
 var cors = require('cors');
 
 // view engine setup

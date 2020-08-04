@@ -1,12 +1,12 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
+import {connect} from 'react-redux'
+import {Calendar, momentLocalizer, Views} from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'components/ParksCalendar.css'
-import { openModal } from "features/modal/modalSlice"
+import {openModal} from "features/modal/modalSlice"
 
-import { cloneDeep } from 'lodash'
+import {cloneDeep} from 'lodash'
 
 const localizer = momentLocalizer(moment)
 let allViews = Object.keys(Views).map(k => Views[k])
@@ -43,7 +43,7 @@ class ParksCalendar extends React.Component {
         this.props.openModal(props)
     }
 
-    render () {
+    render() {
         let eventsArray
 
         if (this.props.showAllParks) {
@@ -71,6 +71,8 @@ class ParksCalendar extends React.Component {
             }
             return transformedEvent
         })
+
+        //console.log(eventsArray);
 
         return (
             <div className="eventsCalendar">

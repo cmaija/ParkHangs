@@ -47,6 +47,7 @@ class ModalNewEvent extends React.Component {
             return null;
         }
     }
+
     editEvent = (eventToEdit) => {
         this.setState({eventToEdit})
     }
@@ -62,9 +63,10 @@ class ModalNewEvent extends React.Component {
 
     }
 
-    updateEvent = (eventId, eventDetail, eventTimestamp, eventEndTimeStamp) => {
+    updateEvent = (eventId, eventTitle, eventDetail, eventTimestamp, eventEndTimeStamp) => {
         const newEventsArray = cloneDeep(this.state.eventsOnCurrentDate)
         let eventIndex = newEventsArray.findIndex(event => event._id === eventId)
+        newEventsArray[eventIndex].title = eventTitle
         newEventsArray[eventIndex].details = eventDetail
         newEventsArray[eventIndex].eventDateTime = `${eventTimestamp}`
         newEventsArray[eventIndex].eventEndDateTime = `${eventEndTimeStamp}`
@@ -93,11 +95,11 @@ class ModalNewEvent extends React.Component {
         return (
             <div className="detailed-content-main modal-card">
                 <div className="ModalEventDetail-header">
-                     <div className= "ModalEventDetail-Title">
+                     <div className="ModalEventDetail-Title">
                         <span className="ModalEventDetail-AddDate">{`Add New Event on ${selectedDate}`}</span>
                     </div>
                 </div>
-               
+
                 <div className="AddEventForm">
                     <EventForm
                         eventDateTime={this.props.selectedSlot.start}
