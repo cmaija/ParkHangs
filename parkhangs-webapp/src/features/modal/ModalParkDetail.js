@@ -150,48 +150,48 @@ class ModalParkDetail extends React.Component {
 
     }
 
-    descriptionTab = (park) => {
+    descriptionTab = (park, averageRating) => {
         return (
             <div className="ModalParkDetail-description">
                         <div className="ParkLocationDetails">
                             <div>
-                                Address: {park.streetNumber + " " + park.streetName}
+                                <b>Address:</b> {park.streetNumber + " " + park.streetName}
                             </div>
                             <div>
-                                Lat: {park.googleMapsLatLon[0]}
+                                <b>Lat:</b> {park.googleMapsLatLon[0]}
                             </div>
                             <div>
-                                Lon: {park.googleMapsLatLon[1]}
+                                <b>Lon:</b> {park.googleMapsLatLon[1]}
                             </div>
                         </div>
                         <div className="OtherDetails">
                             <div>
-                                Neighbourhood Name: {park.neighbourhoodName}
+                                <b>Neighbourhood Name:</b> {park.neighbourhoodName}
                             </div>
                             <div>
-                                Neighbourhood website:
+                                <b>Neighbourhood website:</b>
                             </div>
                             <a href={park.neighbourhoodURL}>{park.neighbourhoodURL}</a>
                             <div>
-                                Size (in hectares): {park.hectares}
+                                <b>Size (in hectares): </b>{park.hectares}
                             </div>
                             <div>
-                                Washrooms available?: {park.hasWashrooms ? "yes" : "no"}
+                                <b>Washrooms available?:</b> {park.hasWashrooms ? "yes" : "no"}
                             </div>
                             <div>
-                                Facilities available?: {park.hasFacilities ? "yes" : "no"}
+                                <b>Facilities available?:</b> {park.hasFacilities ? "yes" : "no"}
                             </div>
                             <div>
-                                Park advisories?: {park.hasAdvisories ? "yes" : "no"}
+                                <b>Park advisories?:</b> {park.hasAdvisories ? "yes" : "no"}
                             </div>
                             <div>
-                                Special Features?: {park.hasSpecialFeatures ? "yes" : "no"}
+                                <b>Special Features?:</b> {park.hasSpecialFeatures ? "yes" : "no"}
                             </div>
                             <div>
-                                Rating: {park.rating}
+                                <b>Rating:</b> {!!averageRating ? averageRating: "N/A"}
                             </div>
                             <div>
-                                Number of Favorites: {park.favoritesCount || 0}
+                                <b>Number of Favorites:</b> {park.favoritesCount || 0}
                             </div>
                         </div>
                     </div>
@@ -220,8 +220,8 @@ class ModalParkDetail extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {facilities.map((facility)=> {  
-                                    return <tr>
+                                {facilities.map((facility, index)=> {  
+                                    return <tr key={index}>
                                         <td>
                                             {facility.facilityType}
                                         </td>
@@ -254,8 +254,8 @@ class ModalParkDetail extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {features.map((feature)=> {
-                                    return <tr>
+                                    {features.map((feature, index)=> {
+                                    return <tr key={index}>
                                         <td>
                                             {feature.feature}
                                         </td>
@@ -362,7 +362,7 @@ class ModalParkDetail extends React.Component {
                 </table>
                 :
                 <div>
-                    There are no events for this park
+                    There are no events for this park.
                 </div>
             }
           
@@ -396,13 +396,37 @@ class ModalParkDetail extends React.Component {
             <div className="ModalParkDetail-comments">
                 <div className="ParkComments">
                     <div className="ParkCommentHistory Column">
-                    { comments.map((comment) => {
-                        return <table>
+                    {
+                    comments.length > 0 ?
+                        <table>
+                        <thead>
+                            <tr>
+                                <td>
+                                    <b>Username:</b>
+                                </td>
+                                <td>
+                                    <b>Created at:</b>
+                                </td>
+                                <td>
+                                    <b>Comment:</b>
+                                </td>
+                                <td>
+                                    <b>Delete:</b>
+                                </td>
+                             </tr>
+                        </thead>
                         <tbody>
-                            <tr key={comment._id}>
+
+                        {comments.map((comment) => {
+                        return <tr key={comment._id}>
                             <td>
-                                <span>{comment.comment}</span> <br/>
-                                <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
+                                {comment.creatorName} 
+                            </td>
+                            <td>
+                                {this.getCreatedTime(comment.createdDateTime)} 
+                            </td>
+                            <td>
+                                {comment.comment}
                             </td>
                             <td>
                                 <button onClick={() => {
@@ -412,10 +436,19 @@ class ModalParkDetail extends React.Component {
                                 </button>
                             </td>
                             </tr>
+                        })
+                        
+                    }
                         </tbody>
                         </table>
-                        })
+                    :
+                    <div>
+                        There are no comments for this park.
+                    </div> 
                     }
+                    
+                        
+
                     </div>
                     <div className="ParkCommentForm Column">
                          <CommentForm parkId={parkId} user={user} />
@@ -476,7 +509,7 @@ class ModalParkDetail extends React.Component {
         } else if (this.state.currentTab === 'facilities-and-features') {
             currentTab = this.facilitiesAndFeaturesTab(park, facilities, features)
         } else {
-            currentTab = this.descriptionTab(park)
+            currentTab = this.descriptionTab(park, averageRating)
         }
 
 

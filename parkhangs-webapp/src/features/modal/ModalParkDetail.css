@@ -37,14 +37,18 @@
     flex-direction: column;
     align-items: flex-start;
 }
-
+.ParkLocationDetails > div{
+    padding: 0.5rem;
+}
 .OtherDetails {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
-
+.OtherDetails > div {
+    padding: 0.5rem;
+}
 .Event {
     width: 100%;
     display: flex;
@@ -137,18 +141,19 @@
 .FacilitiesTable {
     display: flex;
     max-height: 19rem;
-    overflow: scroll
+    overflow: scroll;
 
 }
 .TableContainer {
     display: flex;
     width: 100%;
     height:100%;
+    padding: 0.5rem;
 }
 .FeaturesTable {
    display: flex;
    align-self: start;
-   padding: 0 0.3rem;
+   padding: 0 1rem;
 }
 .ParkComments{
     max-height: 19rem;
@@ -174,8 +179,11 @@
     color: gold
 }
 
-.star{
+.star {
     font-size: 2rem;
+}
+.tr {
+    padding: 0.5rem;
 }
 @media only screen and (max-width:600px){
     .ModalParkDetail-leftToolbar {

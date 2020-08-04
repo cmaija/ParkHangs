@@ -142,36 +142,72 @@ class ModalEventDetail extends React.Component {
       }
 
     commentsTab = (event, comments) => {
+
         return (
-            <div className="EventComments">
-              <div className="EventCommentsHistory Column">
-                  <span className="SectionTitle"><b>Event Comments</b></span>
-                  { comments.map((comment) => {
-                    return <table>
-                      <tbody>
-                        <tr key={comment._id}>
-                          <td>
-                            <span>{comment.comment}</span> <br/>
-                            <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
-                          </td>
-                          <td>
-                            <button onClick={() => {
-                              this.handleDeleteComment(comment, this.props.eventId)
-                            }}>
-                            <b>X</b>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    })
-                  } 
-                  </div>
-                   <div className="EventCommentForm Column">
+            <div className="ModalEventDetail-comments">
+                <div className="EventComments">
+                    <div className="EventCommentsHistory Column">
+                    {
+                    comments.length > 0 ?
+                        <table>
+                        <thead>
+                            <tr>
+                                <td>
+                                    <b>Username:</b>
+                                </td>
+                                <td>
+                                    <b>Created at:</b>
+                                </td>
+                                <td>
+                                    <b>Comment:</b>
+                                </td>
+                                <td>
+                                    <b>Delete:</b>
+                                </td>
+                             </tr>
+                        </thead>
+                        <tbody>
+
+                        {comments.map((comment) => {
+                        return <tr key={comment._id}>
+                            <td>
+                                {comment.creatorName} 
+                            </td>
+                            <td>
+                                {this.getCreatedTime(comment.createdDateTime)} 
+                            </td>
+                            <td>
+                                {comment.comment}
+                            </td>
+                            <td>
+                                <button onClick={() => {
+                                    this.handleDeleteComment(comment, this.props.eventId)
+                                }}>
+                                <b>X</b>
+                                </button>
+                            </td>
+                            </tr>
+                        })
+                        
+                    }
+                        </tbody>
+                        </table>
+                    :
+                    <div>
+                        There are no comments for this park.
+                    </div> 
+                    }
+                    
+                        
+
+                    </div>
+                    <div className="EventCommentForm Column">
                        <CommentForm eventId={this.props.eventId}/>
                    </div>
-               
-              </div>
+                    
+                   
+                </div>
+            </div>
         )
     }
 
