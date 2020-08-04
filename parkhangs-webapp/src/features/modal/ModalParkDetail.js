@@ -204,8 +204,8 @@ class ModalParkDetail extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-          
-                                {facilities.map((facility, index)=> {  
+
+                                {facilities.map((facility, index)=> {
                                     return <tr key={index}>
                                         <td>
                                             {facility.facilityType}
@@ -405,10 +405,10 @@ class ModalParkDetail extends React.Component {
                         {comments.map((comment) => {
                         return <tr key={comment._id}>
                             <td>
-                                {comment.creatorName} 
+                                {comment.creatorName}
                             </td>
                             <td>
-                                {this.getCreatedTime(comment.createdDateTime)} 
+                                {this.getCreatedTime(comment.createdDateTime)}
                             </td>
                             <td>
                                 {comment.comment}
@@ -422,17 +422,17 @@ class ModalParkDetail extends React.Component {
                             </td>
                             </tr>
                         })
-                        
+
                     }
                         </tbody>
                         </table>
                     :
                     <div>
                         There are no comments for this park.
-                    </div> 
+                    </div>
                     }
-                    
-                        
+
+
 
                     </div>
                     <div className="ParkCommentForm Column">
@@ -444,24 +444,47 @@ class ModalParkDetail extends React.Component {
             </div>
         )
     }
-    ratingsTab = (averageRating) => {
-        return(
+    ratingsTab = (averageRating, user, park) => {
+        let userRating = 0
+        let userHasRated = false
+        if (!!user._id) {
+            userRating = park.ratings.find(rating => rating.user === user._id)
+            userRating = !!userRating ? userRating.rating : 0
+            userHasRated = !!userRating
+        }
 
+        return(
             <div className="ModalParkDetail-ratings">
+                <span>Your Rating:</span>
                 <div className="Ratings">
-                <button id={"rating-5"} onClick={() => this.handleAddRating(5)}>
+                <button
+                    id={"rating-5"}
+                    className={`${userRating >= 5 ? 'rated' : ''}`}
+                    onClick={() => this.handleAddRating(5)}>
                     <span  className="star">☆</span>
                 </button>
-                <button id={"rating-4"} onClick={() => this.handleAddRating(4)}>
-                    <span  className="star">☆</span>
-                </button>
-                <button id={"rating-3"} onClick={() => this.handleAddRating(3)}>
-                    <span  className="star">☆</span>
-                </button>
-                <button id={"rating-2"} onClick={() => this.handleAddRating(2)}>
+                <button
+                    id={"rating-4"}
+                    className={`${userRating >= 4 ? 'rated' : ''}`}
+                    onClick={() => this.handleAddRating(4)}>
                     <span className="star">☆</span>
                 </button>
-                <button id={"rating-1"} onClick={() => this.handleAddRating(1)}>
+                <button
+                    id={"rating-3"}
+                    className={`${userRating >= 3 ? 'rated' : ''}`}
+                    onClick={() => this.handleAddRating(3)}>
+                    <span  className="star">☆</span>
+                </button>
+                <button
+                    id={"rating-2"}
+                    className={`${userRating >= 2 ? 'rated' : ''}`}
+                    onClick={() => this.handleAddRating(2)}>
+                    <span className="star">☆</span>
+                </button>
+                <button
+                    id={"rating-1"}
+                    className={`${userRating >= 1 ? 'rated' : ''}`}
+                    onClick={() => this.handleAddRating(1)}>
                     <span className="star">☆</span>
                 </button>
                 </div>
@@ -494,7 +517,7 @@ class ModalParkDetail extends React.Component {
         let currentTab
 
         if (this.state.currentTab === 'ratings') {
-            currentTab = this.ratingsTab(averageRating)
+            currentTab = this.ratingsTab(averageRating, user, park)
         } else if (this.state.currentTab === 'comments') {
             currentTab = this.commentsTab(parkId, comments, user)
         } else if (this.state.currentTab === 'events') {
@@ -554,7 +577,6 @@ class ModalParkDetail extends React.Component {
 
             </div>
         )
-        return LoadingSpinner
     }
 }
 

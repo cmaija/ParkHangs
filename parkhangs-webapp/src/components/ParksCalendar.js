@@ -5,6 +5,7 @@ import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'components/ParksCalendar.css'
 import { openModal } from "features/modal/modalSlice"
+import { selectPark } from 'features/parks/parksSlice'
 
 import { cloneDeep } from 'lodash'
 
@@ -12,13 +13,15 @@ const localizer = momentLocalizer(moment)
 let allViews = Object.keys(Views).map(k => Views[k])
 
 class ParksCalendar extends React.Component {
-    openModal = (event) => {
+    openModal = (event, park) => {
+        const parkToSelect = this.props.parks.find(park => park._id === event.parkId)
         const props = {
             component: 'ModalEventDetail',
             componentParams: {
                 eventId: event._id,
             }
         }
+        this.props.selectPark(parkToSelect._id)
         this.props.openModal(props)
     }
 
@@ -100,7 +103,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    openModal: (modalProps) => dispatch(openModal(modalProps))
+    openModal: (modalProps) => dispatch(openModal(modalProps)),
+    selectPark: (parkId) => dispatch(selectPark(parkId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParksCalendar);

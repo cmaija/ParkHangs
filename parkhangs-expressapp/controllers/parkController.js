@@ -54,6 +54,17 @@ const addRating = async (req, res) => {
         return res.status(404).json({success: false,error: `Could not find the park with that id`})
     }
     try {
+        let userHasRated = false
+        const user = ratingUserPair.user
+        let usersRating = parkToUpdate.ratings.find(rating => rating.user === user)
+        if (!!usersRating) {
+            userHasRated = true
+        }
+
+        if (userHasRated) {
+            parkToUpdate.ratings = parkToUpdate.ratings.filter(rating => rating.user !== user)
+        }
+
         parkToUpdate.ratings.push(ratingUserPair)
         const ratings = parkToUpdate.ratings
         let ratingSum = ratings.reduce((acc, rating) =>  {

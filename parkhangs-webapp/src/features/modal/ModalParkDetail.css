@@ -120,7 +120,7 @@
     flex-direction: row;
     align-items: baseline;
     margin-bottom: 2px;
-    height: 100%;  
+    height: 100%;
 }
 .ModalParkDetail-rightToolbar {
     display: flex;
@@ -175,6 +175,7 @@
     unicode-bidi: bidi-override;
     direction: rtl;
 }
+
 .Ratings > button {
     font-size:100%;
     font-family:inherit;
@@ -183,8 +184,16 @@
     outline: none;
 }
 
-.Ratings > button:hover,
-.Ratings > button:hover ~ button{
+.rated {
+    color: gold;
+}
+
+.Ratings:hover > button {
+    color: black;
+}
+
+.Ratings:hover > button:hover,
+.Ratings:hover > button:hover ~ button{
     font-size: 2rem;
     color: gold
 }
@@ -229,7 +238,7 @@
     }
    .ParkCommentForm {
        margin-left: 0;
-   } 
+   }
 }
 @media only screen and (min-width:600px){
     .ModalParkDetail-leftToolbar {
@@ -256,7 +265,7 @@
    .Column {
         margin: 0rem 2rem;
     }
-   
+
 }
 
 @media only screen and (min-width: 780px){
@@ -273,8 +282,7 @@
     }
     .NotFillHeartIcon{
         height: 1.7rem;
-        width: 1.7rem; 
-        padding: 0.625rem; 
+        width: 1.7rem;
+        padding: 0.625rem;
     }
 }
-
