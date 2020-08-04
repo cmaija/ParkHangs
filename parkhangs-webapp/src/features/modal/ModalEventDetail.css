@@ -47,7 +47,7 @@
     align-items: baseline;
     padding-left: 2.5rem;
     margin-bottom: 2px;
-    height: 100%;  
+    height: 100%;
 }
 
 .ModalEventDetail-rightToolbar {
@@ -117,8 +117,8 @@
     flex-direction: column;
     padding-left: 0;
     font-size: 0.7rem;
-        
-        
+
+
 }
 .AddEventForm {
     width: 80%;

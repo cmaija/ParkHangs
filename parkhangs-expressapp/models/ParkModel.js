@@ -15,8 +15,11 @@ const Park = new Schema(
         hasAdvisories: {type: Boolean, required: true},
         hasSpecialFeatures: {type: Boolean, required: true},
         googleMapsLatLon: {type: Array, required: true},
-        ratings: {type: Array, required: true},
-        favoritesCount: {type: Number, required: true}
+        ratings: {type: Array, required: false},
+        averageRating: {type: Number, required: false},
+        favoritesCount: {type: Number, required: false},
+        facilities: {type: Array, required: false},
+        specialFeatures: {type: Array, required: false},
     },
 );
 

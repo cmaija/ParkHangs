@@ -9,7 +9,7 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
-import {closeModal} from 'features/modal/modalSlice';
+import { closeModal } from 'features/modal/modalSlice';
 
 
 class EventForm extends React.Component {
@@ -94,7 +94,8 @@ class EventForm extends React.Component {
 
         if (this.props.eventDateTime) {
             let date = new Date(this.props.eventDateTime)
-            console.log("moment:" + moment.unix(this.props.eventDateTime).format("YYYYMMDDTHHmmssZ");
+            //TODO: here!!!
+            console.log("moment:" + moment.unix(this.props.eventDateTime).format("YYYYMMDDTHHmmssZ"));
             return date
         }
 
@@ -166,6 +167,7 @@ class EventForm extends React.Component {
                 eventEndDateTime: eventEndDateTime,
             }
 
+            //TODO:
             //console.log(moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY'));
 
             this.props.updateEvent(updatedEvent)
@@ -180,11 +182,6 @@ class EventForm extends React.Component {
         this.setState({
             parkId: event.target.value
         });
-
-    }
-
-    sortParkNamesAlphabetically = () => {
-        return this.props.parks.slice().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
     }
 
     render() {
@@ -244,7 +241,7 @@ class EventForm extends React.Component {
                             <label htmlFor="eventPark">Select Park</label>
                             <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
                                 {
-                                    this.sortParkNamesAlphabetically().map((park) => {
+                                    this.props.parks.map((park) => {
                                         return <option
                                             key={park._id}
                                             value={park._id}>{park.name}</option>

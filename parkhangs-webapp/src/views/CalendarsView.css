@@ -14,7 +14,9 @@
     padding: 1rem 0;
 }
 
-.ShowAllButton {
-    margin-top: 1rem;
-    width: 8rem;
+.search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
 }
