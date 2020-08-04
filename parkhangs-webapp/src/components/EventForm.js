@@ -148,7 +148,7 @@ class EventForm extends React.Component {
     }
 
     render() {
-        const eventDate = this.eventDate()()
+        const eventDate = this.eventDate()
         const eventStartTime = this.eventStartTime()
         const eventEndTime = this.eventEndTime()
 

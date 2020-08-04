@@ -102,8 +102,8 @@ class ModalNewEvent extends React.Component {
                     <EventForm
                         eventDateTime={this.props.selectedSlot.start}
                         showParkPicker={true}
-                        showDayPicker={false}
-                        eventEndDateTime={this.props.selectedSlot.end}/>
+                        eventEndDateTime={this.props.selectedSlot.end}
+                        showDayPicker={false}/>
                 </div>
             </div>
         )

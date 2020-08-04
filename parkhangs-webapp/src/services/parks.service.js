@@ -23,7 +23,6 @@ const ParkService = {
     },
 
     queryParks: async function (params) {
-        console.log(params)
         const config = {
             params: params,
             paramsSerializer: function(params) {
@@ -31,7 +30,6 @@ const ParkService = {
             },
         }
 
-        console.log(config)
         const url = `/queryParks`
         try {
             const response = await ApiService.get(url, config)
