@@ -55,13 +55,11 @@ class CommentForm extends React.Component {
                 <form className="CommentForm">
                     <div className="formsection comment">
                         <label htmlFor="comment">Comment: </label>
-                        <input
-                           id="comment_input"
-                           type="text"
-                           placeholder="Enter Comment"
-                           onChange={e => this.setState({ comments : e.target.value })}
-                           value={this.state.comments}
-                       />
+                        <textarea
+                          onChange={e => this.setState({ comments : e.target.value })}
+                          id="comment_input"
+                          value={this.state.comments}
+                        />
                     </div>
                 </form>
                 <button className={"submit-message-button leftButton"}
