@@ -22,8 +22,6 @@ const ParkService = {
         }
     },
 
-<<<<<<< HEAD
-=======
     queryParks: async function (params) {
         const config = {
             params: params,
@@ -52,7 +50,6 @@ const ParkService = {
     },
 
 
->>>>>>> e54e42865c6a00d941c2a473111feff222405073
     getParkById: async function (id) {
         const url = `/parks/${id}/`
         try {

@@ -134,14 +134,10 @@ class UserProfileView extends React.Component {
                                 <b>Park name: </b>
                             </td>
                             <td className="Favourite-Parks-Table-Rows">
-<<<<<<< HEAD
                                 <b>Address:</b>
                             </td>
                             <td className="Favourite-Parks-Table-Rows">
                                 <b>Average Rating:</b>
-=======
-                                <b>Rating:</b>
->>>>>>> e54e42865c6a00d941c2a473111feff222405073
                             </td>
                             <td className="Favourite-Parks-Table-Rows">
                                 <b>Remove from Favourites</b>
@@ -156,14 +152,10 @@ class UserProfileView extends React.Component {
                                             {park.name}
                                         </td>
                                         <td>
-<<<<<<< HEAD
                                             {park.streetNumber + " " + park.streetName}
                                         </td>
                                         <td>
-                                            {this.getAverageRating(park)}
-=======
                                             {park.averageRating || 'This park has no ratings yet!'}
->>>>>>> e54e42865c6a00d941c2a473111feff222405073
                                         </td>
                                         <td>
                                             <button onClick={() => {
