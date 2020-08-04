@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 1rem;
+    padding-top: 2rem 2rem;
     width: 100%;
+    justify-content: center;
 }
 
 .CalendarWrapper {
@@ -19,4 +20,10 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 1rem;
+}
+@media only screen and (max-width:600px){
+    .CalendarsView{
+        transform: scale(0.8);
+        padding-left: 4.5rem;
+    }
 }

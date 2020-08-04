@@ -21,7 +21,7 @@ class EventForm extends React.Component {
             eventDetail: this.props.eventDetails || null,
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
-            eventDate: this.dayPickerDateFormat(),
+            eventDate: this.eventDate(),
             parkId: this.props.parkId || null,
         }
     }
