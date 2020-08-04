@@ -42,7 +42,7 @@ class CommentForm extends React.Component {
               this.props.addEventComment(newComment, this.props.user)
             }
             this.setState({
-              comments: ''
+              comments: ""
             })
           }
         }
