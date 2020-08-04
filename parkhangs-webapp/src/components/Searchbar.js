@@ -1,7 +1,9 @@
 import React from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import { filterParks } from 'features/parks/parksSlice'
 import Select from 'react-select'
+import 'components/Searchbar.css'
 
 class Searchbar extends React.Component {
 
@@ -23,16 +25,33 @@ class Searchbar extends React.Component {
     }
 
     handleSelectedPark = selectedParks => {
-        this.setState({selectedParks: selectedParks.map(park => park.value)})
+        this.setState({selectedParks: selectedParks})
     }
 
     handleSearchSubmit = () => {
-        this.props.setFilter(this.state.selectedParks)
+        this.props.setFilter(this.state.selectedParks.map(park => park.label))
         this.props.onSearch(false)
+    }
+
+    customStyles = {
+        menu: (provided, state) => ({
+            ...provided,
+            zIndex: 90,
+        })
+    }
+
+    clearSearch = () => {
+        this.setState({selectedParks: []})
+    }
+
+    toggleShowAllParks = () => {
+        this.props.onShowAll(true)
+        this.clearSearch()
     }
 
     render() {
         const parksOptions = this.getParksOptions()
+
         return (
             <div className="searchbar">
                 <Select
@@ -40,11 +59,15 @@ class Searchbar extends React.Component {
                     isMulti={true}
                     isClearable={true}
                     options={parksOptions}
-                    className="multi-select"
+                    styles={this.customStyles}
+                    value={this.state.selectedParks}
+                    placeholder="Select parks to see their events"
+                    className="search-multi-select"
                     onChange={this.handleSelectedPark} />
-                <button type="submit" onClick={this.handleSearchSubmit}>
+                <button className="search-parks-button" onClick={this.handleSearchSubmit}>
                     <i className="fa fa-search"/>
                 </button>
+                <button className="ShowAllButton" onClick={this.toggleShowAllParks}>Show all parks</button>
             </div>
         )
     }

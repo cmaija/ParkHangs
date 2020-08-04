@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { queryParks, resetQuery } from 'features/parks/parksSlice'
+import { queryParks, resetQuery, saveFilterState } from 'features/parks/parksSlice'
 import Select from 'react-select'
 import { cloneDeep } from 'lodash'
 import 'components/ParkFilterToolbar.css'
@@ -9,19 +9,23 @@ class ParkFilterToolbar extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            selectedFacilities: [],
-            selectedSpecialFeatures: [],
-            hasWashrooms: false,
-            minRating: '',
-            maxRating: '',
-            minSize: '',
-            maxSize: '',
-            parkName: '',
-            minRatingValid: true,
-            maxRatingValid: true,
-            minSizeValid: true,
-            maxSizeValid: true,
+        if (Object.keys(this.props.currentFilters).length > 0) {
+            this.state = this.props.currentFilters
+        } else {
+            this.state = {
+                selectedFacilities: [],
+                selectedSpecialFeatures: [],
+                hasWashrooms: false,
+                minRating: '',
+                maxRating: '',
+                minSize: '',
+                maxSize: '',
+                parkName: '',
+                minRatingValid: true,
+                maxRatingValid: true,
+                minSizeValid: true,
+                maxSizeValid: true,
+            }
         }
     }
 
@@ -34,10 +38,20 @@ class ParkFilterToolbar extends React.Component {
 
     handleSearchSubmit = event => {
         event.preventDefault()
+        this.clearSelectedParkName()
+        this.props.saveFilterState(this.state)
+
+        const specialFeatures = this.state.selectedSpecialFeatures.length > 0
+            ? this.state.selectedSpecialFeatures.map(feature => feature.label)
+            : []
+
+            const facilities = this.state.selectedFacilities.length > 0
+                ? this.state.selectedFacilities.map(facility => facility.label)
+                : []
         let searchParams = {
             hasWashrooms: this.state.hasWashrooms,
-            facilities: this.state.selectedFacilities,
-            specialFeatures: this.state.selectedSpecialFeatures,
+            facilities: facilities,
+            specialFeatures: specialFeatures,
             sizeGte: this.state.minSize,
             sizeLte: this.state.maxSize,
             ratingGte: this.state.minRating,
@@ -67,12 +81,12 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleSelectFacility = selectedFacilities => {
-        const selected = selectedFacilities.map(facility => facility.value)
+        const selected = selectedFacilities
         this.setState({selectedFacilities: selected})
     }
 
     handleSelectSpecialFeature = selectedSpecialFeatures => {
-        const selected = selectedSpecialFeatures.map(featureOption => featureOption.value)
+        const selected = selectedSpecialFeatures
         this.setState({selectedSpecialFeatures: selected})
     }
 
@@ -159,6 +173,22 @@ class ParkFilterToolbar extends React.Component {
             this.validateMinSize()
             this.validateMaxSize()
         })
+    }
+
+    clearWashrooms = () => {
+        this.setState({hasWashrooms: false})
+    }
+
+    clearFacilities = () => {
+        this.setState({selectedFacilities: []})
+    }
+
+    clearSpecialFeatures = () => {
+        this.setState({selectedSpecialFeatures: []})
+    }
+
+    clearSelectedParkName = () => {
+        this.setState({parkName: ''})
     }
 
     getFacilities = () => {
@@ -250,13 +280,14 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleSelectedPark = selectedPark => {
-        this.setState({parkName: selectedPark.label})
+        this.setState({parkName: selectedPark})
     }
 
     handleParkNameSearch = () => {
         event.preventDefault()
+        this.props.saveFilterState(this.state)
         let searchParams = {
-            name: this.state.parkName
+            name: this.state.parkName.label
         }
 
         if (searchParams.name !== '') {
@@ -266,7 +297,16 @@ class ParkFilterToolbar extends React.Component {
 
     handleClearSearch = event => {
         event.preventDefault()
+        this.props.saveFilterState({})
         this.props.resetQuery()
+        this.clearMaxSize(event)
+        this.clearMinSize(event)
+        this.clearMaxRating(event)
+        this.clearMinRating(event)
+        this.clearWashrooms()
+        this.clearSpecialFeatures()
+        this.clearFacilities()
+        this.clearSelectedParkName()
     }
 
     customStyles = {
@@ -276,6 +316,8 @@ class ParkFilterToolbar extends React.Component {
             overflow: "scroll",
         })
     }
+
+
 
     render() {
         const facilityOptions = this.getFacilities()
@@ -291,25 +333,29 @@ class ParkFilterToolbar extends React.Component {
 
                     <div className="filterList">
                         <div className="filter parkSearch">
-                            <label id="parkSearch" className="filter-label">Select a specific park</label>
+                            <label id="parkSearch" className="filter-label label-parkSearch">Select a park</label>
                             <Select
+                                placeholder="Search for Park by Name"
                                 id="parkSearch"
                                 isMulti={false}
                                 isClearable={true}
                                 options={parksOptions}
                                 className="multi-select"
+                                value={this.state.parkName}
                                 onChange={this.handleSelectedPark} />
                         </div>
                         <button
                             className="select-park"
                             onClick={this.handleParkNameSearch}>Show Park</button>
-                        <span>Or, filter parks by their attributes</span>
+                        <span className="sectionTitle">Or, filter parks by their attributes</span>
                         <div className="filter facilities-filter">
                             <label id="facilities" className="filter-label">Facilities</label>
                             <Select
+                                placeholder="Select Facilities"
                                 id="facilities"
                                 isMulti={true}
                                 options={facilityOptions}
+                                value={this.state.selectedFacilities}
                                 className="multi-select"
                                 styles={this.customStyles}
                                 onChange={this.handleSelectFacility} />
@@ -317,10 +363,13 @@ class ParkFilterToolbar extends React.Component {
                         <div className="filter specialFeatures-filter">
                             <label id="specialFeatures" className="filter-label">Special Features</label>
                             <Select
+                                placeholder="Select Special Features"
                                 id="specialFeatures"
                                 isMulti={true}
                                 options={specialFeaturesOptions}
+                                value={this.state.selectedSpecialFeatures}
                                 className="multi-select"
+                                styles={this.customStyles}
                                 onChange={this.handleSelectSpecialFeature} />
                         </div>
                         <div className="filter washrooms-filter">
@@ -329,6 +378,7 @@ class ParkFilterToolbar extends React.Component {
                                 id="hasWashrooms"
                                 type="checkbox"
                                 name="washrooms"
+                                checked={this.state.hasWashrooms}
                                 onChange={this.handleSelectWashrooms}/>
                         </div>
                         <div className="filter rating-filters">
@@ -430,12 +480,14 @@ class ParkFilterToolbar extends React.Component {
 const mapDispatchToProps = (dispatch) => ({
     queryParks: (query) => dispatch(queryParks(query)),
     resetQuery: () => dispatch(resetQuery()),
+    saveFilterState: (filters) => dispatch(saveFilterState(filters))
 })
 
 const mapStateToProps = (state) => ({
     facilities: state.parks.facilities,
     specialFeatures: state.parks.specialFeatures,
-    parks: state.parks.parks
+    parks: state.parks.parks,
+    currentFilters: state.parks.currentFilters,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParkFilterToolbar)

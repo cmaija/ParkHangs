@@ -9,6 +9,15 @@
     height: 100%;
 }
 
+.sectionTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 0.75rem;
+    font-size: 0.85rem;
+}
+
+
 .title {
     display: flex;
     flex-direction: row;
@@ -58,6 +67,10 @@
 .filter-label {
     font-size: 0.75rem;
     padding: 0.5rem 0;
+}
+
+.label-parkSearch {
+    font-size: 0.85rem;
 }
 
 .size-filters {

@@ -154,10 +154,6 @@ class EventForm extends React.Component {
         });
     }
 
-    sortParkNamesAlphabetically = () => {
-        return this.props.parks.slice().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-    }
-
     render() {
         const eventDate = this.dayPickerDateFormat()
         const eventStartTime = this.eventStartTime()
@@ -209,7 +205,7 @@ class EventForm extends React.Component {
                             <label htmlFor="eventPark">Select Park</label>
                             <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
                                 {
-                                    this.sortParkNamesAlphabetically().map((park) => {
+                                    this.props.parks.map((park) => {
                                         return <option
                                             key={park._id}
                                             value={park._id}>{park.name}</option>

@@ -35,6 +35,7 @@ const parksSlice = createSlice({
         loadingSpecialFeatures: false,
         facilities: [],
         specialFeatures: [],
+        currentFilters: {},
     },
 
     reducers: {
@@ -60,7 +61,10 @@ const parksSlice = createSlice({
         },
 
         fetchParksSuccessful (state, action) {
-            const parks = action.payload
+            const parks = action.payload.sort((a, b) => {
+                return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+            })
+
             state.parks = parks
             state.loadingParks = false
             state.error = null
@@ -125,7 +129,7 @@ const parksSlice = createSlice({
             const query = action.payload
             let filteredParks = []
             for (let parkName of query) {
-                filteredParks.push(state.parks.filter((park) => {
+                filteredParks.push(...state.parks.filter((park) => {
                     return park.name.toLowerCase().includes(parkName.toLowerCase())
                 }))
             }
@@ -177,6 +181,10 @@ const parksSlice = createSlice({
         resetQuery (state, action) {
             state.parksHaveBeenQueried = false
         },
+
+        saveFilterState (state, action) {
+            state.currentFilters = action.payload
+        }
     },
 
     extraReducers: {
@@ -229,6 +237,7 @@ export const {
     getSpecialFeaturesSuccessful,
     getSpecialFeaturesFailure,
     resetQuery,
+    saveFilterState,
 } = parksSlice.actions
 
 export default parksSlice.reducer
