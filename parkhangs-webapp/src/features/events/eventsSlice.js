@@ -117,21 +117,18 @@ const eventSlice = createSlice({
 
             state.updatingEvent = false
             state.error = null
-        }
-        ,
+        },
 
         updateEventByIdFailure(state, action) {
 
             state.updatingEvent = false
             state.error = action.payload
-        }
-        ,
+        },
 
         deleteEventStart(state, action) {
             state.deletingEvent = true
             state.error = null
-        }
-        ,
+        },
 
         deleteEventSuccessful(state, action) {
             const {_id, parkId} = action.payload
@@ -144,14 +141,12 @@ const eventSlice = createSlice({
 
             state.updatingEvent = false
             state.error = null
-        }
-        ,
+        },
 
         deleteEventFailure(state, action) {
             state.deletingEvent = true
             state.error = action.payload
-        }
-        ,
+        },
     }
 })
 
