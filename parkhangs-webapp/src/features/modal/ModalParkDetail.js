@@ -447,7 +447,7 @@ class ModalParkDetail extends React.Component {
     ratingsTab = (averageRating, user, park) => {
         let userRating = 0
         let userHasRated = false
-        if (!!user._id) {
+        if (!!user && !!user._id) {
             userRating = park.ratings.find(rating => rating.user === user._id)
             userRating = !!userRating ? userRating.rating : 0
             userHasRated = !!userRating
