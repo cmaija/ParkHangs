@@ -44,9 +44,9 @@ One stretch goal is to make the web application responsive to mobile and desktop
 
 **2-3 stretch requirements (plan to complete 1!)**
 - [x] Make the application mobile-friendly (responsive)
-- [] Allow users to invite other users within the app
-- [] Make the app only useable with an account, make the account secure (NOTE: we decided to allow both users with accounts and users without accounts)
-- [] Create a cron job that re-populates the park database weekly or monthly to ensure that all the park information is up to date
+- [ ] Allow users to invite other users within the app
+- [ ] Make the app only useable with an account, make the account secure (NOTE: we decided to allow both users with accounts and users without accounts)
+- [ ] Create a cron job that re-populates the park database weekly or monthly to ensure that all the park information is up to date
 
 **Pick 2 of your minimal requirements and break each of them down into ~2-5 smaller tasks!**
 - Create tables in our own database to represent a park and an event
