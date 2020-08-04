@@ -169,10 +169,10 @@ class ModalEventDetail extends React.Component {
                         {comments.map((comment) => {
                         return <tr key={comment._id}>
                             <td>
-                                {comment.creatorName} 
+                                {comment.creatorName}
                             </td>
                             <td>
-                                {this.getCreatedTime(comment.createdDateTime)} 
+                                {this.getCreatedTime(comment.createdDateTime)}
                             </td>
                             <td>
                                 {comment.comment}
@@ -186,24 +186,24 @@ class ModalEventDetail extends React.Component {
                             </td>
                             </tr>
                         })
-                        
+
                     }
                         </tbody>
                         </table>
                     :
                     <div>
                         There are no comments for this park.
-                    </div> 
+                    </div>
                     }
-                    
-                        
+
+
 
                     </div>
                     <div className="EventCommentForm Column">
                        <CommentForm eventId={this.props.eventId}/>
                    </div>
-                    
-                   
+
+
                 </div>
             </div>
         )
@@ -232,12 +232,20 @@ class ModalEventDetail extends React.Component {
     }
 
     render () {
+        if (this.props.loading) {
+            return (
+                <div className="LoadingState">
+                    <LoadingSpinner key="loadingModal"/>
+                </div>
+            )
+        }
+        
         const event = this.props.events.find(event => event._id === this.props.eventId)
-        const parkName =  this.props.parks.find(park => park._id === event.parkId).name
+        const parkName =  this.props.selectedPark.name
         const eventStart = this.eventStartTime(event.eventDateTime)
         const formattedEnd = this.eventEndTime(event.eventEndDateTime)
-        const parkStrNum = this.props.parks.find(park => park._id === event.parkId).streetNumber
-        const parkStrName = this.props.parks.find(park => park._id === event.parkId).streetName
+        const parkStrNum = this.props.selectedPark.streetNumber
+        const parkStrName = this.props.selectedPark.streetName
         const isFavorited = this.isFavorited(event)
         const comments = this.getCommentsByEvent()
 
@@ -328,7 +336,8 @@ const mapStateToProps = (state) => ({
 
     events: state.events.flattenedEvents,
     updatingEvent: state.events.updatingEvent,
-    parks: state.parks.parks,
+    selectedPark: state.parks.selectedPark,
+    loading: state.parks.loadingParkDetails,
     comments: state.comments.commentsByEventId,
     user: state.user.user
 })

@@ -166,6 +166,9 @@ const parksSlice = createSlice({
             let newParksList = state.parks.filter(park => park._id !== updatedPark._id)
             newParksList.push(updatedPark)
             state.parks = newParksList
+            if (state.selectedPark.parkId === updatedPark.parkId) {
+                state.selectedPark = updatedPark
+            }
 
             state.addingRating = false
             state.error = null
