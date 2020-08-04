@@ -2,8 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {openModal} from "../features/modal/modalSlice";
 import "views/UserProfileView.css";
-import { toggleSavedPark, toggleSavedEvent } from "../features/users/userSlice";
-import { cloneDeep } from 'lodash'
+import {toggleSavedPark, toggleSavedEvent} from "../features/users/userSlice";
+import {cloneDeep} from 'lodash'
 import moment from 'moment'
 
 
@@ -98,7 +98,7 @@ class UserProfileView extends React.Component {
         return savedEvents
     }
 
-    renderSavedParks () {
+    renderSavedParks() {
         const savedParks = this.savedParks()
         const savedEvents = this.savedEvents()
 
@@ -110,20 +110,20 @@ class UserProfileView extends React.Component {
                 {
                     savedParks.length ?
                         <table className="Favourite-Parks-Table">
-                        <thead>
-                        <tr>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Park name: </b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Rating:</b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Remove from Favourites</b>
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
+                            <thead>
+                            <tr>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Park name: </b>
+                                </td>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Average Rating:</b>
+                                </td>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Remove from Favourites</b>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
                             {
                                 savedParks.map((park) =>
                                     <tr key={park._id}>
@@ -142,10 +142,10 @@ class UserProfileView extends React.Component {
                                         </td>
                                     </tr>)
                             }
-                        </tbody>
+                            </tbody>
 
-                    </table>
-                    : savedParks
+                        </table>
+                        : savedParks
                 }
                 <h3 className="Favourite-Parks-Title">
                     Favourite Events:

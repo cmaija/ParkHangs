@@ -3,7 +3,6 @@ import {
     createAsyncThunk } from '@reduxjs/toolkit'
 import ParkService from 'services/parks.service'
 
-
 export const fetchEventsById = createAsyncThunk(
     'parks/fetchEventsByIdStatus',  async (id, {rejectWithValue}) => {
         try {
@@ -164,7 +163,6 @@ const parksSlice = createSlice({
 
         addRatingSuccessful (state, action) {
             const updatedPark = action.payload
-            const updatedRatings = updatedPark.ratings
             let newParksList = state.parks.filter(park => park._id !== updatedPark._id)
             newParksList.push(updatedPark)
             state.parks = newParksList

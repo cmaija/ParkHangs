@@ -24,6 +24,7 @@ ApiService.init()
 const persistConfig = {
     key: 'root',
     storage,
+    whitelist: ['user'] // only persist the user slice and not the other stores
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

@@ -55,11 +55,6 @@ class ModalEventDetail extends React.Component {
         }
     }
 
-
-    editEvent = (eventToEdit) => {
-        this.setState({eventToEdit})
-    }
-
     deleteEvent = (parkId) => {
         if (window.confirm('Are you sure you want to delete this event?')) {
             this.props.deleteOneEvent(this.props.eventId, parkId)
@@ -108,6 +103,9 @@ class ModalEventDetail extends React.Component {
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span><b>Event Time:</b> {`${formattedStart} to ${formattedEnd}`}</span>
+                </div>
+                <div className="ModalEventDetail-description-section">
+                    <span><b>Event Title:</b> {event.title}</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span><b>Event Details:</b> {event.details}</span>
@@ -217,12 +215,14 @@ class ModalEventDetail extends React.Component {
                 <LoadingSpinner />
             </div>
         )
+
         const eventForm = (
             <div className="AddEventForm">
                 <EventForm
                     event={event}
                     eventDateTime={event.eventDateTime}
                     eventEndDateTime={event.eventEndDateTime}
+                    eventTitle={event.title}
                     eventDetails={event.details}
                     eventId={event._id}
                 />
@@ -242,7 +242,7 @@ class ModalEventDetail extends React.Component {
         const comments = this.getCommentsByEvent()
 
         let newEvent = {
-            title: event.details,
+            title: event.title,
             description: event.details,
             location: parkStrNum + " " + parkStrName + " BC, Canada",
             startTime: this.getExportedTime(event.eventDateTime),
@@ -325,6 +325,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
+
     events: state.events.flattenedEvents,
     updatingEvent: state.events.updatingEvent,
     parks: state.parks.parks,

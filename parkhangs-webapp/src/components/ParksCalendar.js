@@ -45,7 +45,7 @@ class ParksCalendar extends React.Component {
         this.props.openModal(props)
     }
 
-    render () {
+    render() {
         let eventsArray
 
         if (this.props.showAllParks) {
