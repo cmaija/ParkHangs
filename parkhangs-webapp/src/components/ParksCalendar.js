@@ -24,10 +24,7 @@ class ParksCalendar extends React.Component {
 
     filterEvents = (parks) => {
         return this.props.events.filter((event) => {
-            console.log(event.parkId)
-            console.log(parks)
             const eventsAtPark = parks.filter(park => {
-                console.log(park)
                 return event.parkId === park._id})
             return eventsAtPark.length > 0
         })

@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
 import { connect } from "react-redux";
 import { filterParks } from 'features/parks/parksSlice'
 import Select from 'react-select'

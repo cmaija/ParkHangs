@@ -72,13 +72,6 @@ class EventForm extends React.Component {
         return this.convertToMoment(this.props.currentDate)
     }
 
-    dayPickerDateFormat = () => {
-        if (this.props.eventDateTime) {
-            return new Date(this.props.eventDateTime)
-        }
-        return null
-    }
-
     parsedEventDate = () => {
         return moment(this.state.eventDate).format("D MM YY")
     }
@@ -155,15 +148,13 @@ class EventForm extends React.Component {
     }
 
     render() {
-        const eventDate = this.dayPickerDateFormat()
+        const eventDate = this.eventDate()()
         const eventStartTime = this.eventStartTime()
         const eventEndTime = this.eventEndTime()
 
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
-
-        console.log(this.props)
 
         return (
             <div className="EventForm">

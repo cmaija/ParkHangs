@@ -1,4 +1,4 @@
-import React, { Component  } from 'react'
+import React, { Component } from 'react'
 import NavBar from 'components/NavBar'
 import { Switch, Route } from 'react-router-dom'
 import MapView from 'views/MapView'

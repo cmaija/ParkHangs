@@ -22,7 +22,6 @@
     "react-scripts": "^0.9.5",
     "react-select": "^3.1.0",
     "react-time-picker": "^4.0.1",
-    "react-transition-group": "^4.4.1",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",

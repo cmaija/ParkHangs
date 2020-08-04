@@ -90,8 +90,6 @@ class ModalNewEvent extends React.Component {
 
     render () {
         const selectedDate = this.eventDate()
-        const show = true
-        console.log(show)
         return (
             <div className="detailed-content-main modal-card">
                 <div className="ModalEventDetail-header">
@@ -102,9 +100,9 @@ class ModalNewEvent extends React.Component {
 
                 <div className="AddEventForm">
                     <EventForm
-                        showDayPicker={show}
                         eventDateTime={this.props.selectedSlot.start}
                         showParkPicker={true}
+                        showDayPicker={false}
                         eventEndDateTime={this.props.selectedSlot.end}/>
                 </div>
             </div>
