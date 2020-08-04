@@ -80,7 +80,7 @@ We had collections including parks, users, events, park comments, and event comm
 
 We deployed our application using Heroku.
 
-**Above and Beyond:**
+## Above and Beyond
 
 We integrated a calendar package and customized it to allow for better visual representation for ease of scheduling events, 
 as well as improved User Experience through interactivity. By incorporating OAuth-based Google Sign-in, 
@@ -88,14 +88,14 @@ we provide a simple way for users sign-in without registration and the ability f
 We incorporated a feature to allow for the events in the application to be exported to other commonly used calendars such as Google calendar, and we believe this adds an extra level of practicality for users to remember the event.  
 In addition, the use of Redux-Toolkit allows our code to ‘mutate’ immutable update logic in an organized slice of state, as well as include commonly used Redux addons such as Redux Thunk for effective code writing.
 
-**Next Steps:**
+## Next Steps
 
 - Work on the 3 stretch goals that we stated. 
 - As our application only has Vancouver park information, determine if other near by cities 
 have readily available park information and integrate this to the application
 - Organizing events at parks depends heavily on weather conditions so we would like to integrate weather information 
 
-**List of Contributions:**
+## List of Contributions
 
 Lydia Zheng:
 - Export functionality to Google calendar (as well as other calendar applications)
@@ -123,7 +123,8 @@ Philippe Chapdelaine
 - Fetch and add endpoints for events 
 - Set up the Google maps npm package and well as create Google/MongoDB accounts
 
-**Sketches of Main Functionality**
+## Sketches of Main Functionality
+
 **Map Page With Menu**
 ![Map Page With Menu](https://github.com/cmaija/ParkHangs/blob/master/sketch1.png?raw=true)
 **Calendar Page**
