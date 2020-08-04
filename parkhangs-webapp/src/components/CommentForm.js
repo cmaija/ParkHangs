@@ -22,26 +22,29 @@ class CommentForm extends React.Component {
     handleAddComment = (comment) => {
         event.preventDefault()
 
-        const commentText =  this.state.comment
+        if (this.state.comments !== '') {
 
-        if ("parkId" in this.props) {
-          const parkId = this.props.parkId;
-          const newComment = {
-            parkId: parkId,
-            comment: commentText
+          const commentText =  this.state.comments
+
+          if ("parkId" in this.props) {
+            const parkId = this.props.parkId;
+            const newComment = {
+              parkId: parkId,
+              comment: commentText
+            }
+            this.props.addParkComment(newComment, this.props.user)
+          } else if ("eventId" in this.props) {
+            const eventId = this.props.eventId;
+            const newComment = {
+              eventId: eventId,
+              comment: commentText
+            }
+              this.props.addEventComment(newComment, this.props.user)
+            }
+            this.setState({
+              comments: ''
+            })
           }
-          this.props.addParkComment(newComment, this.props.user)
-        } else if ("eventId" in this.props) {
-          const eventId = this.props.eventId;
-          const newComment = {
-            eventId: eventId,
-            comment: commentText
-          }
-            this.props.addEventComment(newComment, this.props.user)
-        }
-        this.setState({
-            comments: ''
-          })
         }
 
     render() {
@@ -66,9 +69,8 @@ class CommentForm extends React.Component {
                     <span>{'Add Comment'}</span>
                 </button>
             </div>)
-
-    }
-}
+          }
+        }
 
 const mapStateToProps = (state) => ({
     user: state.user.user
