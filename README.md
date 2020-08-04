@@ -10,7 +10,7 @@ Our web application is intended for people who want to enjoy the Vancouver publi
 
 **What will it do?** (What "human activity" will it support?)
 
-This platform will allow users to organize meetups at Vancouver parks, write comments about parks/events,  filter parks by fields, determine the closest parks to them, or to a place they want to go, and make information about a park easily accessible.
+This platform will allow users to organize meetups at Vancouver parks, write comments about parks/events, filter parks by fields, determine the closest parks to them, or to a place they want to go, and make information about a park easily accessible.
 
 **What type of data will it store?**
 
@@ -27,27 +27,97 @@ One stretch goal is to make the web application responsive to mobile and desktop
 **Project task requirements:**
 
 **3-5 minimal requirements (will definitely complete)**
-- Make simple park Vancouver Parks information available to users (park address, if a park has facilities, size of park etc)
-- Display all parks on Google Maps
-- Create/view all/delete/update an event at a park
-- Find events by entering a park name (or any part of a park name)
+
+- [x] Make simple park Vancouver Parks information available to users (park address, if a park has facilities, size of park etc)
+- [x] Display all parks on Google Maps
+- [x] Create/view all/delete/update an event at a park
+- [x] Find events by entering a park name (or any part of a park name)
 
 **3-7 "standard" requirements (will most likely complete)**
-- Incorporate special feature and facilities (additional information) to park information by using additional Vancouver Open Data Portal APIs
-- Filter parks by fields such as rating, park size, facilities, special features- Share events from parks to Google calendars
-- Find parks by address
-- Use OAuth-based Google Sign-in to allow users to create an account and save events and parks to their account
-- Allows users to add events to their calendar application (Apple, Google etc)
-- Allow both non-logged-in users and users to add comments to both events and parks, as well as add ratings to parks
+- [x] Incorporate special feature and facilities information to parks by using additional Vancouver Open Data Portal APIs
+- [x] Filter parks by fields such as rating, park size, facilities, special features
+- [x] Share events from parks to Google calendars
+- [x] Find parks by address
+- [x] Use OAuth-based Google Sign-in to allow users to create an account and save events and parks to their account
+- [x] Allows users to add events to their calendar application (Apple, Google etc)
+- [x] Allow both non-logged-in users and users to add comments to both events and parks, as well as add ratings to parks
 
 **2-3 stretch requirements (plan to complete 1!)**
-- Make the application mobile-friendly (responsive)
-- Create a cron job that re-populates the park database weekly or monthly to ensure that all the park information is up to date
-- Include weekend playfield status: display events at a playfield so that events are not scheduled at the same time
+- [x] Make the application mobile-friendly (responsive)
+- [] Allow users to invite other users within the app
+- [] Make the app only useable with an account, make the account secure (NOTE: we decided to allow both users with accounts and users without accounts)
+- [] Create a cron job that re-populates the park database weekly or monthly to ensure that all the park information is up to date
 
 **Pick 2 of your minimal requirements and break each of them down into ~2-5 smaller tasks!**
-- Create collections in our own MongoDB to represent parks and events
-- Create a script to get all of the parks data from the Vancouver Open Data Portal API and then write them into our database (so we don’t have to do it by hand)
+- Create tables in our own database to represent a park and an event
+- Create a script to get all of the parks data from the Vancouver parks API and then write them into our database (so we don’t have to do it by hand)
+
+## Course technologies used
+
+All the technologies that we learned in this course are utilized in our project:
+
+**HTML/CSS/JavaScript**
+
+We utilized HTML/CSS throughout our application (with React) for displaying/styling components, views.
+JavaScript was used in the frontend and backend to write methods such as for display logic, manipulate objects etc.
+
+**React/Redux** 
+
+React was used to create all the components that we used in our application. We used Redux Toolkit for state management.
+  
+**Node.js/Express.js**
+
+We used these two for building the backend. Our frontend interacts with 
+the endpoints and the backend interacts with the database. Database operations (GET/POST/DELETE/PATCH) are supported 
+depending on the collection.
+
+**MongoDB** 
+
+We included Mongoose as well. We used MongoDB Atlas as our backend cloud database storage of information. 
+We had collections including parks, users, events, park comments, and event comments.
+
+**Release Engineering**
+
+We deployed our application using Heroku.
+
+**Above and Beyond:**
+
+We integrated a calendar package and customized it to allow for better visual representation for ease of scheduling events, 
+as well as improved User Experience through interactivity. By incorporating OAuth-based Google Sign-in, 
+we provide a simple way for users sign-in without registration and the ability for users to view a clear overview of their personal saved parks and events. 
+We incorporated a feature to allow for the events in the application to be exported to other commonly used calendars such as Google calendar, and we believe this adds an extra level of practicality for users to remember the event.  
+In addition, the use of Redux-Toolkit allows our code to ‘mutate’ immutable update logic in an organized slice of state, as well as include commonly used Redux addons such as Redux Thunk for effective code writing.
+
+**Next Steps:**
+
+- Work on the 3 stretch goals that we stated. 
+- As our application only has Vancouver park information, determine if other near by cities 
+have readily available park information and integrate this to the application
+- Organizing events at parks depends heavily on weather conditions so we would like to integrate weather information 
+
+**List of Contributions:**
+
+Lydia Zheng:
+- Export functionality to Google calendar (as well as other calendar applications)
+- Made custom icons and adjustments to rating buttons
+- Developed and tested to ensure modals in app are web responsive.
+- Frontend styling development (especially with cleaning up styling issues are were present in the early stages of development)
+
+Gordon Zhang:
+
+- Set up schemas with Mongoose for parks and events models
+- Set up of MongoDB Atlas and connection to the backend
+- Implemented OAuth-based Google Sign-in in the application to include signed-in users and developed 
+frontend/backend functionality for usersZ
+- Ensure local storage in browser stores redux data so refreshing page persists user information
+
+Claire Anderson
+- Came up with the original concept for the project
+- Implemented the modal system, routing, and the calendar page in the front end
+- Completed the end-to-end implementation of filtering parks by parameters as well as their location, 
+and the editing and deleting of events
+
+Philippe Chapdelaine
 
 **Sketches of Main Functionality**
 **Map Page With Menu**
