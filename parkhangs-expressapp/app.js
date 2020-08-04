@@ -8,7 +8,6 @@ var indexRouter = require('./routes/index');
 const database = require('./database/index');
 
 var app = express();
-var uuid = require('uuidv4');
 var cors = require('cors');
 
 // view engine setup
@@ -47,10 +46,22 @@ app.use(function (err, req, res, next) {
 //database:
 database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// this is used to populate the database. Do not uncomment unless we need to add the parks
-// to the database again!
+// this is used to populate the database with parks.
+// Do not uncomment unless we need to add the parks to the database again!
 
 // const populatePark = require("./scripts/populateParks");
 // populatePark();
+
+
+// this is used to populate the database with park facilities.
+// Do not uncomment unless we need to add the park facilities to the database again!
+// const populateFacilities = require('./scripts/populateFacilities')
+// populateFacilities()
+
+
+// this is used to populate the database with park special features.
+// Do not uncomment unless we need to add the park special features to the database again!
+// const populateParkSpecialFeatures = require('./scripts/populateSpecialFeatures')
+// populateParkSpecialFeatures()
 
 module.exports = app;

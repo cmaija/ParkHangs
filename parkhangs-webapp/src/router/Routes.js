@@ -8,7 +8,7 @@ import Modal from 'features/modal/Modal'
 import 'App.css'
 import { connect } from "react-redux";
 import UserProfileView from "../views/UserProfileView";
-import { fetchParks } from 'features/parks/parksSlice'
+import { fetchParks, fetchFacilityTypes, fetchSpecialFeatures } from 'features/parks/parksSlice'
 import { fetchEvents } from 'features/events/eventsSlice'
 import { fetchEventComments, fetchParkComments } from 'features/comments/commentSlice'
 
@@ -38,6 +38,8 @@ class Routes extends Component {
         this.props.getAllEvents()
         this.props.getAllEventComments()
         this.props.getAllParkComments()
+        this.props.getFacilityTypes()
+        this.props.getSpecialFeatures()
     }
 
 }
@@ -53,7 +55,9 @@ const mapDispatchToProps = (dispatch) => ({
     getAllParks: () => dispatch(fetchParks()),
     getAllEvents: () => dispatch(fetchEvents()),
     getAllEventComments:() => dispatch(fetchEventComments()),
-    getAllParkComments:() => dispatch(fetchParkComments())
+    getAllParkComments:() => dispatch(fetchParkComments()),
+    getFacilityTypes: () => dispatch(fetchFacilityTypes()),
+    getSpecialFeatures: () => dispatch(fetchSpecialFeatures()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routes)

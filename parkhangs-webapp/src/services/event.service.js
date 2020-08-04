@@ -28,8 +28,10 @@ const EventService = {
     },
 
     updateEvent: async function (updatedEvent) {
+
         const eventId = updatedEvent.eventId
         const url = `/events/${eventId}`
+
         try {
             const response = await ApiService.patch(url, updatedEvent)
             return response.data.data

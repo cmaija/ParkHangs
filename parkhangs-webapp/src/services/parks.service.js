@@ -1,4 +1,5 @@
 import ApiService from 'services/api.service'
+import qs from 'qs'
 
 const ParkService = {
     getParks: async function () {
@@ -21,10 +22,27 @@ const ParkService = {
         }
     },
 
-    addRating: async function (parkIdAndRating) {
-        const url = `/parks`
+    queryParks: async function (params) {
+        const config = {
+            params: params,
+            paramsSerializer: function(params) {
+                return qs.stringify(params)
+            },
+        }
+
+        const url = `/queryParks`
         try {
-            const response = await ApiService.patch(url, parkIdAndRating)
+            const response = await ApiService.get(url, config)
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
+
+    getParksSimple: async function () {
+        const url = `/parksSimple`
+        try {
+            const response = await ApiService.get(url)
             return response.data.data
         } catch (error) {
             throw new Error(error.response)
@@ -54,7 +72,27 @@ const ParkService = {
       } catch (error) {
           throw new Error(error.response)
       }
-    }
+  },
+
+  getFacilityTypes: async function () {
+      const url = `/facilityTypes`
+      try {
+          const response = await ApiService.get(url)
+          return response.data.data
+      } catch (error) {
+          throw new Error(error.response)
+      }
+  },
+
+  getSpecialFeatures: async function () {
+      const url = `/parkSpecialFeatures`
+      try {
+          const response = await ApiService.get(url)
+          return response.data.data
+      } catch (error) {
+          throw new Error(error.response)
+      }
+  },
 }
 
 export default ParkService

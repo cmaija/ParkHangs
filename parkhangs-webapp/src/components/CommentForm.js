@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { addParkComment, addEventComment } from 'features/comments/commentSlice'
-import moment from 'moment'
 import './CommentForm.css'
 
 class CommentForm extends React.Component {
@@ -10,12 +9,8 @@ class CommentForm extends React.Component {
         super(props)
 
         this.state = {
-            comments: this.comment()
+            comments: ''
         }
-    }
-
-    comment = () => {
-        return this.props.comment || ''
     }
 
     handleUpdateComment = (event) => {
@@ -27,30 +22,32 @@ class CommentForm extends React.Component {
     handleAddComment = (comment) => {
         event.preventDefault()
 
-        const commentText =  this.state.comment || this.comment()
+        if (this.state.comments !== '') {
 
-        if ("parkId" in this.props) {
-          const parkId = this.props.parkId;
-          const newComment = {
-            parkId: this.props.parkId,
-            comment: commentText
+          const commentText =  this.state.comments
+
+          if ("parkId" in this.props) {
+            const parkId = this.props.parkId;
+            const newComment = {
+              parkId: parkId,
+              comment: commentText
+            }
+            this.props.addParkComment(newComment, this.props.user)
+          } else if ("eventId" in this.props) {
+            const eventId = this.props.eventId;
+            const newComment = {
+              eventId: eventId,
+              comment: commentText
+            }
+              this.props.addEventComment(newComment, this.props.user)
+            }
+            this.setState({
+              comments: ""
+            })
           }
-          this.props.addParkComment(newComment, this.props.user)
-        } else if ("eventId" in this.props) {
-          const eventId = this.props.eventId;
-          const newComment = {
-            eventId: this.props.eventId,
-            comment: commentText
-          }
-            this.props.addEventComment(newComment, this.props.user)
-        }
-        this.setState({
-            comments: ''
-          })
         }
 
     render() {
-        const comment = this.comment();
 
         return (
             <div className="CommentForm">
@@ -59,9 +56,10 @@ class CommentForm extends React.Component {
                     <div className="formsection comment">
                         <label htmlFor="comment">Comment: </label>
                         <textarea
-                            onChange={this.handleUpdateComment}
-                            id="comment"
-                            defaultValue={comment}/>
+                          onChange={e => this.setState({ comments : e.target.value })}
+                          id="comment_input"
+                          value={this.state.comments}
+                        />
                     </div>
                 </form>
                 <button className={"submit-message-button leftButton"}
@@ -69,9 +67,8 @@ class CommentForm extends React.Component {
                     <span>{'Add Comment'}</span>
                 </button>
             </div>)
-
-    }
-}
+          }
+        }
 
 const mapStateToProps = (state) => ({
     user: state.user.user
