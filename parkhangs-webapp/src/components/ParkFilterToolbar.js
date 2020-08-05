@@ -348,6 +348,10 @@ class ParkFilterToolbar extends React.Component {
                             className="select-park"
                             onClick={this.handleParkNameSearch}>Show Park</button>
                         <span className="sectionTitle">Or, filter parks by their attributes</span>
+                        <div className="filter location-filter">
+                            <label id="location" className="filter-label">Near Address</label>
+                            search location
+                        </div>
                         <div className="filter facilities-filter">
                             <label id="facilities" className="filter-label">Facilities</label>
                             <Select

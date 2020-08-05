@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
 import Marker from '../components/Marker.js'
+import GoogleMap from 'components/GoogleMap'
 
 class SimpleMap extends Component {
 
@@ -17,24 +17,11 @@ class SimpleMap extends Component {
     render() {
         const parks = this.props.parksHaveBeenQueried ? this.props.queriedParks : this.props.parks
         const center = this.props.userLocation ? this.props.userLocation : this.defaultLocation
-        console.log(center)
+
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '600px', width: '90%', margin: 'auto'}}>
-                <GoogleMapReact bootstrapURLKeys={{key: process.env.REACT_APP_MAP_API_KEY}}
-                                initialCenter={center}
-                                center={center}
-                                defaultZoom={this.props.zoom}>
-                    {
-                        parks && parks.length > 0 &&
-                        parks.map((park) => {
-                            return <Marker key={park._id} park={park}
-                                           lat={park.googleMapsLatLon[1]}
-                                           lng={park.googleMapsLatLon[0]}/>
-                        }
-                    )}
-
-                </GoogleMapReact>
+                <GoogleMap parks={parks} userLocation={center} />
             </div>
         );
     }
@@ -52,4 +39,4 @@ const mapStateToProps = (state) => { //name is by convention
     }
 }
 
-export default connect(mapStateToProps, null)(SimpleMap);
+export default connect(mapStateToProps, null)(SimpleMap)
