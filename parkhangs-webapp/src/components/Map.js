@@ -25,8 +25,8 @@ class SimpleMap extends Component {
                         parks && parks.length > 0 &&
                         parks.map((park) => {
                             return <Marker key={park._id} park={park}
-                                           lat={park.googleMapsLatLon[0]}
-                                           lng={park.googleMapsLatLon[1]}/>
+                                           lat={park.googleMapsLatLon[1]}
+                                           lng={park.googleMapsLatLon[0]}/>
                         }
                     )}
 
