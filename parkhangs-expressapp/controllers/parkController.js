@@ -122,7 +122,15 @@ const queryParks = async (req, res) => {
     // if the query specifies a park name, just search for that specific park
     if (query.name) {
         try {
-            const park = await Park.find({name: query.name})
+            let park = await Park.find({name: query.name})
+            park = park.map((park) => {
+                return {
+                    name: park.name,
+                    parkId: park.parkId,
+                    _id: park._id,
+                    googleMapsLatLon: park.googleMapsLatLon.coordinates,
+                }
+            })
             return res.status(200).json({
                 success: true,
                 data: park,
