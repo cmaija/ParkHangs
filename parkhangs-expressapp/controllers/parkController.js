@@ -31,7 +31,7 @@ const getParksSimple = async (req, res) => {
                 name: park.name,
                 parkId: park.parkId,
                 _id: park._id,
-                googleMapsLatLon: park.googleMapsLatLon,
+                googleMapsLatLon: park.googleMapsLatLon.coordinates,
             }
         })
         return res.status(200).json({success: true, data: parks})
@@ -99,7 +99,8 @@ const addRating = async (req, res) => {
 const getParkById = async (req, res) => {
     const parkId = req.params.parkId
     try {
-        const park = await Park.findOne({_id: parkId})
+        let park = await Park.findOne({_id: parkId})
+        park.googleMapsLatLon = park.googleMapsLatLon.coordinates
         return res.status(200).json({
             success: true,
             data: park,
