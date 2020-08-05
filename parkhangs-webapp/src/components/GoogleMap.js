@@ -32,6 +32,8 @@ class GoogleMap extends Component {
                     center={this.props.userLocation}
                     style={this.mapStyles}
                     zoom={this.props.zoom}
+                    minZoom={11}
+                    maxZoom={18}
                     mapTypeControl={false}>
                     {
                         parks && parks.length > 0 &&

@@ -4,6 +4,7 @@ import { queryParks, resetQuery, saveFilterState } from 'features/parks/parksSli
 import Select from 'react-select'
 import { cloneDeep } from 'lodash'
 import 'components/ParkFilterToolbar.css'
+import AddressSearchBar from 'components/AddressSearchBar'
 
 class ParkFilterToolbar extends React.Component {
 
@@ -21,6 +22,9 @@ class ParkFilterToolbar extends React.Component {
                 minSize: '',
                 maxSize: '',
                 parkName: '',
+                distance: '',
+                lat: null,
+                lon: null,
                 minRatingValid: true,
                 maxRatingValid: true,
                 minSizeValid: true,
@@ -38,30 +42,36 @@ class ParkFilterToolbar extends React.Component {
 
     handleSearchSubmit = event => {
         event.preventDefault()
-        this.clearSelectedParkName()
-        this.props.saveFilterState(this.state)
+        if (!this.props.loadingParks) {
+            this.clearSelectedParkName()
+            this.props.saveFilterState(this.state)
 
-        const specialFeatures = this.state.selectedSpecialFeatures.length > 0
-            ? this.state.selectedSpecialFeatures.map(feature => feature.label)
-            : []
+            const specialFeatures = this.state.selectedSpecialFeatures.length > 0
+                ? this.state.selectedSpecialFeatures.map(feature => feature.label)
+                : []
 
             const facilities = this.state.selectedFacilities.length > 0
                 ? this.state.selectedFacilities.map(facility => facility.label)
                 : []
-        let searchParams = {
-            hasWashrooms: this.state.hasWashrooms,
-            facilities: facilities,
-            specialFeatures: specialFeatures,
-            sizeGte: this.state.minSize,
-            sizeLte: this.state.maxSize,
-            ratingGte: this.state.minRating,
-            ratingLte: this.state.maxRating,
-        }
 
-        searchParams = this.pruneSearchParams(searchParams)
+            let searchParams = {
+                hasWashrooms: this.state.hasWashrooms,
+                facilities: facilities,
+                specialFeatures: specialFeatures,
+                sizeGte: this.state.minSize,
+                sizeLte: this.state.maxSize,
+                ratingGte: this.state.minRating,
+                ratingLte: this.state.maxRating,
+                lat: this.state.lat,
+                lon: this.state.lon,
+                distance: this.state.distance,
+            }
 
-        if (Object.keys(searchParams).length > 0 && this.fieldsAreValid()) {
-            this.props.queryParks(searchParams)
+            searchParams = this.pruneSearchParams(searchParams)
+
+            if (Object.keys(searchParams).length > 0 && this.fieldsAreValid()) {
+                this.props.queryParks(searchParams)
+            }
         }
     }
 
@@ -88,6 +98,15 @@ class ParkFilterToolbar extends React.Component {
     handleSelectSpecialFeature = selectedSpecialFeatures => {
         const selected = selectedSpecialFeatures
         this.setState({selectedSpecialFeatures: selected})
+    }
+
+    handleDistanceInput = event => {
+        event.preventDefault()
+        let parsedInput = parseFloat(event.target.value, 10)
+        if (Number.isNaN(parsedInput)) {
+            parsedInput = ''
+        }
+        this.setState({distance: parsedInput})
     }
 
     handleSelectWashrooms = event => {
@@ -265,7 +284,6 @@ class ParkFilterToolbar extends React.Component {
 
     handleKeyDown = event => {
         if (event.key === 'Enter') {
-            console.log('enter')
             event.preventDefault()
         }
     }
@@ -281,6 +299,14 @@ class ParkFilterToolbar extends React.Component {
 
     handleSelectedPark = selectedPark => {
         this.setState({parkName: selectedPark})
+    }
+
+    handleSelectedPlace = (place) => {
+        console.log(place)
+        const lat = place.geometry.location.lat()
+        const lon = place.geometry.location.lng()
+
+        this.setState({lat, lon})
     }
 
     handleParkNameSearch = () => {
@@ -348,9 +374,24 @@ class ParkFilterToolbar extends React.Component {
                             className="select-park"
                             onClick={this.handleParkNameSearch}>Show Park</button>
                         <span className="sectionTitle">Or, filter parks by their attributes</span>
-                        <div className="filter location-filter">
-                            <label id="location" className="filter-label">Near Address</label>
-                            search location
+                        <div className="filter locations-filter">
+                            <div className="subFilters location-subfilters">
+                                <div className="location-subfilter">
+                                    <span className="filter-label">Address</span>
+                                    <AddressSearchBar placeSelected={(place) => this.handleSelectedPlace(place)}/>
+                                </div>
+                                <div className="location-subfilter">
+                                    <label id="distance" className="filter-label">Search Radius (km)</label>
+                                    <input
+                                        id="distance"
+                                        type="number"
+                                        name="radius"
+                                        value={this.state.distance}
+                                        onChange={this.handleDistanceInput}
+                                        className="distance-input"/>
+                                </div>
+
+                            </div>
                         </div>
                         <div className="filter facilities-filter">
                             <label id="facilities" className="filter-label">Facilities</label>
@@ -465,7 +506,7 @@ class ParkFilterToolbar extends React.Component {
                         </div>
                         <button
                             type="submit"
-                            className="search-button"
+                            className={`${this.props.loadingParks ? 'parks-loading-button' : ''} search-button`}
                             onClick={this.handleSearchSubmit}>
                             Search
                         </button>
@@ -492,6 +533,7 @@ const mapStateToProps = (state) => ({
     specialFeatures: state.parks.specialFeatures,
     parks: state.parks.parks,
     currentFilters: state.parks.currentFilters,
+    loadingParks: state.parks.loadingParks,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParkFilterToolbar)

@@ -301,7 +301,7 @@ function parseLatLon (query) {
     const lon = parseFloat(query.lon)
     const distance = parseFloat(query.distance)
     const earthRadiusInKilometers = 6371
-    return { '$geoWithin': { $centerSphere: [ [ lon, lat ], distance / earthDiameterInKilometers ] } }
+    return { '$geoWithin': { $centerSphere: [ [ lon, lat ], distance / earthRadiusInKilometers ] } }
 }
 
 module.exports = {

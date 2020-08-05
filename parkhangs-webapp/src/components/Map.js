@@ -29,15 +29,21 @@ class Map extends Component {
 
     }
 
+    getZoom = () => {
+        return this.props.parksHaveBeenQueried ? 12 : 14
+    }
+
     render() {
         const parks = this.props.parksHaveBeenQueried ? this.props.queriedParks : this.props.parks
         const center = this.props.userLocation ? this.props.userLocation : this.defaultLocation
+        const zoom = this.getZoom()
 
         return (
             <div className="google-map-container">
                 <GoogleMap
                     style={{height: '600px', width: '90%', margin: 'auto'}}
                     parks={parks}
+                    zoom={zoom}
                     userLocation={center}
                     handleSelect={this.handleSelect}/>
             </div>
