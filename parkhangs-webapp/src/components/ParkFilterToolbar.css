@@ -1,6 +1,6 @@
 .ParkFilterToolbar {
     height: 100%;
-    flex-grow: 1;
+    width: 20rem;
     margin: 0.25rem;
 }
 

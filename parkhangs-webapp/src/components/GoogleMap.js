@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import { Map, GoogleApiWrapper } from 'google-maps-react'
-import Marker from '../components/Marker'
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react'
+import 'components/GoogleMap.css'
 
-class SimpleMap extends Component {
+class GoogleMap extends Component {
     static defaultProps = {
-        zoom: 16
+        zoom: 14
     }
 
     defaultLocation = {
@@ -19,23 +19,38 @@ class SimpleMap extends Component {
 
     render() {
         const parks = this.props.parks
+        const image = 'https://raw.githubusercontent.com/cmaija/ParkHangs/master/parkhangs-webapp/src/assets/icons/marker.png'
         return (
-            <Map
+            <div className="google-map">
+                <Map
+                    containerStyle={{
+                        position: 'relative',
+                        height: '600px',
+                    }}
                     google={this.props.google}
-                    initialCenter={this.props.center}
-                    center={this.props.center}
+                    initialCenter={this.props.userLocation}
+                    center={this.props.userLocation}
                     style={this.mapStyles}
-                    zoom={this.props.zoom}>
+                    zoom={this.props.zoom}
+                    mapTypeControl={false}>
                     {
                         parks && parks.length > 0 &&
                         parks.map((park) => {
-                            return <Marker key={park._id} park={park}
-                                           lat={park.googleMapsLatLon[1]}
-                                           lng={park.googleMapsLatLon[0]}/>
+                            return <Marker
+                                key={park._id}
+                                park={park}
+                                icon={image}
+                                position={
+                                   {
+                                       lat: park.googleMapsLatLon[1],
+                                       lng: park.googleMapsLatLon[0]
+                                   }}
+                                draggable={false}
+                                onClick={()=> this.props.handleSelect(park)} />
                         }
                     )}
-
-            </Map>
+                </Map>
+            </div>
         )
     }
 }
@@ -43,4 +58,4 @@ class SimpleMap extends Component {
 
 export default GoogleApiWrapper({
     apiKey: `${process.env.REACT_APP_GOOGLE_API_KEY}`
-})(SimpleMap)
+})(GoogleMap)
