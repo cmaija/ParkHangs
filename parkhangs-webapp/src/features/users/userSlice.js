@@ -10,7 +10,8 @@ const userSlice = createSlice({
         user: null,
         isLoggedIn: false, // if user is not null, must be logged in
         error: null,
-        loadingUser: true
+        gettingUserLocation: true,
+        userLocation: null,
     },
 
     reducers: {
@@ -91,6 +92,24 @@ const userSlice = createSlice({
 
         },
 
+        getUserLocationStart (state, action) {
+            state.gettingUserLocation = true
+        },
+
+        getUserLocationSuccess (state, action) {
+            state.gettingUserLocation = false
+            const lat = action.payload.lat
+            const lng = action.payload.lon
+            state.userLocation = {
+                lat,
+                lng
+            }
+        },
+
+        getUserLocationFailure (state, action) {
+            state.gettingUserLocation = false
+            state.location = null
+        },
 
     }
 
@@ -109,10 +128,27 @@ export const {
     googleLogoutFailure,
     updateUserStart,
     updateUserSuccessful,
-    updateUserFailure
+    updateUserFailure,
+    getUserLocationStart,
+    getUserLocationSuccess,
+    getUserLocationFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;
+
+export const getUserLocation = () => async (dispatch) => {
+    try {
+        dispatch(getUserLocationStart())
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude
+            const lon = position.coords.longitude
+            console.log(position)
+            dispatch(getUserLocationSuccess({lat, lon}))
+        })
+    } catch (error) {
+        dispatch(getUserLocationFailure())
+    }
+}
 
 export const addUser = (userParams) => async (dispatch) => {
 

@@ -31,7 +31,7 @@ const getParksSimple = async (req, res) => {
                 name: park.name,
                 parkId: park.parkId,
                 _id: park._id,
-                googleMapsLatLon: park.googleMapsLatLon,
+                googleMapsLatLon: park.googleMapsLatLon.coordinates,
             }
         })
         return res.status(200).json({success: true, data: parks})
@@ -99,10 +99,16 @@ const addRating = async (req, res) => {
 const getParkById = async (req, res) => {
     const parkId = req.params.parkId
     try {
-        const park = await Park.findOne({_id: parkId})
+        let park = await Park.findOne({_id: parkId})
+        park.googleMapsLatLon = park.googleMapsLatLon.coordinates
         return res.status(200).json({
             success: true,
-            data: park,
+            data: {
+                name: park.name,
+                parkId: park.parkId,
+                _id: park._id,
+                googleMapsLatLon: park.googleMapsLatLon,
+            },
         })
     } catch (error) {
         return res
@@ -136,6 +142,7 @@ const queryParks = async (req, res) => {
         hasWashrooms: query.hasWashrooms !== undefined ? parseWashroomQuery(query.hasWashrooms) : undefined,
         facilities: query.facilities !== undefined ? parseFacilitiesFromQuery(query.facilities) : undefined,
         specialFeatures: query.specialFeatures !== undefined ? parseSpecialFeaturesFromQuery(query.specialFeatures) : undefined,
+        googleMapsLatLon: queryHasLatLon(query) ? parseLatLon(query) : undefined
     }
 
     let queryObject = {
@@ -144,6 +151,7 @@ const queryParks = async (req, res) => {
         hasWashrooms: incomingQuery.hasWashrooms,
         facilities: incomingQuery.facilities,
         specialFeatures: incomingQuery.specialFeatures,
+        googleMapsLatLon: incomingQuery.googleMapsLatLon,
     }
 
     for (let query of Object.keys(queryObject)) {
@@ -159,7 +167,7 @@ const queryParks = async (req, res) => {
                 name: park.name,
                 parkId: park.parkId,
                 _id: park._id,
-                googleMapsLatLon: park.googleMapsLatLon,
+                googleMapsLatLon: park.googleMapsLatLon.coordinates,
             }
         })
         return res.status(200).json({
@@ -272,6 +280,22 @@ function parseSpecialFeaturesFromQuery (featuresQuery) {
     })
     return { $all: parsedQuery }
 }
+
+function queryHasLatLon (query) {
+    const lat = parseFloat(query.lat)
+    const lon = parseFloat(query.lon)
+    const distance = parseFloat(query.distance)
+    return lat && lon && distance && distance > 0
+}
+
+function parseLatLon (query) {
+    const lat = parseFloat(query.lat)
+    const lon = parseFloat(query.lon)
+    const distance = parseFloat(query.distance)
+    const earthRadiusInKilometers = 6371
+    return { '$geoWithin': { $centerSphere: [ [ lon, lat ], distance / earthDiameterInKilometers ] } }
+}
+
 module.exports = {
     getParks,
     addRating,

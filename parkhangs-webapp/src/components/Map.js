@@ -6,27 +6,31 @@ import Marker from '../components/Marker.js'
 class SimpleMap extends Component {
 
     static defaultProps = {
-        center: {
-            lat: 49.28,
-            lng: -123.12
-        },
-        zoom: 12
+        zoom: 16
     };
+
+    defaultLocation = {
+        lat: 49.242140,
+        lng: -123.112158,
+    }
 
     render() {
         const parks = this.props.parksHaveBeenQueried ? this.props.queriedParks : this.props.parks
+        const center = this.props.userLocation ? this.props.userLocation : this.defaultLocation
+        console.log(center)
         return (
             // Important! Always set the container height explicitly
             <div style={{height: '600px', width: '90%', margin: 'auto'}}>
                 <GoogleMapReact bootstrapURLKeys={{key: process.env.REACT_APP_MAP_API_KEY}}
-                                defaultCenter={this.props.center}
+                                initialCenter={center}
+                                center={center}
                                 defaultZoom={this.props.zoom}>
                     {
                         parks && parks.length > 0 &&
                         parks.map((park) => {
                             return <Marker key={park._id} park={park}
-                                           lat={park.googleMapsLatLon[0]}
-                                           lng={park.googleMapsLatLon[1]}/>
+                                           lat={park.googleMapsLatLon[1]}
+                                           lng={park.googleMapsLatLon[0]}/>
                         }
                     )}
 
@@ -42,7 +46,9 @@ const mapStateToProps = (state) => { //name is by convention
     return {
         parks: state.parks.parks,
         queriedParks: state.parks.queriedParks,
-        parksHaveBeenQueried: state.parks.parksHaveBeenQueried
+        parksHaveBeenQueried: state.parks.parksHaveBeenQueried,
+        userLocation: state.user.userLocation,
+        loadingUserLocation: state.user.loadingUserLocation,
     }
 }
 
