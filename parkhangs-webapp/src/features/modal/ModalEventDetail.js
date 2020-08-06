@@ -74,7 +74,7 @@ class ModalEventDetail extends React.Component {
     }
 
     getCreatedTime = (date) => {
-        return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+        return moment.unix(date).format('MMMM Do, YYYY @ h:mm A')
     }
 
     getExportedTime = (date) => {
@@ -239,7 +239,7 @@ class ModalEventDetail extends React.Component {
                 </div>
             )
         }
-        
+
         const event = this.props.events.find(event => event._id === this.props.eventId)
         const parkName =  this.props.selectedPark.name
         const eventStart = this.eventStartTime(event.eventDateTime)
