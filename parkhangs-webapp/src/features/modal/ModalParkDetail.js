@@ -62,7 +62,7 @@ class ModalParkDetail extends React.Component {
     }
 
     getCreatedTime = (date) => {
-        return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+        return moment.unix(date).format('MMMM Do, YYYY @ h:mm A')
     }
 
     toggleFavouritePark = () => {
