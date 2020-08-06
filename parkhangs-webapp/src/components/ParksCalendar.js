@@ -28,7 +28,8 @@ class ParksCalendar extends React.Component {
     filterEvents = (parks) => {
         return this.props.events.filter((event) => {
             const eventsAtPark = parks.filter(park => {
-                return event.parkId === park._id})
+                return event.parkId === park._id
+            })
             return eventsAtPark.length > 0
         })
     }
@@ -46,6 +47,16 @@ class ParksCalendar extends React.Component {
             }
         }
         this.props.openModal(props)
+    }
+
+    eventStyleGetter = () => {
+        const backgroundColor = '#4caf50';
+        const style = {
+            backgroundColor: backgroundColor,
+        };
+        return {
+            style: style
+        };
     }
 
     render() {
@@ -88,6 +99,7 @@ class ParksCalendar extends React.Component {
                     views={allViews}
                     selectable={true}
                     onSelectSlot={this.addNewEvent}
+                    eventPropGetter={this.eventStyleGetter}
                 />
             </div>
         )
