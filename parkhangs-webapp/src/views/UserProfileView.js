@@ -218,19 +218,19 @@ class UserProfileView extends React.Component {
                                 alt="user's avatar"
                                 className="Google-Image"
                                 src={this.props.user.googleImageURL}/>
-                            <h2>Welcome, {this.props.user.username}</h2>
-                            <h3>
-                                Full Name: {this.props.user.firstName + " " + this.props.user.lastName}
-                            </h3>
-                            <h3>
+                            <h3>Welcome, {this.props.user.username}!</h3>
+                            <h4>
+                                Name: {this.props.user.firstName + " " + this.props.user.lastName}
+                            </h4>
+                            <h4>
                                 Email: {this.props.user.email}
-                            </h3>
+                            </h4>
+                            <button className="Edit-Profile-Button" onClick={this.editProfile.bind(this)}>
+                                Edit Username
+                            </button>
                             {
                                 this.renderSavedParks()
                             }
-                            <button className="Edit-Profile-Button" onClick={this.editProfile.bind(this)}>
-                                Edit Profile
-                            </button>
                         </div>
                         :
                         <h3 className="Not-Logged-In">

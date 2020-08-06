@@ -1,13 +1,13 @@
 import React from 'react'
 import 'features/modal/ModalEventDetail.css'
 import moment from 'moment'
-import { connect } from 'react-redux'
-import { deleteEvent } from 'features/events/eventsSlice'
-import { toggleSavedEvent } from 'features/users/userSlice'
-import { closeModal } from 'features/modal/modalSlice'
+import {connect} from 'react-redux'
+import {deleteEvent} from 'features/events/eventsSlice'
+import {toggleSavedEvent} from 'features/users/userSlice'
+import {closeModal} from 'features/modal/modalSlice'
 import EventForm from 'components/EventForm'
 import CommentForm from 'components/CommentForm'
-import { deleteEventComment } from 'features/comments/commentSlice'
+import {deleteEventComment} from 'features/comments/commentSlice'
 import LoadingSpinner from 'components/LoadingSpinner'
 import ShareCalendar from 'components/ShareCalendar'
 import FilledHeartIcon from 'assets/icons/heart-filled.svg'
@@ -85,21 +85,28 @@ class ModalEventDetail extends React.Component {
     favoritedEventIcon = (isFavorited) => {
         if (isFavorited) {
             return <img
-                        alt="filled heart"
-                        className="filledHeart"
-                        src={FilledHeartIcon} />
+                alt="filled heart"
+                className="filledHeart"
+                src={FilledHeartIcon}/>
         }
         return <img
-                    alt="empty heart"
-                    className="emptyHeart"
-                    src={NoFilledHeartIcon} />
+            alt="empty heart"
+            className="emptyHeart"
+            src={NoFilledHeartIcon}/>
     }
 
     descriptionTab = (event, formattedStart, formattedEnd) => {
         return (
             <div className="ModalEventDetail-description">
                 <div className="ModalEventDetail-description-section">
-                    <span><b>Event Liked/Favorited:</b> {event.favoritesCount || 0} people have favorited this event</span>
+                    <span><b>Event Favourited:</b> {event.favoritesCount || 'No one has favourited this event'}
+
+                        {
+
+                            event.favoritesCount ? event.favoritesCount > 1 ? ' people have favourited this event' : ' person has favourited this event' : null
+                        }
+
+                    </span>
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span><b>Event Time:</b> {`${formattedStart} to ${formattedEnd}`}</span>
@@ -117,93 +124,75 @@ class ModalEventDetail extends React.Component {
     }
 
     getCommentsByEvent = () => {
-      let res = this.props.comments[this.props.eventId]
-      if (res === undefined) {
-          //no comments for that park, return empty array
-          return [];
+        let res = this.props.comments[this.props.eventId]
+        if (res === undefined) {
+            //no comments for that park, return empty array
+            return [];
         } else {
-          return res; //filtered array
+            return res; //filtered array
         }
-      };
+    };
 
-      handleDeleteComment = (comment, eventId) => {
+    handleDeleteComment = (comment, eventId) => {
         const commentUser = comment.creatorID;
         let deletingUser = 0;
         if (this.props.user != null) {
-          deletingUser = this.props.user._id
+            deletingUser = this.props.user._id
         }
         if (commentUser === deletingUser) {
-          this.props.deleteCommentFromEvent(comment._id, eventId)
+            this.props.deleteCommentFromEvent(comment._id, eventId)
         } else {
-          alert("You cannot delete another user's comment!")
+            alert("You cannot delete another user's comment!")
         }
-      }
+    }
 
     commentsTab = (event, comments) => {
 
         return (
             <div className="ModalEventDetail-comments">
                 <div className="EventComments">
-                    <div className="EventCommentsHistory Column">
-                    {
-                    comments.length > 0 ?
-                        <table>
-                        <thead>
-                            <tr>
-                                <td>
-                                    <b>Username:</b>
-                                </td>
-                                <td>
-                                    <b>Created at:</b>
-                                </td>
-                                <td>
-                                    <b>Comment:</b>
-                                </td>
-                                <td>
-                                    <b>Delete:</b>
-                                </td>
-                             </tr>
-                        </thead>
-                        <tbody>
+                    <div className="Column">
+                        {
+                            comments.length > 0 ?
 
-                        {comments.map((comment) => {
-                        return <tr key={comment._id}>
-                            <td>
-                                {comment.creatorName}
-                            </td>
-                            <td>
-                                {this.getCreatedTime(comment.createdDateTime)}
-                            </td>
-                            <td>
-                                {comment.comment}
-                            </td>
-                            <td>
-                                <button onClick={() => {
-                                    this.handleDeleteComment(comment, this.props.eventId)
-                                }}>
-                                <b>X</b>
-                                </button>
-                            </td>
-                            </tr>
-                        })
+                                <div>
+                                    <div className="existing-comment-title">
+                                        Comments:
+                                    </div>
+                                    <div className="EventCommentsHistory">
 
-                    }
-                        </tbody>
-                        </table>
-                    :
-                    <div>
-                        There are no comments for this park.
-                    </div>
-                    }
-
-
+                                        {
+                                            comments.map((comment) => {
+                                                return <div className="individual-comment">
+                                                    <b>
+                                                        {comment.creatorName}
+                                                    </b>
+                                                    <div>
+                                                        {this.getCreatedTime(comment.createdDateTime)}
+                                                    </div>
+                                                    <div>
+                                                        {comment.comment}
+                                                    </div>
+                                                    <button className="comment-delete-button" onClick={() => {
+                                                        this.handleDeleteComment(comment, this.props.eventId)
+                                                    }}>
+                                                        <b>X</b>
+                                                    </button>
+                                                </div>
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    There are no comments for this park.
+                                </div>
+                        }
 
                     </div>
                     <div className="EventCommentForm Column">
-                       <CommentForm eventId={this.props.eventId}/>
-                   </div>
-
-
+                        <CommentForm eventId={this.props.eventId}/>
+                    </div>
                 </div>
             </div>
         )
@@ -212,7 +201,7 @@ class ModalEventDetail extends React.Component {
     editTab = (event) => {
         const loadingState = (
             <div className="ModalEventDetail-updatingEvent">
-                <LoadingSpinner />
+                <LoadingSpinner/>
             </div>
         )
 
@@ -231,7 +220,7 @@ class ModalEventDetail extends React.Component {
         return this.props.updatingEvent ? loadingState : eventForm
     }
 
-    render () {
+    render() {
         if (this.props.loading) {
             return (
                 <div className="LoadingState">
@@ -239,9 +228,9 @@ class ModalEventDetail extends React.Component {
                 </div>
             )
         }
-        
+
         const event = this.props.events.find(event => event._id === this.props.eventId)
-        const parkName =  this.props.selectedPark.name
+        const parkName = this.props.selectedPark.name
         const eventStart = this.eventStartTime(event.eventDateTime)
         const formattedEnd = this.eventEndTime(event.eventEndDateTime)
         const parkStrNum = this.props.selectedPark.streetNumber
@@ -254,7 +243,7 @@ class ModalEventDetail extends React.Component {
             description: event.details,
             location: parkStrNum + " " + parkStrName + " BC, Canada",
             startTime: this.getExportedTime(event.eventDateTime),
-            endTime:  this.getExportedTime(event.eventEndDateTime)
+            endTime: this.getExportedTime(event.eventEndDateTime)
         }
 
         const favoritedEventIcon = this.favoritedEventIcon(isFavorited)
@@ -281,12 +270,12 @@ class ModalEventDetail extends React.Component {
                         <div className="ModalEventDetail-leftToolbar">
                             <div className={
                                 `${this.state.currentTab === 'description' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
-                                onClick={() => this.selectTab('description')}>
+                                 onClick={() => this.selectTab('description')}>
                                 <span className="ModalEventDetail-tabName">Description</span>
                             </div>
                             <div className={
                                 `${this.state.currentTab === 'comments' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
-                                onClick={() => this.selectTab('comments')}>
+                                 onClick={() => this.selectTab('comments')}>
                                 <span className="ModalEventDetail-tabName">Comments</span>
                                 <div>
 
@@ -294,7 +283,7 @@ class ModalEventDetail extends React.Component {
                             </div>
                             <div className={
                                 `${this.state.currentTab === 'edit' ? 'tab-selected' : ''} ${'ModalEventDetail-tabSelector'}`}
-                                onClick={() => this.selectTab('edit')}>
+                                 onClick={() => this.selectTab('edit')}>
                                 <span className="ModalEventDetail-tabName">Edit Event</span>
                             </div>
                         </div>
@@ -309,10 +298,11 @@ class ModalEventDetail extends React.Component {
                                     }
                                 </button>
                             }
-                                <ShareCalendar event={newEvent}/>
+                            <ShareCalendar event={newEvent}/>
                             <button
                                 className="ModalEventDetail-actionButton deleteEvent"
-                                onClick={() => this.deleteEvent(event.parkId)}>Delete</button>
+                                onClick={() => this.deleteEvent(event.parkId)}>Delete
+                            </button>
                         </div>
                     </div>
                 </div>
