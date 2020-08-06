@@ -1,6 +1,6 @@
 .ParkFilterToolbar {
     height: 100%;
-    flex-grow: 1;
+    width: 20rem;
     margin: 0.25rem;
 }
 
@@ -92,7 +92,18 @@
     align-items: flex-start;
 }
 
+.pac-target-input  {
+    width: 15rem;
+    height: 1.5rem;
+}
 .rating-filters {
+    min-width: 10rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+}
+
+.locations-filter {
     min-width: 10rem;
     flex-grow: 1;
     display: flex;
@@ -114,11 +125,21 @@
     margin-right: 1rem;
 }
 
+.location-subfilter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .rating-subfilter {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-right: 1rem;
+}
+
+.distance-input {
+    height: 1.5rem;
 }
 
 .facilities-filter {
@@ -145,6 +166,11 @@
     justify-content: flex-start;
 }
 
+.location-subfilters {
+    display: flex;
+    flex-direction: column;
+}
+
 .multi-select {
     width: 100%;
     font-size: 0.75rem;
@@ -162,13 +188,17 @@
 .select-park {
     font: inherit;
     font-size: 0.875rem;
-    margin: 0.75rem;
+    margin: 0.25rem 0.75rem;
+    cursor: pointer;
+}
+
+.parks-loading-button {
     cursor: pointer;
 }
 
 .search-button {
     font: inherit;
     font-size: 0.875rem;
-    margin: 0.75rem;
+    margin: 0.25rem 0.75rem;
     cursor: pointer;
 }

@@ -44,7 +44,7 @@ render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
             <Router>
-                <Routes/>
+                <Routes key="routes"/>
             </Router>
         </PersistGate>
     </Provider>,

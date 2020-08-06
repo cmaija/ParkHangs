@@ -4,6 +4,7 @@ import { queryParks, resetQuery, saveFilterState } from 'features/parks/parksSli
 import Select from 'react-select'
 import { cloneDeep } from 'lodash'
 import 'components/ParkFilterToolbar.css'
+import AddressSearchBar from 'components/AddressSearchBar'
 
 class ParkFilterToolbar extends React.Component {
 
@@ -21,10 +22,15 @@ class ParkFilterToolbar extends React.Component {
                 minSize: '',
                 maxSize: '',
                 parkName: '',
+                distance: '',
+                lat: '',
+                lon: '',
+                formattedPlaceString: '',
                 minRatingValid: true,
                 maxRatingValid: true,
                 minSizeValid: true,
                 maxSizeValid: true,
+                error: '',
             }
         }
     }
@@ -36,32 +42,57 @@ class ParkFilterToolbar extends React.Component {
             && this.state.maxSizeValid
     }
 
+    validateDistance = () => {
+        if (this.state.formattedPlaceString === '' && this.state.distance !== '') {
+            return false
+        }
+
+        if (this.state.formattedPlaceString !== '' && this.state.distance === '') {
+            return false
+        }
+        return true
+    }
+
     handleSearchSubmit = event => {
         event.preventDefault()
-        this.clearSelectedParkName()
-        this.props.saveFilterState(this.state)
+        if (!this.props.loadingParks) {
+            this.clearSelectedParkName()
+            if (!this.validateDistance()) {
+                this.setState({error: 'Please set both a search radius\n and an address'})
+                return
+            }
+            this.props.saveFilterState(this.state)
 
-        const specialFeatures = this.state.selectedSpecialFeatures.length > 0
-            ? this.state.selectedSpecialFeatures.map(feature => feature.label)
-            : []
+            const specialFeatures = this.state.selectedSpecialFeatures.length > 0
+                ? this.state.selectedSpecialFeatures.map(feature => feature.label)
+                : []
 
             const facilities = this.state.selectedFacilities.length > 0
                 ? this.state.selectedFacilities.map(facility => facility.label)
                 : []
-        let searchParams = {
-            hasWashrooms: this.state.hasWashrooms,
-            facilities: facilities,
-            specialFeatures: specialFeatures,
-            sizeGte: this.state.minSize,
-            sizeLte: this.state.maxSize,
-            ratingGte: this.state.minRating,
-            ratingLte: this.state.maxRating,
-        }
 
-        searchParams = this.pruneSearchParams(searchParams)
+            let searchParams = {
+                hasWashrooms: this.state.hasWashrooms,
+                facilities: facilities,
+                specialFeatures: specialFeatures,
+                sizeGte: this.state.minSize,
+                sizeLte: this.state.maxSize,
+                ratingGte: this.state.minRating,
+                ratingLte: this.state.maxRating,
+                lat: this.state.lat,
+                lon: this.state.lon,
+                distance: this.state.distance,
+            }
 
-        if (Object.keys(searchParams).length > 0 && this.fieldsAreValid()) {
-            this.props.queryParks(searchParams)
+            searchParams = this.pruneSearchParams(searchParams)
+
+            if (!this.fieldsAreValid()) {
+                this.setState({error: 'One or more fields are invalid'})
+            }
+
+            if (Object.keys(searchParams).length > 0 && this.fieldsAreValid()) {
+                this.props.queryParks(searchParams)
+            }
         }
     }
 
@@ -76,26 +107,57 @@ class ParkFilterToolbar extends React.Component {
                 delete(params[param])
             }
 
+            if (param === 'distance' && (!params.lat || !params.lon)) {
+                delete(params[param])
+            }
+
+            if (param === 'lat' && (!params.lon || params.distance === '')) {
+                delete(params[param])
+            }
+
+            if (param === 'lon' && (!params.lat || params.distance === '')) {
+                delete(params[param])
+            }
+
         }
         return params
     }
 
+    resetError = () => {
+        this.setState({error: ''})
+    }
+
     handleSelectFacility = selectedFacilities => {
+        this.resetError()
         const selected = selectedFacilities
         this.setState({selectedFacilities: selected})
     }
 
     handleSelectSpecialFeature = selectedSpecialFeatures => {
+        this.resetError()
         const selected = selectedSpecialFeatures
         this.setState({selectedSpecialFeatures: selected})
     }
 
+    handleDistanceInput = event => {
+        this.resetError()
+        event.preventDefault()
+        this.setState({error: ''})
+        let parsedInput = parseFloat(event.target.value, 10)
+        if (Number.isNaN(parsedInput)) {
+            parsedInput = ''
+        }
+        this.setState({distance: parsedInput})
+    }
+
     handleSelectWashrooms = event => {
+        this.resetError()
         const selected = this.state.hasWashrooms
         this.setState({hasWashrooms: !selected})
     }
 
     handleMinimumRatingInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -108,6 +170,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleMaximumRatingInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -120,6 +183,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMinRating = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({minRating: ''}, () => {
             this.validateMinRating()
@@ -128,6 +192,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMaxRating = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({maxRating: ''}, () => {
             this.validateMinRating()
@@ -136,6 +201,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleMinimumSizeInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -148,6 +214,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleMaximumSizeInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -160,6 +227,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMinSize = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({minSize: ''}, () => {
             this.validateMinSize()
@@ -168,6 +236,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMaxSize = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({maxSize: ''}, () => {
             this.validateMinSize()
@@ -176,18 +245,22 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearWashrooms = () => {
+        this.resetError()
         this.setState({hasWashrooms: false})
     }
 
     clearFacilities = () => {
+        this.resetError()
         this.setState({selectedFacilities: []})
     }
 
     clearSpecialFeatures = () => {
+        this.resetError()
         this.setState({selectedSpecialFeatures: []})
     }
 
     clearSelectedParkName = () => {
+        this.resetError()
         this.setState({parkName: ''})
     }
 
@@ -265,7 +338,6 @@ class ParkFilterToolbar extends React.Component {
 
     handleKeyDown = event => {
         if (event.key === 'Enter') {
-            console.log('enter')
             event.preventDefault()
         }
     }
@@ -280,7 +352,20 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleSelectedPark = selectedPark => {
+        this.resetError()
         this.setState({parkName: selectedPark})
+    }
+
+    handleSelectedPlace = (place) => {
+        this.resetError()
+        const lat = place.geometry.location.lat()
+        const lon = place.geometry.location.lng()
+        const formattedPlaceString = place.formatted_address
+
+        this.setState({lat, lon, formattedPlaceString})
+        if (this.state.distance === '') {
+            this.setState({ distance: 2 })
+        }
     }
 
     handleParkNameSearch = () => {
@@ -295,6 +380,14 @@ class ParkFilterToolbar extends React.Component {
         }
     }
 
+    clearAllLocation = () => {
+        this.setState({distance: '', lat: '', lon: '', formattedPlaceString: ''})
+    }
+
+    clearLocation = () => {
+        this.setState({lat: '', lon: '', formattedPlaceString: ''})
+    }
+
     handleClearSearch = event => {
         event.preventDefault()
         this.props.saveFilterState({})
@@ -307,6 +400,7 @@ class ParkFilterToolbar extends React.Component {
         this.clearSpecialFeatures()
         this.clearFacilities()
         this.clearSelectedParkName()
+        this.clearAllLocation()
     }
 
     customStyles = {
@@ -348,6 +442,28 @@ class ParkFilterToolbar extends React.Component {
                             className="select-park"
                             onClick={this.handleParkNameSearch}>Show Park</button>
                         <span className="sectionTitle">Or, filter parks by their attributes</span>
+                        <div className="filter locations-filter">
+                            <div className="subFilters location-subfilters">
+                                <div className="location-subfilter">
+                                    <span className="filter-label">Address</span>
+                                    <AddressSearchBar
+                                        formattedPlaceString={this.state.formattedPlaceString}
+                                        placeSelected={(place) => this.handleSelectedPlace(place)}
+                                        placeDeleted={this.clearLocation}/>
+                                </div>
+                                <div className="location-subfilter">
+                                    <label id="distance" className="filter-label">Search Radius (km)</label>
+                                    <input
+                                        id="distance"
+                                        type="number"
+                                        name="radius"
+                                        value={this.state.distance}
+                                        onChange={this.handleDistanceInput}
+                                        className="distance-input"/>
+                                </div>
+
+                            </div>
+                        </div>
                         <div className="filter facilities-filter">
                             <label id="facilities" className="filter-label">Facilities</label>
                             <Select
@@ -459,9 +575,13 @@ class ParkFilterToolbar extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        {
+                            this.state.error !== '' &&
+                            <span>{this.state.error}</span>
+                        }
                         <button
                             type="submit"
-                            className="search-button"
+                            className={`${this.props.loadingParks ? 'parks-loading-button' : ''} search-button`}
                             onClick={this.handleSearchSubmit}>
                             Search
                         </button>
@@ -488,6 +608,7 @@ const mapStateToProps = (state) => ({
     specialFeatures: state.parks.specialFeatures,
     parks: state.parks.parks,
     currentFilters: state.parks.currentFilters,
+    loadingParks: state.parks.loadingParks,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParkFilterToolbar)
