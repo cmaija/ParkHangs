@@ -37,15 +37,12 @@ textarea {
     padding-bottom: 0.5rem;
 }
 
-@media only screen and (max-width: 838px) {
-    .AddEventForm {
-        order: 2;
-        display: flex;
-        flex-direction: column;
-    }
+#eventDate{
+    display: flex;
+    flex-direction: column;
 }
 
-#eventDate{
+.calendar-date-select{
     display: flex;
     flex-direction: column;
 }
@@ -54,9 +51,33 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 1rem;
 }
 
-.calendar-date-select{
-    display: flex;
-    flex-direction: column;
+.date{
+    padding: 1rem;
+}
+
+@media only screen and (max-width: 765px){
+    .date{
+        transform: scale(0.8, 0.8);
+    }
+    .non-calendar-section{
+       transform: scale(0.9, 0.9);
+    }
+}
+@media only screen and (max-width: 838px) {
+    .AddEventForm {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+    }
+}
+@media only screen and (min-width: 838px){
+    .date{
+        padding: 3rem;
+    }
+    .non-calendar-section{
+        padding: 3rem;
+    }
 }
