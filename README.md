@@ -85,8 +85,11 @@ We deployed our application using Heroku.
 We integrated a calendar package and customized it to allow for better visual representation for ease of scheduling events, 
 as well as improved User Experience through interactivity. By incorporating OAuth-based Google Sign-in, 
 we provide a simple way for users sign-in without registration and the ability for users to view a clear overview of their personal saved parks and events. 
+
 We incorporated a feature to allow for the events in the application to be exported to other commonly used calendars such as Google calendar, and we believe this adds an extra level of practicality for users to remember the event.  
 In addition, the use of Redux-Toolkit allows our code to ‘mutate’ immutable update logic in an organized slice of state, as well as include commonly used Redux addons such as Redux Thunk for effective code writing.
+
+The filter park functionality is also one of the features we are most proud of for this project. This filter enables users to filter parks on the map by features, as well as the ability to find parks by address and around a certain radius. A lot of work went into this feature and this gives an extra layer of practicality to our application.
 
 ## Next Steps
 
