@@ -4,14 +4,16 @@
     margin: 0.25rem;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 600px) {
     .ParkFilterToolbar {
         height: 100%;
         flex-grow: 1;
         margin: 0.25rem;
         display: flex;
         flex-direction: column;
-        min-width: 31rem;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
     }
 }
 
@@ -36,7 +38,7 @@
     justify-content: flex-start;
     font-size: 1rem;
     font-weight: 500;
-    margin-bottom: 0.5rem;
+    margin-left: 0.75rem;
 }
 
 .filterList {
@@ -201,4 +203,64 @@
     font-size: 0.875rem;
     margin: 0.25rem 0.75rem;
     cursor: pointer;
+}
+
+.expand-filters-button {
+    width: 1.15rem;
+    height: 1.15rem;
+    padding: 0;
+}
+
+.expand-arrow {
+    margin: 0;
+}
+
+.open {
+    transform: rotate(180deg);
+}
+
+@media screen and (max-width: 600px) {
+    .filterToolbar {
+        width: 100%;
+    }
+    .filterListHeader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filterList .filter {
+        display: none !important;
+    }
+    .filterList .search-button {
+        display: none !important;
+    }
+    .filterList .select-park {
+        display: none !important;
+    }
+    .filterList .sectionTitle {
+        display: none !important;
+    }
+    .filterList .expand-filters-button {
+        display: flex !important;
+    }
+
+    .filterList.responsive .filter {
+        display: flex !important;
+    }
+    .filterList.responsive .search-button {
+        display: flex !important;
+    }
+    .filterList.responsive .select-park {
+        display: flex !important;
+    }
+    .filterList.responsive .sectionTitle {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .filterList .expand-filters-button {
+        display: none !important;
+    }
 }
