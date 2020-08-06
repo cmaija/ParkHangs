@@ -25,6 +25,7 @@ class ParkFilterToolbar extends React.Component {
                 distance: '',
                 lat: '',
                 lon: '',
+                formattedPlaceString: '',
                 minRatingValid: true,
                 maxRatingValid: true,
                 minSizeValid: true,
@@ -40,10 +41,30 @@ class ParkFilterToolbar extends React.Component {
             && this.state.maxSizeValid
     }
 
+    validateDistance = () => {
+        if (this.state.distance >= 0 && (!this.state.lat || !this.state.lon)) {
+            return false
+        }
+
+        if (this.state.lat && (!this.state.lon || this.state.distance === '')) {
+            return false
+        }
+
+        if (this.state.lat && (!this.state.lon || this.state.distance === '')) {
+            return false
+        }
+
+        return true
+    }
+
     handleSearchSubmit = event => {
         event.preventDefault()
         if (!this.props.loadingParks) {
             this.clearSelectedParkName()
+            if (!this.validateDistance()) {
+                this.setState({error: 'Please set a search radius'})
+                return
+            }
             this.props.saveFilterState(this.state)
 
             const specialFeatures = this.state.selectedSpecialFeatures.length > 0
@@ -83,6 +104,18 @@ class ParkFilterToolbar extends React.Component {
             }
 
             if (param === 'hasWashrooms' && !params[param]) {
+                delete(params[param])
+            }
+
+            if (param === 'distance' && (!params.lat || !params.lon)) {
+                delete(params[param])
+            }
+
+            if (param === 'lat' && (!params.lon || params.distance === '')) {
+                delete(params[param])
+            }
+
+            if (param === 'lon' && (!params.lat || params.distance === '')) {
                 delete(params[param])
             }
 
@@ -305,8 +338,12 @@ class ParkFilterToolbar extends React.Component {
         console.log(place)
         const lat = place.geometry.location.lat()
         const lon = place.geometry.location.lng()
+        const formattedPlaceString = place.formatted_address
 
-        this.setState({lat, lon})
+        this.setState({lat, lon, formattedPlaceString})
+        if (this.state.distance === '') {
+            this.setState({ distance: 2 })
+        }
     }
 
     handleParkNameSearch = () => {
@@ -321,6 +358,10 @@ class ParkFilterToolbar extends React.Component {
         }
     }
 
+    clearAllLocation = () => {
+        this.setState({distance: '', lat: '', lon: '', formattedPlaceString: ''})
+    }
+
     handleClearSearch = event => {
         event.preventDefault()
         this.props.saveFilterState({})
@@ -333,6 +374,7 @@ class ParkFilterToolbar extends React.Component {
         this.clearSpecialFeatures()
         this.clearFacilities()
         this.clearSelectedParkName()
+        this.clearAllLocation()
     }
 
     customStyles = {
@@ -378,7 +420,9 @@ class ParkFilterToolbar extends React.Component {
                             <div className="subFilters location-subfilters">
                                 <div className="location-subfilter">
                                     <span className="filter-label">Address</span>
-                                    <AddressSearchBar placeSelected={(place) => this.handleSelectedPlace(place)}/>
+                                    <AddressSearchBar
+                                        formattedPlaceString={this.state.formattedPlaceString}
+                                        placeSelected={(place) => this.handleSelectedPlace(place)}/>
                                 </div>
                                 <div className="location-subfilter">
                                     <label id="distance" className="filter-label">Search Radius (km)</label>

@@ -5,6 +5,11 @@ class AddressSearchBar extends React.Component {
     constructor (props) {
         super(props)
         this.inputRef = React.createRef()
+        this.state = {
+            googleAutoComplete: null,
+            options: {}
+        }
+
     }
 
     options = (google) => {
@@ -26,10 +31,7 @@ class AddressSearchBar extends React.Component {
     }
 
     handlePlaceSelect = autocomplete => {
-        console.log(autocomplete)
         const place = autocomplete.getPlace()
-        const prediciton = autocomplete.getPlacePredictions()
-        console.log(prediciton)
         this.props.placeSelected(place)
     }
 
@@ -40,17 +42,24 @@ class AddressSearchBar extends React.Component {
         }
     }
 
-    render () {
-        if (this.inputRef.current !== null) {
-            const google = this.props.google
-            const options = this.options(google)
-            const googleAutocomplete = new google.maps.places.Autocomplete(this.inputRef.current, options)
-            googleAutocomplete.addListener("place_changed", () => {
-                this.handlePlaceSelect(googleAutocomplete)
+    createRef = event => {
+        if (!this.state.googleAutoComplete) {
+            const options = this.options(this.props.google)
+            const autocomplete = new this.props.google.maps.places.Autocomplete(event, this.state.options)
+            autocomplete.addListener("place_changed", () => {
+                this.handlePlaceSelect(autocomplete)
             })
+            this.setState({options: options, googleAutocomplete: autocomplete})
         }
+    }
+
+    render () {
         return (
-            <input onChange={this.handleChange} onKeyDown={this.handleChange} ref={this.inputRef} />
+            <input
+                value={this.props.formattedPlaceString}
+                onChange={this.handleChange}
+                onKeyDown={this.handleChange}
+                ref={this.createRef} />
         )
     }
 }
