@@ -38,7 +38,6 @@ class AddressSearchBar extends React.Component {
     handleChange = event => {
         if (event.key === 'Enter') {
             event.preventDefault()
-            console.log(event.target.value)
         }
         if (event.key === 'Backspace') {
             this.props.placeDeleted()

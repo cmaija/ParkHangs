@@ -142,7 +142,6 @@ export const getUserLocation = () => async (dispatch) => {
         navigator.geolocation.getCurrentPosition(function(position) {
             const lat = position.coords.latitude
             const lon = position.coords.longitude
-            console.log(position)
             dispatch(getUserLocationSuccess({lat, lon}))
         })
     } catch (error) {
