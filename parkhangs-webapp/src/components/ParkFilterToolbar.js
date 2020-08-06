@@ -43,22 +43,13 @@ class ParkFilterToolbar extends React.Component {
     }
 
     validateDistance = () => {
-        if (this.state.distance === '' && this.state.lat === '' && this.state.lon === '') {
-            return true
-        }
-
-        if (this.state.distance >= 0 && (!this.state.lat || !this.state.lon)) {
+        if (this.state.formattedPlaceString === '' && this.state.distance !== '') {
             return false
         }
 
-        if (this.state.lat && (!this.state.lon || this.state.distance === '')) {
+        if (this.state.formattedPlaceString !== '' && this.state.distance === '') {
             return false
         }
-
-        if (this.state.lat && (!this.state.lon || this.state.distance === '')) {
-            return false
-        }
-
         return true
     }
 
@@ -67,7 +58,7 @@ class ParkFilterToolbar extends React.Component {
         if (!this.props.loadingParks) {
             this.clearSelectedParkName()
             if (!this.validateDistance()) {
-                this.setState({error: 'Please set a search radius'})
+                this.setState({error: 'Please set both a search radius\n and an address'})
                 return
             }
             this.props.saveFilterState(this.state)
