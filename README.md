@@ -39,13 +39,13 @@ One stretch goal is to make the web application responsive to mobile and desktop
 - [x] Share events from parks to Google calendars
 - [x] Find parks by address
 - [x] Use OAuth-based Google Sign-in to allow users to create an account and save events and parks to their account
-- [x] Allows users to add events to their calendar application (Apple, Google etc)
+- [x] Allows users to add events to their calendar application (Apple, Google etc) (originally we included only Google calendar integration but we added more calendar applications)
 - [x] Allow both non-logged-in users and users to add comments to both events and parks, as well as add ratings to parks
 
 **2-3 stretch requirements (plan to complete 1!)**
 - [x] Make the application mobile-friendly (responsive)
 - [ ] Allow users to invite other users within the app
-- [ ] Make the app only useable with an account, make the account secure (NOTE: we decided to allow both users with accounts and users without accounts)
+- [ ] Make the app only useable with an account, make the account secure (We decided to allow both users with accounts and users without accounts, see standard requirements regarding OAuth-based Google Sign-in)
 - [ ] Create a cron job that re-populates the park database weekly or monthly to ensure that all the park information is up to date
 
 **Pick 2 of your minimal requirements and break each of them down into ~2-5 smaller tasks!**
@@ -108,7 +108,7 @@ Gordon Zhang:
 - Set up schemas with Mongoose for parks and events models
 - Set up of MongoDB Atlas and connection to the backend
 - Implemented OAuth-based Google Sign-in in the application to include signed-in users and developed 
-frontend/backend functionality for usersZ
+frontend/backend functionality for users
 - Ensure local storage in browser stores redux data so refreshing page persists user information
 
 Claire Anderson
