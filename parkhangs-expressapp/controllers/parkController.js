@@ -103,12 +103,7 @@ const getParkById = async (req, res) => {
         park.googleMapsLatLon = park.googleMapsLatLon.coordinates
         return res.status(200).json({
             success: true,
-            data: {
-                name: park.name,
-                parkId: park.parkId,
-                _id: park._id,
-                googleMapsLatLon: park.googleMapsLatLon,
-            },
+            data: park,
         })
     } catch (error) {
         return res

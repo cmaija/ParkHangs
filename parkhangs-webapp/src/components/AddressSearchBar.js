@@ -21,18 +21,22 @@ class AddressSearchBar extends React.Component {
         return {
             bounds: location,
             strictbounds: true,
-            fields: ['geometry.location']
+            fields: ['geometry.location', 'formatted_address']
         }
     }
 
     handlePlaceSelect = autocomplete => {
+        console.log(autocomplete)
         const place = autocomplete.getPlace()
+        const prediciton = autocomplete.getPlacePredictions()
+        console.log(prediciton)
         this.props.placeSelected(place)
     }
 
     handleChange = event => {
         if (event.key === 'Enter') {
             event.preventDefault()
+            console.log(event.target.value)
         }
     }
 
