@@ -375,15 +375,17 @@ class ModalParkDetail extends React.Component {
                             <LoadingSpinner/>
                         </div>
                         :
-                        <EventForm
-                            event={null}
-                            eventDetails={event.details}
-                            eventId={null}
-                            showParkPicker={false}
-                            parkId={parkId}
-                            showCalendar={true}
-                            showDayPicker={true}
-                        />
+                        <div className="EventForm FormContainer">
+                            <EventForm
+                                event={null}
+                                eventDetails={event.details}
+                                eventId={null}
+                                showParkPicker={false}
+                                parkId={parkId}
+                                showCalendar={true}
+                                showDayPicker={true}
+                            />
+                        </div>
                 }
             </div>
         )
@@ -566,7 +568,7 @@ class ModalParkDetail extends React.Component {
                             </div>
                         </div>
 
-                        <div className="ModalParkDetail-rightToolbar">
+                        <div className="ModalParkDetail-rightToolbar ModalParkDetail-tabSelector">
                             {this.getSavedParkIcon()}
                         </div>
 
