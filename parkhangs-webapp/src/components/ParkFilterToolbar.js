@@ -5,6 +5,7 @@ import Select from 'react-select'
 import { cloneDeep } from 'lodash'
 import 'components/ParkFilterToolbar.css'
 import AddressSearchBar from 'components/AddressSearchBar'
+import ArrowIcon from 'assets/icons/arrow-icon.svg'
 
 class ParkFilterToolbar extends React.Component {
 
@@ -31,6 +32,7 @@ class ParkFilterToolbar extends React.Component {
                 minSizeValid: true,
                 maxSizeValid: true,
                 error: '',
+                filtersOpen: false,
             }
         }
     }
@@ -411,6 +413,10 @@ class ParkFilterToolbar extends React.Component {
         })
     }
 
+    openFilters = event => {
+        event.preventDefault()
+        this.setState({filtersOpen: !this.state.filtersOpen})
+    }
 
 
     render() {
@@ -421,11 +427,22 @@ class ParkFilterToolbar extends React.Component {
         return (
             <div className="ParkFilterToolbar">
                 <form className="filterToolbar">
-                    <div className="title">
-                        <span>PARK FILTERS</span>
-                    </div>
-
-                    <div className="filterList">
+                    <div className={`filterList ${this.state.filtersOpen ? 'responsive' : ''}`}>
+                        <div className="filterListHeader">
+                            <div className="title">
+                                <span>PARK FILTERS</span>
+                            </div>
+                            <button
+                                className="expand-filters-button"
+                                onClick={this.openFilters}>
+                                <span >
+                                    <img
+                                        className={`expand-arrow ${this.state.filtersOpen ? 'open' : 'closed'}`}
+                                        src={ArrowIcon}
+                                        alt="Expand Icon"/>
+                                </span>
+                            </button>
+                        </div>
                         <div className="filter parkSearch">
                             <label id="parkSearch" className="filter-label label-parkSearch">Select a park</label>
                             <Select
@@ -581,7 +598,7 @@ class ParkFilterToolbar extends React.Component {
                         }
                         <button
                             type="submit"
-                            className={`${this.props.loadingParks ? 'parks-loading-button' : ''} search-button`}
+                            className={`${this.props.loadingParks ? '"parks-loading-button" ' : ''}search-button`}
                             onClick={this.handleSearchSubmit}>
                             Search
                         </button>
