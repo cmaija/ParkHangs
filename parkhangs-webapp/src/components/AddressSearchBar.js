@@ -43,20 +43,22 @@ class AddressSearchBar extends React.Component {
     }
 
     createRef = event => {
-        if (!this.state.googleAutoComplete) {
-            const options = this.options(this.props.google)
-            const autocomplete = new this.props.google.maps.places.Autocomplete(event, this.state.options)
-            autocomplete.addListener("place_changed", () => {
-                this.handlePlaceSelect(autocomplete)
-            })
-            this.setState({options: options, googleAutocomplete: autocomplete})
+        if (event) {
+            if (!this.state.googleAutoComplete) {
+                const options = this.options(this.props.google)
+                const autocomplete = new this.props.google.maps.places.Autocomplete(event, options)
+                autocomplete.addListener("place_changed", () => {
+                    this.handlePlaceSelect(autocomplete)
+                })
+                this.setState({options: options, googleAutocomplete: autocomplete})
+            }
         }
     }
 
     render () {
         return (
             <input
-                value={this.props.formattedPlaceString}
+                defaultValue={this.props.formattedPlaceString}
                 onChange={this.handleChange}
                 onKeyDown={this.handleChange}
                 ref={this.createRef} />
