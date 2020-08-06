@@ -125,9 +125,12 @@ Philippe Chapdelaine
 
 ## Sketches of Main Functionality
 
-**Map Page With Menu**
-![Map Page With Menu](https://github.com/cmaija/ParkHangs/blob/master/sketch1.png?raw=true)
+**Sketches of Main Functionality**
+**Map Page With Filter**
+![Map Page With Filter](MapView.png)
 **Calendar Page**
-![Calendar Page](https://github.com/cmaija/ParkHangs/blob/master/sketch2.png?raw=true)
-**Map Page with Modal describing park features**
-![Map Page with Modal describing park features](https://github.com/cmaija/ParkHangs/blob/master/sketch3.png?raw=true)
+![Calendar Page](CalendarPage.png)
+**Park Features**
+![Park Features](ParkDetails.png)
+**User Profile Page**
+![User Profile Page](UserProfile.png)
