@@ -11,7 +11,7 @@
         margin: 0.25rem;
         display: flex;
         flex-direction: column;
-        order: 2;
+        min-width: 31rem;
     }
 }
 
