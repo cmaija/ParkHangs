@@ -32,7 +32,7 @@ class NavBar extends React.Component {
 
                     {
                         this.props.user !== null ?
-                            <Link className="username-link"to="/user">
+                            <Link className="username-link" to="/user">
                                 <span>Welcome, {this.props.user.username}</span>
                             </Link>
                             :

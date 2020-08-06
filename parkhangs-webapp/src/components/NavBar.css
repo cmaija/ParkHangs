@@ -27,6 +27,13 @@
     .NavTitle {
         padding-left: 3rem;
     }
+
+}
+
+@media only screen and (max-width: 500px) {
+    .username-link {
+        display: none;
+    }
 }
 
 
