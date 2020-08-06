@@ -34,7 +34,10 @@ const populateParks = async function() {
                     hasFacilities: parkObjectFields.facilities === "Y",
                     hasAdvisories: parkObjectFields.advisories === "Y",
                     hasSpecialFeatures: parkObjectFields.specialfeatures === "Y",
-                    googleMapsLatLon: [lat, lon],
+                    googleMapsLatLon: {
+                        type: "Point",
+                        coordinates: [lon, lat]
+                    },
                     ratings: [],
                     favoritesCount: 0
                 };

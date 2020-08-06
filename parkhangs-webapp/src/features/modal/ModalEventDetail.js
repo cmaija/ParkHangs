@@ -55,11 +55,6 @@ class ModalEventDetail extends React.Component {
         }
     }
 
-
-    editEvent = (eventToEdit) => {
-        this.setState({eventToEdit})
-    }
-
     deleteEvent = (parkId) => {
         if (window.confirm('Are you sure you want to delete this event?')) {
             this.props.deleteOneEvent(this.props.eventId, parkId)
@@ -79,7 +74,7 @@ class ModalEventDetail extends React.Component {
     }
 
     getCreatedTime = (date) => {
-        return moment.unix(date).format("YYYY/MM/DD hh:MM a");
+        return moment.unix(date).format('MMMM Do, YYYY @ h:mm A')
     }
 
     getExportedTime = (date) => {
@@ -108,6 +103,9 @@ class ModalEventDetail extends React.Component {
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span><b>Event Time:</b> {`${formattedStart} to ${formattedEnd}`}</span>
+                </div>
+                <div className="ModalEventDetail-description-section">
+                    <span><b>Event Title:</b> {event.title}</span>
                 </div>
                 <div className="ModalEventDetail-description-section">
                     <span><b>Event Details:</b> {event.details}</span>
@@ -142,33 +140,72 @@ class ModalEventDetail extends React.Component {
       }
 
     commentsTab = (event, comments) => {
+
         return (
-            <div className="Section">
-              <div className="EventComments">
-                  <span className="SectionTitle">Event Comments</span>
-                  { comments.map((comment) => {
-                    return <table>
-                      <tbody>
-                        <tr key={comment._id}>
-                          <td>
-                            <span>{comment.comment}</span> <br/>
-                            <span id="commentDetails">Left by: {comment.creatorName} on {this.getCreatedTime(comment.createdDateTime)} </span>
-                          </td>
-                          <td>
-                            <button onClick={() => {
-                              this.handleDeleteComment(comment, this.props.eventId)
-                            }}>
-                            <b>X</b>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    })
-                  }
-                  <CommentForm eventId={this.props.eventId}/>
+            <div className="ModalEventDetail-comments">
+                <div className="EventComments">
+                    <div className="EventCommentsHistory Column">
+                    {
+                    comments.length > 0 ?
+                        <table>
+                        <thead>
+                            <tr>
+                                <td>
+                                    <b>Username:</b>
+                                </td>
+                                <td>
+                                    <b>Created at:</b>
+                                </td>
+                                <td>
+                                    <b>Comment:</b>
+                                </td>
+                                <td>
+                                    <b>Delete:</b>
+                                </td>
+                             </tr>
+                        </thead>
+                        <tbody>
+
+                        {comments.map((comment) => {
+                        return <tr key={comment._id}>
+                            <td>
+                                {comment.creatorName}
+                            </td>
+                            <td>
+                                {this.getCreatedTime(comment.createdDateTime)}
+                            </td>
+                            <td>
+                                {comment.comment}
+                            </td>
+                            <td>
+                                <button onClick={() => {
+                                    this.handleDeleteComment(comment, this.props.eventId)
+                                }}>
+                                <b>X</b>
+                                </button>
+                            </td>
+                            </tr>
+                        })
+
+                    }
+                        </tbody>
+                        </table>
+                    :
+                    <div>
+                        There are no comments for this park.
+                    </div>
+                    }
+
+
+
+                    </div>
+                    <div className="EventCommentForm Column">
+                       <CommentForm eventId={this.props.eventId}/>
+                   </div>
+
+
                 </div>
-              </div>
+            </div>
         )
     }
 
@@ -178,32 +215,42 @@ class ModalEventDetail extends React.Component {
                 <LoadingSpinner />
             </div>
         )
+
         const eventForm = (
             <div className="AddEventForm">
                 <EventForm
                     event={event}
                     eventDateTime={event.eventDateTime}
                     eventEndDateTime={event.eventEndDateTime}
+                    eventTitle={event.title}
                     eventDetails={event.details}
                     eventId={event._id}
-                    showDayPicker={false} />
+                />
             </div>
         )
         return this.props.updatingEvent ? loadingState : eventForm
     }
 
     render () {
+        if (this.props.loading) {
+            return (
+                <div className="LoadingState">
+                    <LoadingSpinner key="loadingModal"/>
+                </div>
+            )
+        }
+
         const event = this.props.events.find(event => event._id === this.props.eventId)
-        const parkName =  this.props.parks.find(park => park._id === event.parkId).name
+        const parkName =  this.props.selectedPark.name
         const eventStart = this.eventStartTime(event.eventDateTime)
         const formattedEnd = this.eventEndTime(event.eventEndDateTime)
-        const parkStrNum = this.props.parks.find(park => park._id === event.parkId).streetNumber
-        const parkStrName = this.props.parks.find(park => park._id === event.parkId).streetName
+        const parkStrNum = this.props.selectedPark.streetNumber
+        const parkStrName = this.props.selectedPark.streetName
         const isFavorited = this.isFavorited(event)
         const comments = this.getCommentsByEvent()
 
         let newEvent = {
-            title: event.details,
+            title: event.title,
             description: event.details,
             location: parkStrNum + " " + parkStrName + " BC, Canada",
             startTime: this.getExportedTime(event.eventDateTime),
@@ -286,9 +333,11 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const mapStateToProps = (state) => ({
+
     events: state.events.flattenedEvents,
     updatingEvent: state.events.updatingEvent,
-    parks: state.parks.parks,
+    selectedPark: state.parks.selectedPark,
+    loading: state.parks.loadingParkDetails,
     comments: state.comments.commentsByEventId,
     user: state.user.user
 })

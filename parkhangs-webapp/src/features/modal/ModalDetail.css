@@ -22,7 +22,7 @@
 
 .modal-card {
     z-index: 102;
-    background-color: #E3F1DF;  
+    background-color: #E3F1DF;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -88,7 +88,7 @@
 }
 
 @media only screen and (max-width:600px){
-    .modal-card {  
+    .modal-card {
         font-size: 0.9rem;
     }
 }

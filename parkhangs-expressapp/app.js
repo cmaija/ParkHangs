@@ -8,7 +8,6 @@ var indexRouter = require('./routes/index');
 const database = require('./database/index');
 
 var app = express();
-var uuid = require('uuidv4');
 var cors = require('cors');
 
 // view engine setup
@@ -47,10 +46,27 @@ app.use(function (err, req, res, next) {
 //database:
 database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// this is used to populate the database. Do not uncomment unless we need to add the parks
-// to the database again!
+// this is used to populate the database with parks.
+// Do not uncomment unless we need to add the parks to the database again!
 
 // const populatePark = require("./scripts/populateParks");
 // populatePark();
+
+// after you run the populate park script, it is necessary to add the geospatial index
+// back to the parks collection. just log in to mongodb atlas and go to the
+// parks collection and select indexes -> click create index.
+// add the params { "googleMapsLatLon": "2dsphere" } and click review -> create. 
+
+
+// this is used to populate the database with park facilities.
+// Do not uncomment unless we need to add the park facilities to the database again!
+// const populateFacilities = require('./scripts/populateFacilities')
+// populateFacilities()
+
+
+// this is used to populate the database with park special features.
+// Do not uncomment unless we need to add the park special features to the database again!
+// const populateParkSpecialFeatures = require('./scripts/populateSpecialFeatures')
+// populateParkSpecialFeatures()
 
 module.exports = app;

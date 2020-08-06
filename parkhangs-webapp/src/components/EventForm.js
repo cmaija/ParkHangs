@@ -9,7 +9,8 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
-import {closeModal} from 'features/modal/modalSlice';
+import { closeModal } from 'features/modal/modalSlice';
+
 
 class EventForm extends React.Component {
 
@@ -17,12 +18,17 @@ class EventForm extends React.Component {
         super(props)
 
         this.state = {
+            eventTitle: this.props.eventTitle || null,
             eventDetail: this.props.eventDetails || null,
             eventStartTime: this.eventStartTime(),
             eventEndTime: this.eventEndTime(),
             eventDate: this.eventDate(),
-            parkId: this.props.parkId || null
+            parkId: this.props.parkId || null,
         }
+    }
+
+    eventTitle = () => {
+        return this.props.eventTitle || ''
     }
 
     eventDetail = () => {
@@ -80,6 +86,17 @@ class EventForm extends React.Component {
         return this.props.showDayPicker
     }
 
+    showDatePicker = () => {
+        return this.props.showDatePicker
+    }
+
+    dayPickerDateFormat = () => {
+        if (this.props.eventDateTime) {
+            return new Date(this.props.eventDateTime)
+        }
+        return null
+    }
+
     isNewEvent = () => {
         return !this.props.eventId
     }
@@ -90,6 +107,13 @@ class EventForm extends React.Component {
 
     handleEventEndTimeChange = (time) => {
         this.setState({eventEndTime: time})
+    }
+
+
+    handleUpdateTitle = (event) => {
+        this.setState({
+            eventTitle: event.target.value
+        })
     }
 
     handleUpdateDetails = (event) => {
@@ -103,8 +127,8 @@ class EventForm extends React.Component {
     }
 
     handleAddEvent = (event) => {
-        event.preventDefault()
 
+        event.preventDefault()
         const eventStartTimestamp = moment(`${this.parsedEventStartTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
 
         let eventEndDateTime
@@ -113,26 +137,31 @@ class EventForm extends React.Component {
             eventEndDateTime = moment(`${this.parsedEventEndTime()} ${this.parsedEventDate()}`, 'hh:mm D MM YY').unix()
         }
 
+        const title = this.state.eventTitle || this.eventTitle
         const detail = this.state.eventDetail || this.eventDetail()
-        const eventDateTime = eventStartTimestamp
 
         if (!this.props.eventId) {
 
             const newEvent = {
                 parkId: this.state.parkId,
+                title: title,
                 details: detail,
-                eventDateTime: eventDateTime,
+                eventDateTime: eventStartTimestamp,
                 eventEndDateTime: eventEndDateTime,
             }
 
             this.props.addOneEvent(this.props.user, newEvent)
+
         } else {
+
             const updatedEvent = {
                 eventId: this.props.eventId,
+                title: title,
                 details: detail,
-                eventDateTime: eventDateTime,
+                eventDateTime: eventStartTimestamp,
                 eventEndDateTime: eventEndDateTime,
             }
+
             this.props.updateEvent(updatedEvent)
 
         }
@@ -145,18 +174,14 @@ class EventForm extends React.Component {
         this.setState({
             parkId: event.target.value
         });
-
-    }
-
-    sortParkNamesAlphabetically = () => {
-        return this.props.parks.slice().sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
     }
 
     render() {
-        const eventDate = this.eventDate()
+        const eventDate = this.dayPickerDateFormat()
         const eventStartTime = this.eventStartTime()
         const eventEndTime = this.eventEndTime()
 
+        const eventTitle = this.eventTitle()
         const eventDetail = this.eventDetail()
         const isNewEvent = this.isNewEvent()
         const showCalendar = this.showCalendar()
@@ -180,13 +205,20 @@ class EventForm extends React.Component {
                             clearIcon={null}/>
                     </div>
                     <div className="formsection time">
-                        <label htmlFor="eventTime">Event End Time: (optional)</label>
+                        <label htmlFor="eventTime">Event End Time:</label>
                         <TimePicker
                             onChange={this.handleEventEndTimeChange}
                             id="eventEndTime"
                             disableClock={true}
                             value={eventEndTime}
                             clearIcon={null}/>
+                    </div>
+                    <div className="formsection details">
+                        <label htmlFor="eventDetail">Title: </label>
+                        <textarea
+                            onChange={this.handleUpdateTitle}
+                            id="eventTitle"
+                            defaultValue={eventTitle}/>
                     </div>
                     <div className="formsection details">
                         <label htmlFor="eventDetail">Details: </label>
@@ -199,9 +231,10 @@ class EventForm extends React.Component {
                         this.props.showParkPicker &&
                         <div className="formsection park">
                             <label htmlFor="eventPark">Select Park</label>
-                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark">
+                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark" defaultValue="">
+                            <option disabled={true} value="">Select a Park</option>
                                 {
-                                    this.sortParkNamesAlphabetically().map((park) => {
+                                    this.props.parks.map((park) => {
                                         return <option
                                             key={park._id}
                                             value={park._id}>{park.name}</option>
@@ -228,7 +261,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
     parks: state.parks.parks,
-    user: state.user.user
+    user: state.user.user,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventForm);

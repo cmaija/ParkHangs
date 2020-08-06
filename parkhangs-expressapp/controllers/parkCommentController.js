@@ -1,6 +1,5 @@
 const ParkComment = require('../models/ParkCommentModel');
 const express = require('express');
-const Request = require("request");
 var assert = require('assert');
 var mongoose = require('mongoose');
 const database = require('../database/index');
@@ -15,17 +14,24 @@ const getParkComments = async (req, res) => {
         if (err) {
             return res.status(400).json({success: false, error: err})
         }
+
         if (!parkComments.length) {
+            if (parkComments.length === 0) {
+                return res.status(200).json({success: true, data: []})
+            }
+
             return res.status(404).json({success: false, error: `Park comments not found`})
         }
+
         return res.status(200).json({success: true, data: parkComments})
+
     }).catch(err => console.log(err))
 };
 
 // Adds a new park comment
 const addParkComment = async (req, res) => {
-  const user = req.body.user;
-  const commentDetails = req.body.newComment;
+    const user = req.body.user;
+    const commentDetails = req.body.newComment;
 
     var newParkComment = {
         parkId: commentDetails.parkId ? commentDetails.parkId : null,
@@ -68,7 +74,7 @@ const deleteParkComment = async (req, res) => {
         return res.status(200).json({success: true, data: commentToDelete})
     } catch (error) {
         return res.status(404).json({success: false, error: `Could not find and delete the park comment with that id`})
-      }
+    }
 }
 
 module.exports = {

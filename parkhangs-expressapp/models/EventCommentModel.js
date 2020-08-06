@@ -8,7 +8,7 @@ const EventComment = new Schema(
         comment: {type: String, required: true},
         creatorId: {type: Number, required: true},
         creatorName: {type: String, required: true},
-        createdDateTime: {type: Date, required: true}
+        createdDateTime: {type: String, required: true}
     },
     {
       collection : 'eventComments'

@@ -4,7 +4,7 @@ import ModalEventDetail from 'features/modal/ModalEventDetail'
 import ModalUserEdit from "./ModalUserEdit"
 import ModalParkDetail from "./ModalParkDetail"
 import ModalNewEvent from 'features/modal/ModalNewEvent'
-
+import './Modal.css'
 import { connect } from 'react-redux'
 
 import {
@@ -46,7 +46,7 @@ class Modal extends React.Component {
                                 {hasComponent && <ComponentName {...this.props.modalProps.componentParams}/>}
                             </div>
                         </div>
-                        <button className="button" onClick={this.close}>close</button>
+                        <button className="button" onClick={this.close}>Close</button>
                     </div>
                 </div>
             )

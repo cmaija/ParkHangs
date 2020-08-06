@@ -2,32 +2,37 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    min-height: 22rem;
 }
 
-.Title {
-    text-transform: uppercase;
-    font-size: 18px;
-    padding: 1rem 0;
-    font-weight: 500;
+.LoadingState {
+    width: 100%;
+    height: 22rem;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
-.Details {
+.ModalParkDetail-header {
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.ModalParkDetail-Title {
+    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    font-weight: bold;
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 0.5rem;
+    background-color:#173630;
+    color:white;
+    margin-bottom: 1rem;
 }
 
-.SectionTitle {
-    text-transform: uppercase;
-    font-size: 16px;
-    font-weight: 500;
-    padding-bottom: 0.75rem;
-    padding-right: 20px;
-}
 
 .Section {
     flex: 1;
@@ -42,14 +47,18 @@
     flex-direction: column;
     align-items: flex-start;
 }
-
+.ParkLocationDetails > div{
+    padding: 0.5rem;
+}
 .OtherDetails {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
-
+.OtherDetails > div {
+    padding: 0.5rem;
+}
 .Event {
     width: 100%;
     display: flex;
@@ -65,8 +74,6 @@
 .FilledHeartIcon {
     position: absolute;
     align-self: flex-end;
-    height: 1.875rem;
-    width: 1.875rem;
     padding: 0.625rem;
     fill: red
 }
@@ -74,8 +81,6 @@
 .NotFillHeartIcon {
     position: absolute;
     align-self: flex-end;
-    height: 1.875rem;
-    width: 1.875rem;
     padding: 0.625rem;
 }
 
@@ -86,4 +91,198 @@
     font-weight: lighter;
     text-decoration: none;
     padding: 0.1rem;
+}
+
+.ModalParkDetail-tabSelector {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+    height: 100%;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tab-selected {
+    border-bottom: 2px solid #3b5238;
+}
+
+.ModalParkDetail-toolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    height: 2.5rem;
+}
+
+.ModalParkDetail-leftToolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-bottom: 2px;
+    height: 100%;
+}
+.ModalParkDetail-rightToolbar {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    padding-right: 2.5rem;
+    height: 100%;
+}
+
+.ModalParkDetail-divider {
+    width: 98%;
+    height: 1px;
+    background-color: #bfbfbf;
+}
+.ModalParkDetail-Body {
+    width: 100%;
+    min-height: 13rem;
+    padding-left: 2.5rem;
+    padding-top: 1rem;
+}
+.ModalParkDetail-facilities-and-features{
+    display: flex;
+    justify-content: center;
+}
+.Column {
+    flex: 50%;
+}
+.FacilitiesTable {
+    display: flex;
+    max-height: 19rem;
+    overflow: scroll;
+
+}
+.TableContainer {
+    display: flex;
+    width: 100%;
+    height:100%;
+    padding: 0.5rem;
+}
+.FeaturesTable {
+   display: flex;
+   align-self: start;
+   padding: 0 1rem;
+}
+.ParkComments{
+    max-height: 19rem;
+    overflow: scroll;
+    width: 90%;
+    display: flex;
+}
+.Ratings{
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+.Ratings > button {
+    font-size:100%;
+    font-family:inherit;
+    border:0;
+    background: none;
+    outline: none;
+}
+
+.rated {
+    color: gold;
+}
+
+.Ratings:hover > button {
+    color: black;
+}
+
+.Ratings:hover > button:hover,
+.Ratings:hover > button:hover ~ button{
+    font-size: 2rem;
+    color: gold
+}
+
+.star {
+    font-size: 2rem;
+}
+.tr {
+    padding: 0.5rem;
+}
+
+@media only screen and (max-width:600px){
+    .ModalParkDetail-leftToolbar {
+        padding-left: 0.2rem;
+        height: 100%;
+    }
+    .ModalParkDetail-tabName {
+        font-size: 0.55rem;
+    }
+   .FilledHeartIcon{
+        height: 0.9rem;
+        width: 0.9rem;
+    }
+   .NotFillHeartIcon{
+        height: 0.9rem;
+        width: 0.9rem;
+    }
+   .ModalParkDetail-Body{
+        font-size: 0.8rem;
+    }
+   .EventTable{
+        width: 95%;
+    }
+    .Column {
+        margin: 0rem 3rem;
+    }
+   .FacilitiesTable {
+        margin-right: 1rem;
+    }
+   .FeaturesTable {
+        margin-left: 0;
+    }
+   .ParkCommentForm {
+       margin-left: 0;
+   }
+}
+@media only screen and (min-width:600px){
+    .ModalParkDetail-leftToolbar {
+        padding-left: 0.5rem;
+        height: 100%;
+    }
+    .ModalParkDetail-tabName {
+        font-size: 0.85rem;
+    }
+    .EventTable {
+        width: 98%;
+    }
+    .FilledHeartIcon {
+        height: 0.9rem;
+        width: 0.9rem;
+   }
+   .NotFillHeartIcon {
+        height: 0.9rem;
+        width: 0.9rem;
+   }
+   .FeaturesTable {
+        margin-left: 0;
+   }
+   .Column {
+        margin: 0rem 2rem;
+    }
+
+}
+
+@media only screen and (min-width: 780px){
+    .ModalParkDetail-leftToolbar {
+        padding-left: 2.5rem;
+    }
+    .ModalParkDetail-tabName {
+        font-size: 0.9rem;
+    }
+    .FilledHeartIcon {
+        height: 1.7rem;
+        width: 1.7rem;
+        padding: 0.625rem;
+    }
+    .NotFillHeartIcon{
+        height: 1.7rem;
+        width: 1.7rem;
+        padding: 0.625rem;
+    }
 }
