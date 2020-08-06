@@ -102,7 +102,8 @@
 .ModalParkDetail-tabSelector {
     display: flex;
     align-items: center;
-    margin-right: 2rem;
+    justify-content: space-between;
+    padding-right: 1rem;
     height: 100%;
     cursor: pointer;
     font-weight: bold;
@@ -310,7 +311,25 @@
     padding: 0.5rem 4rem;
 }
 
-@media only screen and (max-width: 550px) {
+.header-text {
+    white-space: nowrap;
+}
+
+.facility {
+    height: 5rem;
+}
+
+.header-text-label {
+    width: 20rem;
+}
+
+.EventForm {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media only screen and (max-width: 556px) {
 
     .ModalParkDetail-facilities-and-features {
         display: flex;
@@ -364,20 +383,22 @@
     .ParkCommentForm {
         margin-left: 0;
     }
-}
-
-.ModalParkDetail-FacilitiesTable{
-    font-size: 0.6rem;
-}
-
-@media only screen and (max-width: 838px) {
-    .ParkComments {
-        display: inline;
+    .AddEventForm {
+        transform: scale(0.7, 0.7);
     }
-}
+    .ModalParkDetail-FacilitiesTable{
+    font-size: 0.6rem;
+    }
+    .ModalParkDetail-Body{
+        transform: scale(0.8, 0.8);
+    }
 
-@media only screen and (min-width: 550px) {
+ }
 
+
+
+@media only screen and (min-width: 554px) {
+    
     .ModalParkDetail-FacilitiesTable{
         font-size: 1rem;
     }
@@ -418,39 +439,45 @@
         margin: 0rem 1rem;
     }
 
-}
-
-@media only screen and (min-width: 780px) {
-    .ModalParkDetail-leftToolbar {
-        padding-left: 2.5rem;
+    .AddEventForm {
+        transform: scale(0.85, 0.85);
+        margin-right: 2rem;
     }
 
-    .ModalParkDetail-tabName {
-        font-size: 0.9rem;
-        white-space: nowrap;
+    .ModalParkDetail-tabSelector{
+        margin-right: 1rem;
     }
-
-    .FilledHeartIcon {
-        height: 1.7rem;
-        width: 1.7rem;
-        padding: 0.625rem;
+    .ModalParkDetail-toolbar{
+        transform: scale(0.7, 0.7);
     }
-
-    .NotFillHeartIcon {
-        height: 1.7rem;
-        width: 1.7rem;
-        padding: 0.625rem;
+    .ModalParkDetail-leftToolbar{
+        margin-left: -3.5rem;
+    }
+    .ModalParkDetail-Body{
+        transform: scale(0.75, 0.75);
     }
 }
 
-.header-text {
-    white-space: nowrap;
+@media only screen and (min-width: 610px){
+    .ModalParkDetail-Body{
+        transform: scale(0.8, 0.8);
+    }
+    .ModalParkDetail-toolbar{
+        transform: scale(0.8, 0.8);
+    }
+    .ModalParkDetail-leftToolbar{
+        margin-left: -3rem;
+    }
+
 }
 
-.facility {
-    height: 5rem;
+@media only screen and (min-width: 830px) {
+    .ModalParkDetail-toolbar{
+        transform: scale(1, 1);
+    }
+    .ModalParkDetail-leftToolbar{
+        margin-left: 0rem;
+    }
+
 }
 
-.header-text-label {
-    width: 20rem;
-}

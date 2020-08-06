@@ -251,12 +251,13 @@ class EventForm extends React.Component {
                                 </select>
                             </div>
                         }
+                        <button className={"submit-message-button"}
+                        onClick={this.handleAddEvent}>
+                        <span>{isNewEvent ? 'Create Event' : 'Update Event'}</span>
+                         </button>
                     </div>
                 </form>
-                <button className={"submit-message-button"}
-                        onClick={this.handleAddEvent}>
-                    <span>{isNewEvent ? 'Create Event' : 'Update Event'}</span>
-                </button>
+                
             </div>)
 
     }
