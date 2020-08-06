@@ -1,7 +1,6 @@
 .EventForm {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     width: 100%;
 }
 
@@ -11,14 +10,53 @@
     align-items: flex-start;
     width: 100%;
 }
-.submit-message-button{
+
+.submit-message-button {
     align-self: center;
     font-family: 'Ubuntu', sans-serif;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 20%;
 }
 
 .react-time-picker {
     background-color: white;
 }
-textarea{
+
+.edit-event-label {
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+}
+
+textarea {
     font-family: 'Ubuntu', sans-serif;
+}
+
+.select-park-label {
+    padding-top: 0.75rem;
+    padding-bottom: 0.5rem;
+}
+
+@media only screen and (max-width: 838px) {
+    .AddEventForm {
+        order: 2;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+#eventDate{
+    display: flex;
+    flex-direction: column;
+}
+
+.non-calendar-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calendar-date-select{
+    display: flex;
+    flex-direction: column;
 }

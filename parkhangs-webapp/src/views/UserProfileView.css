@@ -3,16 +3,18 @@
 }
 
 .Edit-Profile-Button{
-    width: 6rem;
+    white-space: nowrap;
+    width: 7rem;
     height: 1.875rem;
-    margin: 1.5625rem;
+    margin-top: 1.5625rem;
 }
 
 .Favourite-Parks-Title{
-    margin-top: 5rem;
+    margin-top: 3rem;
 }
 
 .Favourite-Parks-Table{
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
 }

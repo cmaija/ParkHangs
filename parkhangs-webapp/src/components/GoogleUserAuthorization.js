@@ -66,7 +66,7 @@ class GoogleUserAuthorization extends Component {
                     >
                     </GoogleLogout> : <GoogleLogin
                         clientId={CLIENT_ID}
-                        buttonText='Login with Google'
+                        buttonText='Login'
                         onSuccess={this.login}
                         onFailure={this.handleLoginFailure}
                         cookiePolicy={'single_host_origin'}

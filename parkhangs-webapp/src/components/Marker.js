@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {openModal} from 'features/modal/modalSlice.js'
-import MarkerIcon from 'assets/icons/marker.png'
+import MarkerIcon from 'assets/icons/Marker.svg'
 import {connect} from "react-redux"
 import { selectPark } from 'features/parks/parksSlice'
 
