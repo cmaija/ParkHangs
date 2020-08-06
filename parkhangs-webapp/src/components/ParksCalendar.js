@@ -1,13 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
+import {connect} from 'react-redux'
+import {Calendar, momentLocalizer, Views} from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'components/ParksCalendar.css'
-import { openModal } from "features/modal/modalSlice"
-import { selectPark } from 'features/parks/parksSlice'
+import {openModal} from "features/modal/modalSlice"
+import {selectPark} from 'features/parks/parksSlice'
 
-import { cloneDeep } from 'lodash'
+import {cloneDeep} from 'lodash'
 
 const localizer = momentLocalizer(moment)
 let allViews = Object.keys(Views).map(k => Views[k])
@@ -28,7 +28,8 @@ class ParksCalendar extends React.Component {
     filterEvents = (parks) => {
         return this.props.events.filter((event) => {
             const eventsAtPark = parks.filter(park => {
-                return event.parkId === park._id})
+                return event.parkId === park._id
+            })
             return eventsAtPark.length > 0
         })
     }
@@ -46,6 +47,16 @@ class ParksCalendar extends React.Component {
             }
         }
         this.props.openModal(props)
+    }
+
+    eventStyleGetter = () => {
+        const backgroundColor = '#4caf50';
+        const style = {
+            backgroundColor: backgroundColor,
+        };
+        return {
+            style: style
+        };
     }
 
     render() {
@@ -88,6 +99,7 @@ class ParksCalendar extends React.Component {
                     views={allViews}
                     selectable={true}
                     onSelectSlot={this.addNewEvent}
+                    eventPropGetter={this.eventStyleGetter}
                 />
             </div>
         )
