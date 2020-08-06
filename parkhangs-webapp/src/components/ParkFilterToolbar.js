@@ -30,6 +30,7 @@ class ParkFilterToolbar extends React.Component {
                 maxRatingValid: true,
                 minSizeValid: true,
                 maxSizeValid: true,
+                error: '',
             }
         }
     }
@@ -42,6 +43,10 @@ class ParkFilterToolbar extends React.Component {
     }
 
     validateDistance = () => {
+        if (this.state.distance === '' && this.state.lat === '' && this.state.lon === '') {
+            return true
+        }
+
         if (this.state.distance >= 0 && (!this.state.lat || !this.state.lon)) {
             return false
         }
@@ -90,6 +95,10 @@ class ParkFilterToolbar extends React.Component {
 
             searchParams = this.pruneSearchParams(searchParams)
 
+            if (!this.fieldsAreValid()) {
+                this.setState({error: 'One or more fields are invalid'})
+            }
+
             if (Object.keys(searchParams).length > 0 && this.fieldsAreValid()) {
                 this.props.queryParks(searchParams)
             }
@@ -123,18 +132,26 @@ class ParkFilterToolbar extends React.Component {
         return params
     }
 
+    resetError = () => {
+        this.setState({error: ''})
+    }
+
     handleSelectFacility = selectedFacilities => {
+        this.resetError()
         const selected = selectedFacilities
         this.setState({selectedFacilities: selected})
     }
 
     handleSelectSpecialFeature = selectedSpecialFeatures => {
+        this.resetError()
         const selected = selectedSpecialFeatures
         this.setState({selectedSpecialFeatures: selected})
     }
 
     handleDistanceInput = event => {
+        this.resetError()
         event.preventDefault()
+        this.setState({error: ''})
         let parsedInput = parseFloat(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
             parsedInput = ''
@@ -143,11 +160,13 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleSelectWashrooms = event => {
+        this.resetError()
         const selected = this.state.hasWashrooms
         this.setState({hasWashrooms: !selected})
     }
 
     handleMinimumRatingInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -160,6 +179,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleMaximumRatingInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -172,6 +192,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMinRating = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({minRating: ''}, () => {
             this.validateMinRating()
@@ -180,6 +201,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMaxRating = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({maxRating: ''}, () => {
             this.validateMinRating()
@@ -188,6 +210,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleMinimumSizeInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -200,6 +223,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleMaximumSizeInput = event => {
+        this.resetError()
         event.preventDefault()
         let parsedInput = parseInt(event.target.value, 10)
         if (Number.isNaN(parsedInput)) {
@@ -212,6 +236,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMinSize = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({minSize: ''}, () => {
             this.validateMinSize()
@@ -220,6 +245,7 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearMaxSize = event => {
+        this.resetError()
         event.preventDefault()
         this.setState({maxSize: ''}, () => {
             this.validateMinSize()
@@ -228,18 +254,22 @@ class ParkFilterToolbar extends React.Component {
     }
 
     clearWashrooms = () => {
+        this.resetError()
         this.setState({hasWashrooms: false})
     }
 
     clearFacilities = () => {
+        this.resetError()
         this.setState({selectedFacilities: []})
     }
 
     clearSpecialFeatures = () => {
+        this.resetError()
         this.setState({selectedSpecialFeatures: []})
     }
 
     clearSelectedParkName = () => {
+        this.resetError()
         this.setState({parkName: ''})
     }
 
@@ -331,11 +361,12 @@ class ParkFilterToolbar extends React.Component {
     }
 
     handleSelectedPark = selectedPark => {
+        this.resetError()
         this.setState({parkName: selectedPark})
     }
 
     handleSelectedPlace = (place) => {
-        console.log(place)
+        this.resetError()
         const lat = place.geometry.location.lat()
         const lon = place.geometry.location.lng()
         const formattedPlaceString = place.formatted_address
@@ -360,6 +391,10 @@ class ParkFilterToolbar extends React.Component {
 
     clearAllLocation = () => {
         this.setState({distance: '', lat: '', lon: '', formattedPlaceString: ''})
+    }
+
+    clearLocation = () => {
+        this.setState({lat: '', lon: '', formattedPlaceString: ''})
     }
 
     handleClearSearch = event => {
@@ -422,7 +457,8 @@ class ParkFilterToolbar extends React.Component {
                                     <span className="filter-label">Address</span>
                                     <AddressSearchBar
                                         formattedPlaceString={this.state.formattedPlaceString}
-                                        placeSelected={(place) => this.handleSelectedPlace(place)}/>
+                                        placeSelected={(place) => this.handleSelectedPlace(place)}
+                                        placeDeleted={this.clearLocation}/>
                                 </div>
                                 <div className="location-subfilter">
                                     <label id="distance" className="filter-label">Search Radius (km)</label>
@@ -548,6 +584,10 @@ class ParkFilterToolbar extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        {
+                            this.state.error !== '' &&
+                            <span>{this.state.error}</span>
+                        }
                         <button
                             type="submit"
                             className={`${this.props.loadingParks ? 'parks-loading-button' : ''} search-button`}

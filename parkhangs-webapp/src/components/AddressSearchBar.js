@@ -40,6 +40,9 @@ class AddressSearchBar extends React.Component {
             event.preventDefault()
             console.log(event.target.value)
         }
+        if (event.key === 'Backspace') {
+            this.props.placeDeleted()
+        }
     }
 
     createRef = event => {
