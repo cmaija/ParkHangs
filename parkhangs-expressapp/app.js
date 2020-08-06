@@ -52,6 +52,11 @@ database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // const populatePark = require("./scripts/populateParks");
 // populatePark();
 
+// after you run the populate park script, it is necessary to add the geospatial index
+// back to the parks collection. just log in to mongodb atlas and go to the
+// parks collection and select indexes -> click create index.
+// add the params { "googleMapsLatLon": "2dsphere" } and click review -> create. 
+
 
 // this is used to populate the database with park facilities.
 // Do not uncomment unless we need to add the park facilities to the database again!

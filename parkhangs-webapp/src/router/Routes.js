@@ -11,6 +11,7 @@ import UserProfileView from "../views/UserProfileView";
 import { fetchParks, fetchFacilityTypes, fetchSpecialFeatures } from 'features/parks/parksSlice'
 import { fetchEvents } from 'features/events/eventsSlice'
 import { fetchEventComments, fetchParkComments } from 'features/comments/commentSlice'
+import { getUserLocation } from 'features/users/userSlice'
 
 class Routes extends Component {
     render() {
@@ -40,6 +41,7 @@ class Routes extends Component {
         this.props.getAllParkComments()
         this.props.getFacilityTypes()
         this.props.getSpecialFeatures()
+        this.props.getUserLocation()
     }
 
 }
@@ -58,6 +60,7 @@ const mapDispatchToProps = (dispatch) => ({
     getAllParkComments:() => dispatch(fetchParkComments()),
     getFacilityTypes: () => dispatch(fetchFacilityTypes()),
     getSpecialFeatures: () => dispatch(fetchSpecialFeatures()),
+    getUserLocation: () => dispatch(getUserLocation())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routes)

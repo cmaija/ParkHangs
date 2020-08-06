@@ -145,6 +145,7 @@ const queryParks = async (req, res) => {
         hasWashrooms: query.hasWashrooms !== undefined ? parseWashroomQuery(query.hasWashrooms) : undefined,
         facilities: query.facilities !== undefined ? parseFacilitiesFromQuery(query.facilities) : undefined,
         specialFeatures: query.specialFeatures !== undefined ? parseSpecialFeaturesFromQuery(query.specialFeatures) : undefined,
+        googleMapsLatLon: queryHasLatLon(query) ? parseLatLon(query) : undefined
     }
 
     let queryObject = {
@@ -153,6 +154,7 @@ const queryParks = async (req, res) => {
         hasWashrooms: incomingQuery.hasWashrooms,
         facilities: incomingQuery.facilities,
         specialFeatures: incomingQuery.specialFeatures,
+        googleMapsLatLon: incomingQuery.googleMapsLatLon,
     }
 
     for (let query of Object.keys(queryObject)) {
@@ -281,6 +283,22 @@ function parseSpecialFeaturesFromQuery (featuresQuery) {
     })
     return { $all: parsedQuery }
 }
+
+function queryHasLatLon (query) {
+    const lat = parseFloat(query.lat)
+    const lon = parseFloat(query.lon)
+    const distance = parseFloat(query.distance)
+    return lat && lon && distance && distance > 0
+}
+
+function parseLatLon (query) {
+    const lat = parseFloat(query.lat)
+    const lon = parseFloat(query.lon)
+    const distance = parseFloat(query.distance)
+    const earthRadiusInKilometers = 6371
+    return { '$geoWithin': { $centerSphere: [ [ lon, lat ], distance / earthRadiusInKilometers ] } }
+}
+
 module.exports = {
     getParks,
     addRating,
