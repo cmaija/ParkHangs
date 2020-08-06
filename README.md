@@ -125,7 +125,7 @@ Philippe Chapdelaine
 
 ## Sketches of Main Functionality
 
-**Sketches of Main Functionality**
+**Main Functionality**
 **Map Page With Filter**
 ![Map Page With Filter](MapView.png)
 **Calendar Page**
