@@ -4,28 +4,33 @@ import 'react-add-to-calendar/dist/react-add-to-calendar.css';
 
 class ShareCalendar extends React.Component {
 
-  constructor(props){
-      super(props);
+    constructor(props) {
+        super(props);
 
-      this.state = {
-          showDetails: false
-      }
-  }
+        this.state = {
+            showDetails: false
+        }
+    }
 
-  render() {
-    let icon= { 'calendar-plus-o': 'left' };
-    let items= [
-      {google: 'Google'},
-      {apple: 'Apple'}
-    ]
+    render() {
+        let icon = {'calendar-plus-o': 'center'};
 
-    return <AddToCalendar
-                        event={this.props.event}
-                        buttonTemplate={icon}
-                        buttonLabel=""
-                        listItems={items}
-                        dropdownClass="dropdown"
-            />;
-  };
+        let items = [
+            {outlook: 'Outlook'},
+            {apple: 'iCal'},
+            {yahoo: 'Yahoo!'},
+            {google: 'Google'}
+        ];
+
+        return <AddToCalendar
+            buttonWrapperClass="react-add-to-calendar-wrapper"
+            event={this.props.event}
+            buttonTemplate={icon}
+            listItems={items}
+            dropdownClass="dropdown"
+            buttonLabel=""
+        />
+    }
 }
+
 export default ShareCalendar;

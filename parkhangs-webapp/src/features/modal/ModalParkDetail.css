@@ -20,6 +20,7 @@
     align-items: center;
     width: 100%;
 }
+
 .ModalParkDetail-Title {
     align-items: center;
     flex-direction: column;
@@ -28,8 +29,8 @@
     font-size: 1.25rem;
     width: 100%;
     padding: 0.5rem;
-    background-color:#173630;
-    color:white;
+    background-color: #173630;
+    color: white;
     margin-bottom: 1rem;
 }
 
@@ -47,18 +48,23 @@
     flex-direction: column;
     align-items: flex-start;
 }
-.ParkLocationDetails > div{
+
+.ParkLocationDetails > div {
     padding: 0.5rem;
 }
+
 .OtherDetails {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    text-align: left;
 }
+
 .OtherDetails > div {
     padding: 0.5rem;
 }
+
 .Event {
     width: 100%;
     display: flex;
@@ -66,7 +72,7 @@
     justify-content: space-between;
 }
 
-.EventTable{
+.EventTable {
     max-height: 19rem;
     overflow: scroll
 }
@@ -96,7 +102,8 @@
 .ModalParkDetail-tabSelector {
     display: flex;
     align-items: center;
-    margin-right: 2rem;
+    justify-content: space-between;
+    padding-right: 1rem;
     height: 100%;
     cursor: pointer;
     font-weight: bold;
@@ -122,6 +129,7 @@
     margin-bottom: 2px;
     height: 100%;
 }
+
 .ModalParkDetail-rightToolbar {
     display: flex;
     flex-direction: row;
@@ -135,51 +143,132 @@
     height: 1px;
     background-color: #bfbfbf;
 }
+
 .ModalParkDetail-Body {
-    width: 100%;
     min-height: 13rem;
-    padding-left: 2.5rem;
-    padding-top: 1rem;
+    padding: 2rem 2rem 2rem 5rem;
 }
-.ModalParkDetail-facilities-and-features{
+
+.existing-comment-title{
+    text-align: left;
+    padding-top: 1rem;
+    padding-bottom: 0.75em;
+}
+
+.ModalParkDetail-facilities-and-features {
     display: flex;
     justify-content: center;
 }
+
 .Column {
     flex: 50%;
 }
+
 .FacilitiesTable {
     display: flex;
     max-height: 19rem;
-    overflow: scroll;
-
 }
+
+.FacilitiesTable ::-webkit-scrollbar-track {
+    border-radius: 9.375rem;
+}
+
+.FacilitiesTable ::-webkit-scrollbar-thumb {
+    background: #828282;
+    border-radius: 0.25rem;
+}
+
+.FacilitiesTable ::-webkit-scrollbar {
+    width: 0.25rem;
+    height: 0.25rem;
+}
+
+.FacilitiesTable {
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.EventTable {
+    display: flex;
+    max-height: 23rem;
+}
+
+.EventTable ::-webkit-scrollbar-track {
+    border-radius: 9.375rem;
+}
+
+.EventTable ::-webkit-scrollbar-thumb {
+    background: #828282;
+    border-radius: 0.25rem;
+}
+
+.EventTable ::-webkit-scrollbar {
+    width: 0.25rem;
+    height: 0.25rem;
+}
+
+.EventTable {
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
 .TableContainer {
     display: flex;
     width: 100%;
-    height:100%;
+    height: 100%;
     padding: 0.5rem;
 }
+
 .FeaturesTable {
-   display: flex;
-   align-self: start;
-   padding: 0 1rem;
+    display: flex;
+    align-self: start;
+    padding: 0 1rem;
 }
-.ParkComments{
+
+.ParkComments {
     max-height: 19rem;
-    overflow: scroll;
     width: 90%;
     display: flex;
 }
-.Ratings{
+
+.ParkCommentHistory ::-webkit-scrollbar-track {
+    border-radius: 9.375rem;
+}
+
+.ParkCommentHistory ::-webkit-scrollbar-thumb {
+    background: #828282;
+    border-radius: 0.25rem;
+}
+
+.ParkCommentHistory ::-webkit-scrollbar {
+    width: 0.25rem;
+    height: 0.25rem;
+}
+
+.ParkCommentHistory {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 10rem
+}
+
+.Ratings {
     unicode-bidi: bidi-override;
     direction: rtl;
 }
 
+.no-events{
+    align-items: center;
+    justify-content: center;
+}
+
+.ModalParkDetail-ratings{
+    padding-top: 5%;
+}
+
 .Ratings > button {
-    font-size:100%;
-    font-family:inherit;
-    border:0;
+    font-size: 100%;
+    font-family: inherit;
+    border: 0;
     background: none;
     outline: none;
 }
@@ -193,7 +282,7 @@
 }
 
 .Ratings:hover > button:hover,
-.Ratings:hover > button:hover ~ button{
+.Ratings:hover > button:hover ~ button {
     font-size: 2rem;
     color: gold
 }
@@ -201,88 +290,194 @@
 .star {
     font-size: 2rem;
 }
+
 .tr {
     padding: 0.5rem;
 }
 
-@media only screen and (max-width:600px){
+.ModalParkDetail-tabName {
+    white-space: nowrap;
+}
+
+.individual-comment {
+    text-align: left;
+    display: block;
+    border-style: solid;
+    background: white;
+    border-width: 2px;
+    border-radius: 5px;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    padding: 0.5rem 4rem;
+}
+
+.header-text {
+    white-space: nowrap;
+}
+
+.facility {
+    height: 5rem;
+}
+
+.header-text-label {
+    width: 20rem;
+}
+
+.EventForm {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+@media only screen and (max-width: 556px) {
+
+    .ModalParkDetail-facilities-and-features {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
     .ModalParkDetail-leftToolbar {
         padding-left: 0.2rem;
         height: 100%;
     }
+
     .ModalParkDetail-tabName {
         font-size: 0.55rem;
+        white-space: nowrap;
     }
-   .FilledHeartIcon{
+
+    .FilledHeartIcon {
         height: 0.9rem;
         width: 0.9rem;
     }
-   .NotFillHeartIcon{
+
+    .NotFillHeartIcon {
         height: 0.9rem;
         width: 0.9rem;
     }
-   .ModalParkDetail-Body{
+
+    .ModalParkDetail-Body {
+        padding: 0rem;
         font-size: 0.8rem;
     }
-   .EventTable{
+
+    .EventTable {
         width: 95%;
     }
+
     .Column {
-        margin: 0rem 3rem;
+        margin: 0rem 0rem;
+        justify-content: center;
     }
-   .FacilitiesTable {
+
+    .FacilitiesTable {
         margin-right: 1rem;
     }
-   .FeaturesTable {
+
+    .FeaturesTable {
         margin-left: 0;
     }
-   .ParkCommentForm {
-       margin-left: 0;
-   }
-}
-@media only screen and (min-width:600px){
+
+    .ParkCommentForm {
+        margin-left: 0;
+    }
+    .AddEventForm {
+        transform: scale(0.7, 0.7);
+    }
+    .ModalParkDetail-FacilitiesTable{
+    font-size: 0.6rem;
+    }
+    .ModalParkDetail-Body{
+        transform: scale(0.8, 0.8);
+    }
+
+ }
+
+
+
+@media only screen and (min-width: 554px) {
+    
+    .ModalParkDetail-FacilitiesTable{
+        font-size: 1rem;
+    }
+
+    .ModalParkDetail-Body {
+        font-size: 1rem;
+    }
+
     .ModalParkDetail-leftToolbar {
         padding-left: 0.5rem;
         height: 100%;
     }
+
     .ModalParkDetail-tabName {
         font-size: 0.85rem;
+        white-space: nowrap;
     }
+
     .EventTable {
         width: 98%;
     }
+
     .FilledHeartIcon {
         height: 0.9rem;
         width: 0.9rem;
-   }
-   .NotFillHeartIcon {
+    }
+
+    .NotFillHeartIcon {
         height: 0.9rem;
         width: 0.9rem;
-   }
-   .FeaturesTable {
+    }
+
+    .FeaturesTable {
         margin-left: 0;
-   }
-   .Column {
-        margin: 0rem 2rem;
+    }
+
+    .Column {
+        margin: 0rem 1rem;
+    }
+
+    .AddEventForm {
+        transform: scale(0.85, 0.85);
+        margin-right: 2rem;
+    }
+
+    .ModalParkDetail-tabSelector{
+        margin-right: 1rem;
+    }
+    .ModalParkDetail-toolbar{
+        transform: scale(0.7, 0.7);
+    }
+    .ModalParkDetail-leftToolbar{
+        margin-left: -3.5rem;
+    }
+    .ModalParkDetail-Body{
+        transform: scale(0.75, 0.75);
+    }
+}
+
+@media only screen and (min-width: 610px){
+    .ModalParkDetail-Body{
+        transform: scale(0.8, 0.8);
+    }
+    .ModalParkDetail-toolbar{
+        transform: scale(0.8, 0.8);
+    }
+    .ModalParkDetail-leftToolbar{
+        margin-left: -3rem;
     }
 
 }
 
-@media only screen and (min-width: 780px){
-    .ModalParkDetail-leftToolbar {
-        padding-left: 2.5rem;
+@media only screen and (min-width: 830px) {
+    .ModalParkDetail-toolbar{
+        transform: scale(1, 1);
     }
-    .ModalParkDetail-tabName {
-        font-size: 0.9rem;
+    .ModalParkDetail-leftToolbar{
+        margin-left: 0rem;
     }
-    .FilledHeartIcon {
-        height: 1.7rem;
-        width: 1.7rem;
-        padding: 0.625rem;
-    }
-    .NotFillHeartIcon{
-        height: 1.7rem;
-        width: 1.7rem;
-        padding: 0.625rem;
-    }
+
 }
+

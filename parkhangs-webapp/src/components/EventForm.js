@@ -9,7 +9,7 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import moment from 'moment'
 import './EventForm.css'
-import { closeModal } from 'features/modal/modalSlice';
+import {closeModal} from 'features/modal/modalSlice';
 
 
 class EventForm extends React.Component {
@@ -166,7 +166,10 @@ class EventForm extends React.Component {
 
         }
 
-        this.props.closeModal();
+        // if we coming from the park modal, don't close the modal
+        if (!this.props.parkId) {
+            this.props.closeModal();
+        }
     }
 
     handleUpdateSelectedPark = (event) => {
@@ -192,62 +195,69 @@ class EventForm extends React.Component {
                     {
                         showCalendar && <div className="formsection date">
                             <label htmlFor="eventDate">Date:</label>
-                            <Calendar id="eventDate" value={eventDate} onChange={this.handleUpdateDate}/>
+                            <div className="calendar-date-select">
+
+                                <Calendar id="eventDate" value={eventDate} onChange={this.handleUpdateDate}/>
+                            </div>
                         </div>
                     }
-                    <div className="formsection time">
-                        <label htmlFor="eventTime">Event Start Time:</label>
-                        <TimePicker
-                            onChange={this.handleEventStartTimeChange}
-                            id="eventStartTime"
-                            disableClock={true}
-                            value={eventStartTime}
-                            clearIcon={null}/>
-                    </div>
-                    <div className="formsection time">
-                        <label htmlFor="eventTime">Event End Time:</label>
-                        <TimePicker
-                            onChange={this.handleEventEndTimeChange}
-                            id="eventEndTime"
-                            disableClock={true}
-                            value={eventEndTime}
-                            clearIcon={null}/>
-                    </div>
-                    <div className="formsection details">
-                        <label htmlFor="eventDetail">Title: </label>
-                        <textarea
-                            onChange={this.handleUpdateTitle}
-                            id="eventTitle"
-                            defaultValue={eventTitle}/>
-                    </div>
-                    <div className="formsection details">
-                        <label htmlFor="eventDetail">Details: </label>
-                        <textarea
-                            onChange={this.handleUpdateDetails}
-                            id="eventDetail"
-                            defaultValue={eventDetail}/>
-                    </div>
-                    {
-                        this.props.showParkPicker &&
-                        <div className="formsection park">
-                            <label htmlFor="eventPark">Select Park</label>
-                            <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark" defaultValue="">
-                            <option disabled={true} value="">Select a Park</option>
-                                {
-                                    this.props.parks.map((park) => {
-                                        return <option
-                                            key={park._id}
-                                            value={park._id}>{park.name}</option>
-                                    })
-                                }
-                            </select>
+                    <div className="non-calendar-section">
+                        <div className="formsection time">
+                            <label className="edit-event-label" htmlFor="eventTime">Event Start Time:</label>
+                            <TimePicker
+                                onChange={this.handleEventStartTimeChange}
+                                id="eventStartTime"
+                                disableClock={true}
+                                value={eventStartTime}
+                                clearIcon={null}/>
                         </div>
-                    }
-                </form>
-                <button className={"submit-message-button leftButton"}
+                        <div className="formsection time">
+                            <label className="edit-event-label" htmlFor="eventTime">Event End Time:</label>
+                            <TimePicker
+                                onChange={this.handleEventEndTimeChange}
+                                id="eventEndTime"
+                                disableClock={true}
+                                value={eventEndTime}
+                                clearIcon={null}/>
+                        </div>
+                        <div className="formsection details">
+                            <label className="edit-event-label" htmlFor="eventDetail">Title: </label>
+                            <textarea
+                                onChange={this.handleUpdateTitle}
+                                id="eventTitle"
+                                defaultValue={eventTitle}/>
+                        </div>
+                        <div className="formsection details">
+                            <label className="edit-event-label" htmlFor="eventDetail">Details: </label>
+                            <textarea
+                                onChange={this.handleUpdateDetails}
+                                id="eventDetail"
+                                defaultValue={eventDetail}/>
+                        </div>
+                        {
+                            this.props.showParkPicker &&
+                            <div className="formsection park">
+                                <label className="select-park-label" htmlFor="eventPark">Select Park</label>
+                                <select onChange={this.handleUpdateSelectedPark} name="Select Park" id="eventPark"
+                                        defaultValue="">
+                                    <option disabled={true} value="">Select a Park</option>
+                                    {
+                                        this.props.parks.map((park) => {
+                                            return <option
+                                                key={park._id}
+                                                value={park._id}>{park.name}</option>
+                                        })
+                                    }
+                                </select>
+                            </div>
+                        }
+                        <button className={"submit-message-button"}
                         onClick={this.handleAddEvent}>
-                    <span>{isNewEvent ? 'Create Event' : 'Update Event'}</span>
-                </button>
+                        <span>{isNewEvent ? 'Create Event' : 'Update Event'}</span>
+                         </button>
+                    </div>
+                </form>
+                
             </div>)
 
     }

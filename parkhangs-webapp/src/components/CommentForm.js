@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addParkComment, addEventComment } from 'features/comments/commentSlice'
+import {connect} from 'react-redux'
+import {addParkComment, addEventComment} from 'features/comments/commentSlice'
 import './CommentForm.css'
 
 class CommentForm extends React.Component {
@@ -24,51 +24,52 @@ class CommentForm extends React.Component {
 
         if (this.state.comments !== '') {
 
-          const commentText =  this.state.comments
+            const commentText = this.state.comments
 
-          if ("parkId" in this.props) {
-            const parkId = this.props.parkId;
-            const newComment = {
-              parkId: parkId,
-              comment: commentText
-            }
-            this.props.addParkComment(newComment, this.props.user)
-          } else if ("eventId" in this.props) {
-            const eventId = this.props.eventId;
-            const newComment = {
-              eventId: eventId,
-              comment: commentText
-            }
-              this.props.addEventComment(newComment, this.props.user)
+            if ("parkId" in this.props) {
+                const parkId = this.props.parkId;
+                const newComment = {
+                    parkId: parkId,
+                    comment: commentText
+                }
+                this.props.addParkComment(newComment, this.props.user)
+            } else if ("eventId" in this.props) {
+                const eventId = this.props.eventId;
+                const newComment = {
+                    eventId: eventId,
+                    comment: commentText
+                }
+                this.props.addEventComment(newComment, this.props.user)
             }
             this.setState({
-              comments: ""
+                comments: ""
             })
-          }
         }
+    }
 
     render() {
 
         return (
             <div className="CommentForm">
-
                 <form className="CommentForm">
                     <div className="formsection comment">
-                        <label htmlFor="comment">Comment: </label>
+                        <label className="comment-label" htmlFor="comment">Write a comment:</label>
                         <textarea
-                          onChange={e => this.setState({ comments : e.target.value })}
-                          id="comment_input"
-                          value={this.state.comments}
+                            className="comment-textarea"
+                            onChange={e => this.setState({comments: e.target.value})}
+                            id="comment_input"
+                            value={this.state.comments}
                         />
                     </div>
+                    <button className={"submit-message-button"}
+                            onClick={this.handleAddComment}>
+                        <span>{'Add Comment'}</span>
+                    </button>
                 </form>
-                <button className={"submit-message-button leftButton"}
-                        onClick={this.handleAddComment}>
-                    <span>{'Add Comment'}</span>
-                </button>
-            </div>)
-          }
-        }
+            </div>
+        )
+    }
+}
 
 const mapStateToProps = (state) => ({
     user: state.user.user
