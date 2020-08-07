@@ -4,7 +4,8 @@ import {GoogleLogin, GoogleLogout} from 'react-google-login';
 import {
     getUser,
     setAccessToken,
-    logout
+    logout,
+    getSavedParksInfo,
 } from 'features/users/userSlice'
 import './GoogleUserAuthentication.css'
 
@@ -39,7 +40,8 @@ class GoogleUserAuthorization extends Component {
             };
 
             this.props.setAccessToken(accessToken);
-            this.props.getUser(user);
+            this.props.getUser(user)
+            this.props.getSavedParksInfo(user.email)
         }
     }
 
@@ -77,7 +79,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     setAccessToken: (accessToken) => dispatch(setAccessToken(accessToken)),
     getUser: (user) => dispatch(getUser(user)),
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    getSavedParksInfo: (email) => dispatch(getSavedParksInfo(email)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleUserAuthorization);

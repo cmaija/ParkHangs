@@ -30,6 +30,7 @@ router.post('/events', eventController.addEvent);
 router.get('/user/:email', userController.getUser);
 router.patch('/user/:userId', userController.updateUser);
 router.post('/user', userController.addUser);
+router.get('/user/:email/savedParks', userController.getSavedParks)
 
 router.get('/parkComments', parkCommentController.getParkComments);
 router.post('/parkComments', parkCommentController.addParkComment);

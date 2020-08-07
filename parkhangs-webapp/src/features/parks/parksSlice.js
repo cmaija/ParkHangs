@@ -143,10 +143,9 @@ const parksSlice = createSlice({
 
         updateParkByIdSuccessful (state, action) {
             const newPark = action.payload
-            let newParksList = state.parks.filter(park => park._id !== newPark._id)
-
-            newParksList.push(newPark)
-            state.parks = newParksList
+            if (state.selectedPark.parkId === newPark.parkId) {
+                state.selectedPark = newPark
+            }
             state.loadingParks = false
             state.error = null
         },
@@ -163,13 +162,9 @@ const parksSlice = createSlice({
 
         addRatingSuccessful (state, action) {
             const updatedPark = action.payload
-            let newParksList = state.parks.filter(park => park._id !== updatedPark._id)
-            newParksList.push(updatedPark)
-            state.parks = newParksList
             if (state.selectedPark.parkId === updatedPark.parkId) {
                 state.selectedPark = updatedPark
             }
-
             state.addingRating = false
             state.error = null
         },
