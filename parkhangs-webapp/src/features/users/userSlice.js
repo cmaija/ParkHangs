@@ -1,8 +1,7 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import UserService from 'services/user.service'
 import { updateParkById } from 'features/parks/parksSlice'
 import { updateEventById } from 'features/events/eventsSlice'
-// import EventService from 'services/event.service'
 
 const userSlice = createSlice({
     name: 'user',
@@ -67,6 +66,7 @@ const userSlice = createSlice({
 });
 
 export const {
+    setAccessToken,
     getUserStart,
     getUserSuccessful,
     getUserFailure,
