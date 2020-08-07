@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 import EventService from 'services/event.service'
 
 const eventSlice = createSlice({
@@ -10,15 +10,15 @@ const eventSlice = createSlice({
         updatingEvent: false,
         deletingEvent: false,
         addingEvent: false,
-        error : null
+        error: null
     },
     reducers: {
-        fetchEventsStart (state) {
+        fetchEventsStart(state) {
             state.loadingParks = true
             state.error = null
         },
 
-        fetchEventsSuccessful (state, action) {
+        fetchEventsSuccessful(state, action) {
             const events = action.payload
             state.flattenedEvents = action.payload
             const parsedEvents = events.reduce(function (acc, event) {
@@ -26,8 +26,7 @@ const eventSlice = createSlice({
                 const hasSeenParkSoFar = !!acc[parkId]
                 if (hasSeenParkSoFar) {
                     acc[parkId].push(event)
-                }
-                else {
+                } else {
                     acc[parkId] = [event]
                 }
                 return acc
@@ -36,17 +35,17 @@ const eventSlice = createSlice({
             state.eventsByParkId = parsedEvents
         },
 
-        fetchEventsFailure (state, action) {
+        fetchEventsFailure(state, action) {
             state.loadingEvents = false
             state.error = action.payload
         },
 
-        addEventStart (state, action) {
+        addEventStart(state, action) {
             state.addingEvent = true
             state.error = null
         },
 
-        addEventSuccessful (state, action) {
+        addEventSuccessful(state, action) {
             const newEvent = action.payload
             const parkId = newEvent.parkId
             let currentEvents = state.eventsByParkId[parkId]
@@ -65,17 +64,17 @@ const eventSlice = createSlice({
             state.error = null
         },
 
-        addEventFailure (state, action) {
+        addEventFailure(state, action) {
             state.addingEvent = false
             state.error = action.payload
         },
 
-        updateEventStart (state, action) {
+        updateEventStart(state, action) {
             state.updatingEvent = true
             state.error = null
         },
 
-        updateEventSuccessful (state, action) {
+        updateEventSuccessful(state, action) {
             const updatedEvent = action.payload
             const parkId = updatedEvent.parkId
             const eventId = updatedEvent._id
@@ -87,22 +86,23 @@ const eventSlice = createSlice({
             newFlattenedEventArray.push(updatedEvent)
             state.flattenedEvents = newFlattenedEventArray
 
-
             state.updatingEvent = false
             state.error = null
         },
 
-        updateEventFailure (state, action) {
+        updateEventFailure(state, action) {
+
             state.updatingEvent = true
             state.error = action.payload
         },
 
-        updateEventByIdStart (state, action) {
+        updateEventByIdStart(state, action) {
+
             state.updatingEvent = true
             state.error = null
         },
 
-        updateEventByIdSuccessful (state, action) {
+        updateEventByIdSuccessful(state, action) {
             const updatedEvent = action.payload
             const parkId = updatedEvent.parkId
             const eventId = updatedEvent._id
@@ -119,18 +119,19 @@ const eventSlice = createSlice({
             state.error = null
         },
 
-        updateEventByIdFailure (state, action) {
+        updateEventByIdFailure(state, action) {
+
             state.updatingEvent = false
             state.error = action.payload
         },
 
-        deleteEventStart (state, action) {
+        deleteEventStart(state, action) {
             state.deletingEvent = true
             state.error = null
         },
 
-        deleteEventSuccessful (state, action) {
-            const { _id, parkId } = action.payload
+        deleteEventSuccessful(state, action) {
+            const {_id, parkId} = action.payload
 
             const newEventArray = state.eventsByParkId[parkId].filter(event => event._id !== _id)
             state.eventsByParkId[parkId] = newEventArray
@@ -142,7 +143,7 @@ const eventSlice = createSlice({
             state.error = null
         },
 
-        deleteEventFailure (state, action) {
+        deleteEventFailure(state, action) {
             state.deletingEvent = true
             state.error = action.payload
         },

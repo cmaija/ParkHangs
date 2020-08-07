@@ -25,7 +25,7 @@ const getUser = async (req, res) => {
         return res.status(400).json({success: false, error: err})
     })
 
-};
+}
 
 const addUser = async (req, res) => {
 
@@ -215,8 +215,27 @@ async function saveEvents (savedEvents, newSavedEvents) {
     return
 }
 
+const getSavedParks = async (req, res) => {
+    try {
+        const user = await User.findOne({email: req.params.email})
+        let favoriteParksWithInfo = []
+        if (user && user.savedParks && user.savedParks.length > 0) {
+            let favoriteParks = user.savedParks
+            for (let park of favoriteParks) {
+                let parkInfo = await Park.findOne({_id: park})
+                favoriteParksWithInfo.push(parkInfo)
+            }
+        }
+        return res.status(200).json({success: true, data: favoriteParksWithInfo})
+    } catch (error) {
+        console.error(error.toString())
+        return res.status(400).json({success: false, error: error.toString()})
+    }
+}
+
 module.exports = {
     addUser,
     getUser,
-    updateUser
+    updateUser,
+    getSavedParks,
 };

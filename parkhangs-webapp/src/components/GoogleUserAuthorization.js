@@ -4,8 +4,10 @@ import {GoogleLogin, GoogleLogout} from 'react-google-login';
 import {
     getUser,
     setAccessToken,
-    logout
+    logout,
+    getSavedParksInfo,
 } from 'features/users/userSlice'
+import './GoogleUserAuthentication.css'
 
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_API_CLIENT_ID;
@@ -16,8 +18,6 @@ class GoogleUserAuthorization extends Component {
         super(props);
 
         this.login = this.login.bind(this);
-        this.handleLoginFailure = this.handleLoginFailure.bind(this);
-        this.handleLogoutFailure = this.handleLogoutFailure.bind(this);
     }
 
     login(response) {
@@ -40,18 +40,9 @@ class GoogleUserAuthorization extends Component {
             };
 
             this.props.setAccessToken(accessToken);
-            this.props.getUser(user);
+            this.props.getUser(user)
+            this.props.getSavedParksInfo(user.email)
         }
-    }
-
-    handleLoginFailure(response) {
-        //TODO
-        alert('Failed to log in')
-    }
-
-    handleLogoutFailure(response) {
-        //TODO
-        alert('Failed to log out')
     }
 
     render() {
@@ -59,16 +50,17 @@ class GoogleUserAuthorization extends Component {
             <div>
                 {this.props.isLoggedIn ?
                     <GoogleLogout
+                        className="google-button-styling"
                         clientId={CLIENT_ID}
-                        buttonText='Logout'
+                        buttonText="Logout"
+                        icon={false}
                         onLogoutSuccess={this.props.logout}
-                        onFailure={this.handleLogoutFailure}
                     >
                     </GoogleLogout> : <GoogleLogin
+                        className="google-button-styling"
                         clientId={CLIENT_ID}
-                        buttonText='Login with Google'
+                        buttonText="Login"
                         onSuccess={this.login}
-                        onFailure={this.handleLoginFailure}
                         cookiePolicy={'single_host_origin'}
                         responseType='code,token'
                     />
@@ -87,7 +79,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     setAccessToken: (accessToken) => dispatch(setAccessToken(accessToken)),
     getUser: (user) => dispatch(getUser(user)),
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logout()),
+    getSavedParksInfo: (email) => dispatch(getSavedParksInfo(email)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleUserAuthorization);

@@ -1,3 +1,11 @@
 .eventsCalendar {
     height: 60vh;
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 800px) {
+    .eventsCalendar {
+        font-size: 70%;
+    }
 }

@@ -24,6 +24,7 @@ ApiService.init()
 const persistConfig = {
     key: 'root',
     storage,
+    whitelist: ['user'] // only persist the user slice and not the other stores
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -33,8 +34,6 @@ const store = configureStore({
         serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
         },
-        immutableCheck: false,
-        serializableCheck: false
     }),
     reducer: persistedReducer
 })
@@ -45,7 +44,7 @@ render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
             <Router>
-                <Routes/>
+                <Routes key="routes"/>
             </Router>
         </PersistGate>
     </Provider>,

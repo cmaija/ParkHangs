@@ -2,7 +2,7 @@ import React from 'react'
 import 'features/modal/ModalDetail.css'
 import moment from 'moment'
 import {connect} from "react-redux"
-import { deleteEvent } from 'features/events/eventsSlice'
+import {deleteEvent} from 'features/events/eventsSlice'
 import {cloneDeep} from 'lodash'
 import EventForm from "../../components/EventForm";
 
@@ -79,6 +79,9 @@ class ModalDetail extends React.Component {
                                                 <b>Created by:</b>
                                             </td>
                                             <td>
+                                                <b>Title:</b>
+                                            </td>
+                                            <td>
                                                 <b>Details:</b>
                                             </td>
                                             <td>
@@ -105,6 +108,9 @@ class ModalDetail extends React.Component {
                                                     </td>
                                                     <td>
                                                         {event.creatorName}
+                                                    </td>
+                                                    <td>
+                                                        {event.title}
                                                     </td>
                                                     <td>
                                                         {event.details}
@@ -152,12 +158,13 @@ class ModalDetail extends React.Component {
                             event={this.state.eventToEdit ? this.state.eventToEdit : null}
                             eventDateTime={this.state.eventToEdit ? this.state.eventToEdit.eventDateTime : false}
                             eventEndDateTime={this.state.eventToEdit ? this.state.eventToEdit.eventEndDateTime : null}
+                            eventTitle={this.state.eventToEdit ? this.state.eventToEdit.title : false}
                             eventDetails={this.state.eventToEdit ? this.state.eventToEdit.details : false}
                             eventId={this.state.eventToEdit ? this.state.eventToEdit._id : false}
                             parkId={this.props.park._id}
                             currentDate={this.props.date}
                             showDayPicker={false}
-                            eventChanged={(eventId, detail, eventTimestamp, eventEndTimestamp) => this.updateEvent(eventId, detail, eventTimestamp, eventEndTimestamp)}/>
+                            eventChanged={(eventId, title, detail, eventTimestamp, eventEndTimestamp) => this.updateEvent(eventId, title, detail, eventTimestamp, eventEndTimestamp)}/>
                     </div>
                 </div>
             </div>

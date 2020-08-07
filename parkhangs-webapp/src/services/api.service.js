@@ -2,11 +2,11 @@ import axios from 'axios'
 
 const ApiService = {
     async init() {
-        axios.defaults.baseURL =  process.env.REACT_APP_API_ROOT
+        axios.defaults.baseURL = process.env.REACT_APP_API_ROOT
     },
 
-    get(resource) {
-        return axios.get(resource)
+    get(resource, config) {
+        return axios.get(resource, config)
     },
 
     post(resource, data) {

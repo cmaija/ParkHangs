@@ -1,8 +1,23 @@
 .MapView {
     height: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: stretch;
     justify-content: center;
     padding-top: 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+    .MapView {
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        padding-top: 1rem;
+    }
+
+    .filterToolbar{
+        padding-top: 1rem;
+    }
 }

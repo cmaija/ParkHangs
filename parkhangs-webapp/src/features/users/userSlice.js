@@ -1,8 +1,7 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import UserService from 'services/user.service'
 import { updateParkById } from 'features/parks/parksSlice'
 import { updateEventById } from 'features/events/eventsSlice'
-// import EventService from 'services/event.service'
 
 const userSlice = createSlice({
     name: 'user',
@@ -10,40 +9,22 @@ const userSlice = createSlice({
         user: null,
         isLoggedIn: false, // if user is not null, must be logged in
         error: null,
-        loadingUser: true
+        gettingUserLocation: true,
+        userLocation: null,
+        updatingUser: false,
+        gettingSavedParks: false,
     },
 
     reducers: {
 
-        // googleLoginStart(state) {
-        //
-        // },
-        //
-        // googleLoginSuccessful(state, action) {
-        //
-        // },
-        //
-        // googleLoginFailure() {
-        //
-        // },
-
         setAccessToken(state, action) {
             state.googleAccessToken = action.payload;
-        },
-
-        googleLogoutStart() {
-
         },
 
         googleLogoutSuccessful(state) {
             state.user = null;
             state.isLoggedIn = false;
             state.googleAccessToken = null;
-        },
-
-        googleLogoutFailure(state) {
-            //TODO:
-
         },
 
         getUserStart(state) {
@@ -60,12 +41,31 @@ const userSlice = createSlice({
             // else don't do anything
         },
 
-        getUserFailure(state, action) {
-            //TODO
+        updateUserStart (state) {
+            state.updatingUser = true
+            state.error = null
         },
 
-        addUserStart(state, action) {
+        updateUserSuccessful (state, action) {
+            state.user = action.payload
+            state.updatingUser = false
+            state.error = null
+        },
 
+
+        updateUserFailure (state, action) {
+            state.updatingUser = false
+            state.error = action.payload.toString()
+        },
+
+        addUserStart (state) {
+            state.updatingUser = true
+            state.error = null
+        },
+
+        addUserFailure (state, action) {
+            state.updatingUser = false
+            state.error = action.payload
         },
 
         addUserSuccessful(state, action) {
@@ -73,35 +73,48 @@ const userSlice = createSlice({
             state.isLoggedIn = true
         },
 
-        addUserFailure(station, action) {
-
+        getSavedParksByUserStart (state) {
+            state.gettingSavedParks = true
+            state.error = null
         },
 
-        updateUserStart(state, action) {
-
+        getSavedParksByUserSuccess (state, action) {
+            state.savedParks = action.payload
+            state.error = false
+            state.gettingSavedParks = false
         },
 
-        updateUserSuccessful(state, action) {
-            state.user = action.payload;
-
+        getSavedParksByUserFailure (state, action) {
+            state.error = action.payload.toString()
+            state.gettingSavedParks = false
         },
 
-        updateUserFailure(station, action) {
-
-
+        getUserLocationStart (state, action) {
+            state.gettingUserLocation = true
         },
 
+        getUserLocationSuccess (state, action) {
+            state.gettingUserLocation = false
+            const lat = action.payload.lat
+            const lng = action.payload.lon
+            state.userLocation = {
+                lat,
+                lng
+            }
+        },
 
+        getUserLocationFailure (state, action) {
+            state.gettingUserLocation = false
+            state.location = null
+        },
     }
-
-
 });
 
 export const {
+    setAccessToken,
     getUserStart,
     getUserSuccessful,
     getUserFailure,
-    setAccessToken,
     googleLogoutSuccessful,
     addUserStart,
     addUserSuccessful,
@@ -109,46 +122,52 @@ export const {
     googleLogoutFailure,
     updateUserStart,
     updateUserSuccessful,
-    updateUserFailure
+    updateUserFailure,
+    getSavedParksByUserStart,
+    getSavedParksByUserSuccess,
+    getSavedParksByUserFailure,
+    getUserLocationStart,
+    getUserLocationSuccess,
+    getUserLocationFailure,
 } = userSlice.actions;
 
 export default userSlice.reducer;
 
-export const addUser = (userParams) => async (dispatch) => {
-
-    //TODO: can't call this for some reason.
+export const getUserLocation = () => async (dispatch) => {
     try {
-        dispatch(addUserStart());
-
-        let newUser = {
-            firstName: userParams.firstName,
-            lastName: userParams.lastName,
-            username: userParams.firstName.substring(0, 1) + userParams.lastName,
-            email: userParams.email,
-            googleImageURL: userParams.googleImageURL,
-            savedParks: []
-        };
-
-        const successfulAddUser = await UserService.addUser(newUser);
-        dispatch(addUserSuccessful(successfulAddUser));
+        dispatch(getUserLocationStart())
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude
+            const lon = position.coords.longitude
+            dispatch(getUserLocationSuccess({lat, lon}))
+        })
     } catch (error) {
-        dispatch(addUserFailure());
-
+        dispatch(getUserLocationFailure())
     }
-};
+}
+export const getSavedParksInfo = (email) => async (dispatch) => {
+    try {
+        dispatch(getSavedParksByUserStart())
+        const savedParks = await UserService.getSavedParks(email)
+        dispatch(getSavedParksByUserSuccess(savedParks))
+    } catch (error) {
+        dispatch(getSavedParksByUserFailure(error.toString()))
+    }
+}
 
 export const getUser = (user) => async (dispatch) => {
 
     try {
         dispatch(getUserStart());
+
         const email = user.email;
         const successfulGetUser = await UserService.getUser(email);
+
         if (successfulGetUser == null) {
 
-            //TODO:
-            //addUser(getUserParameters);
-
+            //this adds a new user to the database
             try {
+
                 dispatch(addUserStart());
 
                 let newUser = {
@@ -167,17 +186,16 @@ export const getUser = (user) => async (dispatch) => {
 
             }
 
-
         } else {
             dispatch(getUserSuccessful(successfulGetUser))
         }
     } catch (error) {
+        console.log(error)
         dispatch(getUserFailure());
     }
 };
 
 export const editUsername = (userId, username) => async (dispatch) => {
-
     try {
 
         dispatch(updateUserStart());
@@ -186,8 +204,8 @@ export const editUsername = (userId, username) => async (dispatch) => {
             username: username
         };
 
-        const successfulUpdateUser = await UserService.updateUser(userId, usernameObject);
-        dispatch(updateUserSuccessful(successfulUpdateUser));
+        const successfulUpdateUser = await UserService.updateUser(userId, usernameObject)
+        dispatch(updateUserSuccessful(successfulUpdateUser))
     } catch (error) {
         dispatch(updateUserFailure())
     }
@@ -199,7 +217,6 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
         let newSavedParkArray = [...user.savedParks]; //copies original array to a local variable
 
         const parkIsAlreadySaved = newSavedParkArray.includes(parkId);
-
         if (parkIsAlreadySaved) {
             // remove the park
             newSavedParkArray = newSavedParkArray.filter((existingParkId) => existingParkId !== parkId);
@@ -210,13 +227,15 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
 
         const newSaveParksObject = {
             savedParks: newSavedParkArray
-        };
+        }
 
         const successfulUpdateUser = await UserService.updateUser(user._id, newSaveParksObject);
+        dispatch(getSavedParksInfo(successfulUpdateUser.email))
         dispatch(updateParkById(parkId))
-        dispatch(updateUserSuccessful(successfulUpdateUser));
+        dispatch(updateUserSuccessful(successfulUpdateUser))
 
     } catch (error) {
+        console.error(error.toString())
         dispatch(updateUserFailure())
     }
 }
@@ -224,7 +243,9 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
 
 export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
     try {
+
         dispatch(updateUserStart())
+
         let newSavedEventArray = []
         if (user.savedEvents) {
             newSavedEventArray = [...user.savedEvents]

@@ -1,0 +1,9 @@
+.google-map {
+    width: 100%;
+    height: 100%;
+}
+
+.google-map-container {
+    flex-grow: 1;
+    min-width: 20rem;
+}

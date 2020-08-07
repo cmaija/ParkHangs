@@ -1,35 +1,51 @@
 import React, {Component} from 'react';
-import GoogleMapReact from 'google-map-react';
 import {connect} from 'react-redux';
-import Marker from '../components/Marker.js'
+import { openModal } from 'features/modal/modalSlice'
+import { selectPark } from 'features/parks/parksSlice'
+import GoogleMap from 'components/GoogleMap'
 
-class SimpleMap extends Component {
+class Map extends Component {
 
     static defaultProps = {
-        center: {
-            lat: 49.28,
-            lng: -123.12
-        },
-        zoom: 12
+        zoom: 16
     };
 
-    render() {
-        return (
-            // Important! Always set the container height explicitly
-            <div style={{height: '600px', width: '90%', margin: 'auto'}}>
-                <GoogleMapReact bootstrapURLKeys={{key: process.env.REACT_APP_MAP_API_KEY}}
-                                defaultCenter={this.props.center}
-                                defaultZoom={this.props.zoom}>
-                    {
-                        this.props.parks && this.props.parks.length > 0 &&
-                        this.props.parks.map((park) => {
-                            return <Marker key={park._id} park={park}
-                                           lat={park.googleMapsLatLon[0]}
-                                           lng={park.googleMapsLatLon[1]}/>
-                        }
-                    )}
+    defaultLocation = {
+        lat: 49.242140,
+        lng: -123.112158,
+    }
 
-                </GoogleMapReact>
+    handleSelect = (park) => {
+        this.props.selectPark(park._id)
+        const modalProps = {
+            component: 'ModalParkDetail',
+            componentParams: {
+                park,
+                parkId: park._id
+            }
+        };
+
+        this.props.openModal(modalProps);
+
+    }
+
+    getZoom = () => {
+        return this.props.parksHaveBeenQueried ? 12 : 14
+    }
+
+    render() {
+        const parks = this.props.parksHaveBeenQueried ? this.props.queriedParks : this.props.parks
+        const center = this.props.userLocation ? this.props.userLocation : this.defaultLocation
+        const zoom = this.getZoom()
+
+        return (
+            <div className="google-map-container">
+                <GoogleMap
+                    style={{height: '600px', width: '90%', margin: 'auto'}}
+                    parks={parks}
+                    zoom={zoom}
+                    userLocation={center}
+                    handleSelect={this.handleSelect}/>
             </div>
         );
     }
@@ -39,8 +55,18 @@ class SimpleMap extends Component {
 
 const mapStateToProps = (state) => { //name is by convention
     return {
-        parks: state.parks.parks
+        parks: state.parks.parks,
+        queriedParks: state.parks.queriedParks,
+        parksHaveBeenQueried: state.parks.parksHaveBeenQueried,
+        userLocation: state.user.userLocation,
+        loadingUserLocation: state.user.loadingUserLocation,
     }
 }
 
-export default connect(mapStateToProps, null)(SimpleMap);
+const mapDispatchToProps = (dispatch) => ({
+    selectPark: (parkId) => dispatch(selectPark(parkId)),
+    openModal: (modalProps) => dispatch(openModal(modalProps))
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map)

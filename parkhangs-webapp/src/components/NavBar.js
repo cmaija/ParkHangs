@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux'
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux'
 import 'components/NavBar.css'
 import MapIcon from 'assets/icons/map-icon.svg'
 import CalendarIcon from 'assets/icons/calendar-icon.svg'
-import UserIcon from 'assets/icons/user-icon.svg'
+import UserIcon from 'assets/icons/profile.svg'
 import GoogleUserAuthorization from "./GoogleUserAuthorization";
 
 class NavBar extends React.Component {
@@ -32,10 +32,11 @@ class NavBar extends React.Component {
 
                     {
                         this.props.user !== null ?
-                            <span>Welcome, {this.props.user.username}</span>
+                            <Link className="username-link" to="/user">
+                                <span>Welcome, {this.props.user.username}</span>
+                            </Link>
                             :
                             null
-
                     }
 
                     <li className="NavLink">

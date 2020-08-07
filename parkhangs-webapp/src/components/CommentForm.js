@@ -1,7 +1,6 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { addParkComment, addEventComment } from 'features/comments/commentSlice'
-import moment from 'moment'
+import {connect} from 'react-redux'
+import {addParkComment, addEventComment} from 'features/comments/commentSlice'
 import './CommentForm.css'
 
 class CommentForm extends React.Component {
@@ -10,12 +9,8 @@ class CommentForm extends React.Component {
         super(props)
 
         this.state = {
-            comments: this.comment()
+            comments: ''
         }
-    }
-
-    comment = () => {
-        return this.props.comment || ''
     }
 
     handleUpdateComment = (event) => {
@@ -27,49 +22,52 @@ class CommentForm extends React.Component {
     handleAddComment = (comment) => {
         event.preventDefault()
 
-        const commentText =  this.state.comment || this.comment()
+        if (this.state.comments !== '') {
 
-        if ("parkId" in this.props) {
-          const parkId = this.props.parkId;
-          const newComment = {
-            parkId: this.props.parkId,
-            comment: commentText
-          }
-          this.props.addParkComment(newComment, this.props.user)
-        } else if ("eventId" in this.props) {
-          const eventId = this.props.eventId;
-          const newComment = {
-            eventId: this.props.eventId,
-            comment: commentText
-          }
-            this.props.addEventComment(newComment, this.props.user)
+            const commentText = this.state.comments
+
+            if ("parkId" in this.props) {
+                const parkId = this.props.parkId;
+                const newComment = {
+                    parkId: parkId,
+                    comment: commentText
+                }
+                this.props.addParkComment(newComment, this.props.user)
+            } else if ("eventId" in this.props) {
+                const eventId = this.props.eventId;
+                const newComment = {
+                    eventId: eventId,
+                    comment: commentText
+                }
+                this.props.addEventComment(newComment, this.props.user)
+            }
+            this.setState({
+                comments: ""
+            })
         }
-        this.setState({
-            comments: ''
-          })
-        }
+    }
 
     render() {
-        const comment = this.comment();
 
         return (
             <div className="CommentForm">
-
                 <form className="CommentForm">
                     <div className="formsection comment">
-                        <label htmlFor="comment">Comment: </label>
+                        <label className="comment-label" htmlFor="comment">Write a comment:</label>
                         <textarea
-                            onChange={this.handleUpdateComment}
-                            id="comment"
-                            defaultValue={comment}/>
+                            className="comment-textarea"
+                            onChange={e => this.setState({comments: e.target.value})}
+                            id="comment_input"
+                            value={this.state.comments}
+                        />
                     </div>
+                    <button className={"submit-message-button"}
+                            onClick={this.handleAddComment}>
+                        <span>{'Add Comment'}</span>
+                    </button>
                 </form>
-                <button className={"submit-message-button leftButton"}
-                        onClick={this.handleAddComment}>
-                    <span>{'Add Comment'}</span>
-                </button>
-            </div>)
-
+            </div>
+        )
     }
 }
 

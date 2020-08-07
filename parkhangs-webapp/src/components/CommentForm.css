@@ -1,13 +1,34 @@
-.EventForm {
+.CommentForm {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
+    padding-left: 2.5rem;
+}
+
+@media only screen and (max-width: 838px) {
+    .CommentForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding-left: 0.5rem;
+    }
 }
 
 .formsection {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
+}
+
+.comment-label {
+    font-size: 1rem;
+    padding: 1rem
+}
+
+.comment-textarea {
+    width: 75%;
+    min-height: 4rem;
 }

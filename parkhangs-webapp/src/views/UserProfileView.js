@@ -2,8 +2,8 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {openModal} from "../features/modal/modalSlice";
 import "views/UserProfileView.css";
-import { toggleSavedPark, toggleSavedEvent } from "../features/users/userSlice";
-import { cloneDeep } from 'lodash'
+import {toggleSavedPark, toggleSavedEvent, getSavedParksInfo} from "../features/users/userSlice";
+import {cloneDeep} from 'lodash'
 import moment from 'moment'
 
 
@@ -14,6 +14,12 @@ class UserProfileView extends React.Component {
 
         this.editProfile = this.editProfile.bind(this);
         this.renderSavedParks = this.renderSavedParks.bind(this);
+    }
+
+    componentDidMount = () => {
+        if (this.props.user) {
+            this.props.getSavedParks(this.props.user.email)
+        }
     }
 
     editProfile = () => {
@@ -54,25 +60,13 @@ class UserProfileView extends React.Component {
     }
 
     savedParks = () => {
-        const savedParkIds = this.props.user.savedParks;
+        const savedParks = this.props.savedParks
 
-        let savedParkObjects = []
-
-        const parks = this.props.parks;
-        if (parks) {
-            savedParkIds.forEach((parkId) => {
-                const park = parks.find((park) => park._id === parkId)
-                if (!!park) {
-                    savedParkObjects.push(park)
-                }
-            })
-        }
-
-        if (savedParkObjects.length === 0) {
+        if (savedParks.length === 0) {
             return <div> You do not have any saved parks!</div>;
         }
 
-        return savedParkObjects
+        return savedParks
     }
 
     savedEvents = () => {
@@ -98,7 +92,7 @@ class UserProfileView extends React.Component {
         return savedEvents
     }
 
-    renderSavedParks () {
+    renderSavedParks() {
         const savedParks = this.savedParks()
         const savedEvents = this.savedEvents()
 
@@ -110,23 +104,20 @@ class UserProfileView extends React.Component {
                 {
                     savedParks.length ?
                         <table className="Favourite-Parks-Table">
-                        <thead>
-                        <tr>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Park name: </b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Address:</b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Rating:</b>
-                            </td>
-                            <td className="Favourite-Parks-Table-Rows">
-                                <b>Remove from Favourites</b>
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
+                            <thead>
+                            <tr>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Park name: </b>
+                                </td>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Average Rating:</b>
+                                </td>
+                                <td className="Favourite-Parks-Table-Rows">
+                                    <b>Remove from Favourites</b>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
                             {
                                 savedParks.map((park) =>
                                     <tr key={park._id}>
@@ -134,10 +125,7 @@ class UserProfileView extends React.Component {
                                             {park.name}
                                         </td>
                                         <td>
-                                            {park.streetNumber + " " + park.streetName}
-                                        </td>
-                                        <td>
-                                            {park.rating}
+                                            {park.averageRating || 'This park has no ratings yet!'}
                                         </td>
                                         <td>
                                             <button onClick={() => {
@@ -148,10 +136,10 @@ class UserProfileView extends React.Component {
                                         </td>
                                     </tr>)
                             }
-                        </tbody>
+                            </tbody>
 
-                    </table>
-                    : savedParks
+                        </table>
+                        : savedParks
                 }
                 <h3 className="Favourite-Parks-Title">
                     Favourite Events:
@@ -224,19 +212,19 @@ class UserProfileView extends React.Component {
                                 alt="user's avatar"
                                 className="Google-Image"
                                 src={this.props.user.googleImageURL}/>
-                            <h2>Welcome, {this.props.user.username}</h2>
-                            <h3>
-                                Full Name: {this.props.user.firstName + " " + this.props.user.lastName}
-                            </h3>
-                            <h3>
+                            <h3>Welcome, {this.props.user.username}!</h3>
+                            <h4>
+                                Name: {this.props.user.firstName + " " + this.props.user.lastName}
+                            </h4>
+                            <h4>
                                 Email: {this.props.user.email}
-                            </h3>
+                            </h4>
+                            <button className="Edit-Profile-Button" onClick={this.editProfile.bind(this)}>
+                                Edit Username
+                            </button>
                             {
                                 this.renderSavedParks()
                             }
-                            <button className="Edit-Profile-Button" onClick={this.editProfile.bind(this)}>
-                                Edit Profile
-                            </button>
                         </div>
                         :
                         <h3 className="Not-Logged-In">
@@ -254,6 +242,7 @@ const mapStateToProps = (state) => {
         user: state.user.user,
         parks: state.parks.parks,
         events: state.events.flattenedEvents,
+        savedParks: state.user.savedParks,
     }
 };
 
@@ -264,8 +253,8 @@ const mapDispatchToProps = (dispatch) => ({
     },
     removeFavoriteEvent: (user, eventId) => {
         dispatch(toggleSavedEvent(user, eventId))
-    }
-
+    },
+    getSavedParks: (email) => dispatch(getSavedParksInfo(email)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileView);

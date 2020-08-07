@@ -1,18 +1,12 @@
 const Event = require('../models/EventModel');
 const express = require('express');
-const Request = require("request");
 var assert = require('assert');
 var mongoose = require('mongoose');
 const database = require('../database/index');
 const moment = require('moment');
-// var { uuid } = require('uuidv4');
 
 var router = express.Router();
 router.use(express.json())
-
-database.once("open", function () {
-    console.log("MongoDB database connection established successfully");
-});
 
 // Gets all events
 const getEvents = async (req, res) => {
@@ -35,7 +29,8 @@ const getEventById = async (req, res) => {
         const event = await Event.findOne({_id: eventId})
         return res.status(200).json({
             success: true,
-            data: event})
+            data: event
+        })
     } catch (error) {
         return res
             .status(404)
@@ -55,12 +50,14 @@ const addEvent = async (req, res) => {
 
     var newEvent = {
         parkId: eventDetails.parkId ? eventDetails.parkId : null,
+        title: eventDetails.title ? eventDetails.title : null,
         details: eventDetails.details ? eventDetails.details : null,
         eventDateTime: eventDetails.eventDateTime ? eventDetails.eventDateTime : null,
-        eventEndDateTime: eventDetails.eventEndDateTime ? eventDetails.eventEndDateTime : null // not required
+        eventEndDateTime: eventDetails.eventEndDateTime ? eventDetails.eventEndDateTime : null, // not required
+        favoritesCount: 0,
     }
 
-    if (newEvent.parkId === null || newEvent.details === null || newEvent.eventDateTime === null) {
+    if (newEvent.parkId === null || newEvent.title === null || newEvent.details === null || newEvent.eventDateTime === null) {
         return res.status(400).json({success: false, error: `Missing one or more fields`})
     }
 
@@ -71,8 +68,7 @@ const addEvent = async (req, res) => {
 
     newEvent.createdDateTime = now;
 
-    if (user != null){
-
+    if (user != null) {
         newEvent.creatorName = user.firstName + " " + user.lastName;
         newEvent.creatorID = user._id;
     } else {
@@ -103,6 +99,7 @@ const updateEvent = async (req, res) => {
 
     const {
         parkId,
+        title,
         details,
         eventDateTime,
         eventEndDateTime,
@@ -110,6 +107,7 @@ const updateEvent = async (req, res) => {
 
     const update = {
         parkId: parkId ? parkId : null,
+        title: title ? title : null,
         details: details ? details : null,
         eventDateTime: eventDateTime ? eventDateTime : null,
         eventEndDateTime: eventEndDateTime ? eventEndDateTime : null
@@ -146,6 +144,7 @@ const updateEvent = async (req, res) => {
         })
 
         const updatedEvent = await eventToUpdate.save()
+
         if (!updatedEvent) {
             return res
                 .status(404)
@@ -161,6 +160,7 @@ const updateEvent = async (req, res) => {
                 success: true,
                 data: updatedEvent,
             })
+
     } catch (error) {
         return res.status(400).json({
             success: false,

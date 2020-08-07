@@ -1,0 +1,266 @@
+.ParkFilterToolbar {
+    height: 100%;
+    width: 20rem;
+    margin: 0.25rem;
+}
+
+@media only screen and (max-width: 600px) {
+    .ParkFilterToolbar {
+        height: 100%;
+        flex-grow: 1;
+        margin: 0.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+    }
+}
+
+.filterToolbar {
+    width: 20rem;
+    height: 100%;
+}
+
+.sectionTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-left: 0.75rem;
+    font-size: 0.85rem;
+}
+
+
+.title {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 0.75rem;
+}
+
+.filterList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    background-color: #fafbfc;
+    border: 1px solid #e1e4e8;
+    padding: 0.5rem;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0.75rem;
+}
+
+.parkSearch {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.rating-input {
+    width: 3rem;
+    margin-right: 0.5rem;
+}
+
+.size-input {
+    width: 3rem;
+    margin-right: 0.5rem;
+}
+
+.invalid {
+    border: 1px solid red;
+}
+
+.filter-label {
+    font-size: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.label-parkSearch {
+    font-size: 0.85rem;
+}
+
+.size-filters {
+    min-width: 10rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+}
+
+.pac-target-input  {
+    width: 15rem;
+    height: 1.5rem;
+}
+.rating-filters {
+    min-width: 10rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+}
+
+.locations-filter {
+    min-width: 10rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+}
+
+.washrooms-filter {
+    min-width: 5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.size-subfilter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 1rem;
+}
+
+.location-subfilter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.rating-subfilter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 1rem;
+}
+
+.distance-input {
+    height: 1.5rem;
+}
+
+.facilities-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+    min-width: 15rem;
+    max-height: 4rem;
+}
+
+.specialFeatures-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+    min-width: 15rem;
+    max-height: 4rem;
+}
+
+.subFilters {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.location-subfilters {
+    display: flex;
+    flex-direction: column;
+}
+
+.multi-select {
+    width: 100%;
+    font-size: 0.75rem;
+}
+
+.clear-button {
+    border-radius: 1rem;
+    background-color: #fafbfc;
+    border: 1px solid #e1e4e8;
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+}
+
+.select-park {
+    font: inherit;
+    font-size: 0.875rem;
+    margin: 0.25rem 0.75rem;
+    cursor: pointer;
+}
+
+.parks-loading-button {
+    cursor: pointer;
+}
+
+.search-button {
+    font: inherit;
+    font-size: 0.875rem;
+    margin: 0.25rem 0.75rem;
+    cursor: pointer;
+}
+
+.expand-filters-button {
+    width: 1.15rem;
+    height: 1.15rem;
+    padding: 0;
+}
+
+.expand-arrow {
+    margin: 0;
+}
+
+.open {
+    transform: rotate(180deg);
+}
+
+@media screen and (max-width: 600px) {
+    .filterToolbar {
+        width: 100%;
+    }
+    .filterListHeader {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .filterList .filter {
+        display: none !important;
+    }
+    .filterList .search-button {
+        display: none !important;
+    }
+    .filterList .select-park {
+        display: none !important;
+    }
+    .filterList .sectionTitle {
+        display: none !important;
+    }
+    .filterList .expand-filters-button {
+        display: flex !important;
+    }
+
+    .filterList.responsive .filter {
+        display: flex !important;
+    }
+    .filterList.responsive .search-button {
+        display: flex !important;
+    }
+    .filterList.responsive .select-park {
+        display: flex !important;
+    }
+    .filterList.responsive .sectionTitle {
+        display: flex !important;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .filterList .expand-filters-button {
+        display: none !important;
+    }
+}

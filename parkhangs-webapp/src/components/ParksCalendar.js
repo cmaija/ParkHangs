@@ -5,6 +5,7 @@ import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import 'components/ParksCalendar.css'
 import { openModal } from "features/modal/modalSlice"
+import { selectPark } from 'features/parks/parksSlice'
 
 import { cloneDeep } from 'lodash'
 
@@ -12,19 +13,24 @@ const localizer = momentLocalizer(moment)
 let allViews = Object.keys(Views).map(k => Views[k])
 
 class ParksCalendar extends React.Component {
-    openModal = (event) => {
+    openModal = (event, park) => {
+        const parkToSelect = this.props.parks.find(park => park._id === event.parkId)
         const props = {
             component: 'ModalEventDetail',
             componentParams: {
                 eventId: event._id,
             }
         }
+        this.props.selectPark(parkToSelect._id)
         this.props.openModal(props)
     }
 
     filterEvents = (parks) => {
         return this.props.events.filter((event) => {
-            return parks.filter(park => event.parkId === park._id).length > 0
+            const eventsAtPark = parks.filter(park => {
+                return event.parkId === park._id
+            })
+            return eventsAtPark.length > 0
         })
     }
 
@@ -43,7 +49,17 @@ class ParksCalendar extends React.Component {
         this.props.openModal(props)
     }
 
-    render () {
+    eventStyleGetter = () => {
+        const backgroundColor = '#4caf50';
+        const style = {
+            backgroundColor: backgroundColor,
+        };
+        return {
+            style: style
+        };
+    }
+
+    render() {
         let eventsArray
 
         if (this.props.showAllParks) {
@@ -83,6 +99,7 @@ class ParksCalendar extends React.Component {
                     views={allViews}
                     selectable={true}
                     onSelectSlot={this.addNewEvent}
+                    eventPropGetter={this.eventStyleGetter}
                 />
             </div>
         )
@@ -98,7 +115,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    openModal: (modalProps) => dispatch(openModal(modalProps))
+    openModal: (modalProps) => dispatch(openModal(modalProps)),
+    selectPark: (parkId) => dispatch(selectPark(parkId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParksCalendar);
