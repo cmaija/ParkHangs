@@ -19,7 +19,7 @@ class GoogleMap extends Component {
 
     render() {
         const parks = this.props.parks
-        const image = 'https://github.com/cmaija/ParkHangs/blob/master/parkhangs-webapp/src/assets/icons/marker.png'
+        const image = 'https://raw.githubusercontent.com/cmaija/ParkHangs/master/parkhangs-webapp/src/assets/icons/marker.png'
         return (
             <div className="google-map">
                 <Map
