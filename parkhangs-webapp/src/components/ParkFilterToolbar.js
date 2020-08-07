@@ -409,7 +409,7 @@ class ParkFilterToolbar extends React.Component {
         valueContainer: (provided, state) => ({
             ...provided,
             maxHeight: "2rem",
-            overflow: "scroll",
+            overflow: "auto",
         })
     }
 
