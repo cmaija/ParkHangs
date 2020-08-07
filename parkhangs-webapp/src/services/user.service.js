@@ -12,6 +12,16 @@ const UserService = {
         }
     },
 
+    getSavedParks: async function (email) {
+        const url = `/user/${email}/savedParks`
+        try {
+            const response = await ApiService.get(url);
+            return response.data.data
+        } catch (error) {
+            throw new Error(error.response)
+        }
+    },
+
     addUser: async function (user) {
         const url = `/user`
         try {

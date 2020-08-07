@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {openModal} from "../features/modal/modalSlice";
 import "views/UserProfileView.css";
-import {toggleSavedPark, toggleSavedEvent} from "../features/users/userSlice";
+import {toggleSavedPark, toggleSavedEvent, getSavedParksInfo} from "../features/users/userSlice";
 import {cloneDeep} from 'lodash'
 import moment from 'moment'
 
@@ -14,6 +14,12 @@ class UserProfileView extends React.Component {
 
         this.editProfile = this.editProfile.bind(this);
         this.renderSavedParks = this.renderSavedParks.bind(this);
+    }
+
+    componentDidMount = () => {
+        if (this.props.user) {
+            this.props.getSavedParks(this.props.user.email)
+        }
     }
 
     editProfile = () => {
@@ -54,25 +60,13 @@ class UserProfileView extends React.Component {
     }
 
     savedParks = () => {
-        const savedParkIds = this.props.user.savedParks;
+        const savedParks = this.props.savedParks
 
-        let savedParkObjects = []
-
-        const parks = this.props.parks;
-        if (parks) {
-            savedParkIds.forEach((parkId) => {
-                const park = parks.find((park) => park._id === parkId)
-                if (!!park) {
-                    savedParkObjects.push(park)
-                }
-            })
-        }
-
-        if (savedParkObjects.length === 0) {
+        if (savedParks.length === 0) {
             return <div> You do not have any saved parks!</div>;
         }
 
-        return savedParkObjects
+        return savedParks
     }
 
     savedEvents = () => {
@@ -248,6 +242,7 @@ const mapStateToProps = (state) => {
         user: state.user.user,
         parks: state.parks.parks,
         events: state.events.flattenedEvents,
+        savedParks: state.user.savedParks,
     }
 };
 
@@ -258,8 +253,8 @@ const mapDispatchToProps = (dispatch) => ({
     },
     removeFavoriteEvent: (user, eventId) => {
         dispatch(toggleSavedEvent(user, eventId))
-    }
-
+    },
+    getSavedParks: (email) => dispatch(getSavedParksInfo(email)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserProfileView);

@@ -11,6 +11,8 @@ const userSlice = createSlice({
         error: null,
         gettingUserLocation: true,
         userLocation: null,
+        updatingUser: false,
+        gettingSavedParks: false,
     },
 
     reducers: {
@@ -39,9 +41,57 @@ const userSlice = createSlice({
             // else don't do anything
         },
 
+        updateUserStart (state) {
+            state.updatingUser = true
+            state.error = null
+        },
+
+        updateUserSuccessful (state, action) {
+            state.user = action.payload
+            state.updatingUser = false
+            state.error = null
+        },
+
+
+        updateUserFailure (state, action) {
+            state.updatingUser = false
+            state.error = action.payload.toString()
+        },
+
+        addUserStart (state) {
+            state.updatingUser = true
+            state.error = null
+        },
+
+        addUserFailure (state, action) {
+            state.updatingUser = false
+            state.error = action.payload
+        },
+
         addUserSuccessful(state, action) {
             state.user = action.payload;
             state.isLoggedIn = true
+        },
+
+        addUserFailure (state, action) {
+            state.error = action.payload
+            state.isLoggedIn = false
+        },
+
+        getSavedParksByUserStart (state) {
+            state.gettingSavedParks = true
+            state.error = null
+        },
+
+        getSavedParksByUserSuccess (state, action) {
+            state.savedParks = action.payload
+            state.error = false
+            state.gettingSavedParks = false
+        },
+
+        getSavedParksByUserFailure (state, action) {
+            state.error = action.payload.toString()
+            state.gettingSavedParks = false
         },
 
         getUserLocationStart (state, action) {
@@ -78,6 +128,9 @@ export const {
     updateUserStart,
     updateUserSuccessful,
     updateUserFailure,
+    getSavedParksByUserStart,
+    getSavedParksByUserSuccess,
+    getSavedParksByUserFailure,
     getUserLocationStart,
     getUserLocationSuccess,
     getUserLocationFailure,
@@ -134,12 +187,12 @@ export const getUser = (user) => async (dispatch) => {
             dispatch(getUserSuccessful(successfulGetUser))
         }
     } catch (error) {
+        console.log(error)
         dispatch(getUserFailure());
     }
 };
 
 export const editUsername = (userId, username) => async (dispatch) => {
-
     try {
 
         dispatch(updateUserStart());
@@ -148,8 +201,8 @@ export const editUsername = (userId, username) => async (dispatch) => {
             username: username
         };
 
-        const successfulUpdateUser = await UserService.updateUser(userId, usernameObject);
-        dispatch(updateUserSuccessful(successfulUpdateUser));
+        const successfulUpdateUser = await UserService.updateUser(userId, usernameObject)
+        dispatch(updateUserSuccessful(successfulUpdateUser))
     } catch (error) {
         dispatch(updateUserFailure())
     }
@@ -161,7 +214,6 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
         let newSavedParkArray = [...user.savedParks]; //copies original array to a local variable
 
         const parkIsAlreadySaved = newSavedParkArray.includes(parkId);
-
         if (parkIsAlreadySaved) {
             // remove the park
             newSavedParkArray = newSavedParkArray.filter((existingParkId) => existingParkId !== parkId);
@@ -172,13 +224,15 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
 
         const newSaveParksObject = {
             savedParks: newSavedParkArray
-        };
+        }
 
         const successfulUpdateUser = await UserService.updateUser(user._id, newSaveParksObject);
+        dispatch(getSavedParksInfo(successfulUpdateUser.email))
         dispatch(updateParkById(parkId))
-        dispatch(updateUserSuccessful(successfulUpdateUser));
+        dispatch(updateUserSuccessful(successfulUpdateUser))
 
     } catch (error) {
+        console.error(error.toString())
         dispatch(updateUserFailure())
     }
 }
@@ -212,6 +266,16 @@ export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
 
     } catch (error) {
         dispatch(updateUserFailure())
+    }
+}
+
+export const getSavedParksInfo = (email) => async (dispatch) => {
+    try {
+        dispatch(getSavedParksByUserStart())
+        const savedParks = await UserService.getSavedParks(email)
+        dispatch(getSavedParksByUserSuccess(savedParks))
+    } catch (error) {
+        dispatch(getSavedParksByUserFailure(error.toString()))
     }
 }
 
