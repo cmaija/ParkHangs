@@ -73,11 +73,6 @@ const userSlice = createSlice({
             state.isLoggedIn = true
         },
 
-        addUserFailure (state, action) {
-            state.error = action.payload
-            state.isLoggedIn = false
-        },
-
         getSavedParksByUserStart (state) {
             state.gettingSavedParks = true
             state.error = null
@@ -150,7 +145,15 @@ export const getUserLocation = () => async (dispatch) => {
         dispatch(getUserLocationFailure())
     }
 }
-
+export const getSavedParksInfo = (email) => async (dispatch) => {
+    try {
+        dispatch(getSavedParksByUserStart())
+        const savedParks = await UserService.getSavedParks(email)
+        dispatch(getSavedParksByUserSuccess(savedParks))
+    } catch (error) {
+        dispatch(getSavedParksByUserFailure(error.toString()))
+    }
+}
 
 export const getUser = (user) => async (dispatch) => {
 
@@ -266,16 +269,6 @@ export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
 
     } catch (error) {
         dispatch(updateUserFailure())
-    }
-}
-
-export const getSavedParksInfo = (email) => async (dispatch) => {
-    try {
-        dispatch(getSavedParksByUserStart())
-        const savedParks = await UserService.getSavedParks(email)
-        dispatch(getSavedParksByUserSuccess(savedParks))
-    } catch (error) {
-        dispatch(getSavedParksByUserFailure(error.toString()))
     }
 }
 
