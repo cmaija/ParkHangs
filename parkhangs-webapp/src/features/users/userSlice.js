@@ -16,35 +16,14 @@ const userSlice = createSlice({
 
     reducers: {
 
-        // googleLoginStart(state) {
-        //
-        // },
-        //
-        // googleLoginSuccessful(state, action) {
-        //
-        // },
-        //
-        // googleLoginFailure() {
-        //
-        // },
-
         setAccessToken(state, action) {
             state.googleAccessToken = action.payload;
-        },
-
-        googleLogoutStart() {
-
         },
 
         googleLogoutSuccessful(state) {
             state.user = null;
             state.isLoggedIn = false;
             state.googleAccessToken = null;
-        },
-
-        googleLogoutFailure(state) {
-            //TODO:
-
         },
 
         getUserStart(state) {
@@ -61,35 +40,9 @@ const userSlice = createSlice({
             // else don't do anything
         },
 
-        getUserFailure(state, action) {
-            //TODO
-        },
-
-        addUserStart(state, action) {
-
-        },
-
         addUserSuccessful(state, action) {
             state.user = action.payload;
             state.isLoggedIn = true
-        },
-
-        addUserFailure(station, action) {
-
-        },
-
-        updateUserStart(state, action) {
-
-        },
-
-        updateUserSuccessful(state, action) {
-            state.user = action.payload;
-
-        },
-
-        updateUserFailure(station, action) {
-
-
         },
 
         getUserLocationStart (state, action) {
@@ -110,17 +63,13 @@ const userSlice = createSlice({
             state.gettingUserLocation = false
             state.location = null
         },
-
     }
-
-
 });
 
 export const {
     getUserStart,
     getUserSuccessful,
     getUserFailure,
-    setAccessToken,
     googleLogoutSuccessful,
     addUserStart,
     addUserSuccessful,
@@ -149,41 +98,20 @@ export const getUserLocation = () => async (dispatch) => {
     }
 }
 
-export const addUser = (userParams) => async (dispatch) => {
-
-    //TODO: can't call this for some reason.
-    try {
-        dispatch(addUserStart());
-
-        let newUser = {
-            firstName: userParams.firstName,
-            lastName: userParams.lastName,
-            username: userParams.firstName.substring(0, 1) + userParams.lastName,
-            email: userParams.email,
-            googleImageURL: userParams.googleImageURL,
-            savedParks: []
-        };
-
-        const successfulAddUser = await UserService.addUser(newUser);
-        dispatch(addUserSuccessful(successfulAddUser));
-    } catch (error) {
-        dispatch(addUserFailure());
-
-    }
-};
 
 export const getUser = (user) => async (dispatch) => {
 
     try {
         dispatch(getUserStart());
+
         const email = user.email;
         const successfulGetUser = await UserService.getUser(email);
+
         if (successfulGetUser == null) {
 
-            //TODO:
-            //addUser(getUserParameters);
-
+            //this adds a new user to the database
             try {
+
                 dispatch(addUserStart());
 
                 let newUser = {
@@ -201,7 +129,6 @@ export const getUser = (user) => async (dispatch) => {
                 dispatch(addUserFailure());
 
             }
-
 
         } else {
             dispatch(getUserSuccessful(successfulGetUser))
@@ -259,7 +186,9 @@ export const toggleSavedPark = (user, parkId) => async (dispatch) => {
 
 export const toggleSavedEvent = (user, eventId) => async (dispatch) => {
     try {
+
         dispatch(updateUserStart())
+
         let newSavedEventArray = []
         if (user.savedEvents) {
             newSavedEventArray = [...user.savedEvents]
