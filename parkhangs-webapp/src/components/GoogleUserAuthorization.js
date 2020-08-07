@@ -53,14 +53,12 @@ class GoogleUserAuthorization extends Component {
                         buttonText="Logout"
                         icon={false}
                         onLogoutSuccess={this.props.logout}
-                        onFailure={this.handleLogoutFailure}
                     >
                     </GoogleLogout> : <GoogleLogin
                         className="google-button-styling"
                         clientId={CLIENT_ID}
                         buttonText="Login"
                         onSuccess={this.login}
-                        onFailure={this.handleLoginFailure}
                         cookiePolicy={'single_host_origin'}
                         responseType='code,token'
                     />
