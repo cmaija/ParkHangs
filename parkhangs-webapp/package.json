@@ -10,7 +10,7 @@
     "google-maps-react": "^2.0.6",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "react": "^16.13.1",
     "react-add-to-calendar": "^0.1.5",
     "react-big-calendar": "^0.26.0",
